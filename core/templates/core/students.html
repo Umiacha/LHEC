@@ -1,14 +1,34 @@
-{% extends "core/base.html" %}
+{% extends "core/_placeholder.html" %}
 
-{% block title %}
-    Студенты ЛХВЭ
+{% block title %}Студентам — ЛХВЭ{% endblock %}
+
+{% block description %}
+Возможности для студентов в Лаборатории химии высоких энергий.
 {% endblock %}
 
-{% block content %}
-<section class="section">
-    <div class="container">
-        <h1>Студенты</h1>
-        <p>Раздел находится в разработке.</p>
-    </div>
-</section>
+{% block page_label %}Образование{% endblock %}
+
+{% block page_heading %}
+Студентам
+{% endblock %}
+
+{% block page_intro %}
+Информация об учебных материалах, курсовых и выпускных
+работах и участии студентов в научной деятельности лаборатории.
+{% endblock %}
+
+{% block page_actions %}
+<a
+    href="{% url 'core:materials' %}"
+    class="inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800"
+>
+    Учебные материалы →
+</a>
+
+<a
+    href="{% url 'core:theses' %}"
+    class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 text-sm font-semibold text-lab-950 transition-colors hover:border-lab-950 hover:bg-white"
+>
+    Курсовые и дипломные →
+</a>
 {% endblock %}

@@ -132,18 +132,31 @@
         {% endblock %}
     </main>
 
-    <footer class="site-footer" id="contacts">
-        <div class="container footer-content">
+    <footer class="border-t border-slate-200 bg-white">
+        <div
+            class="mx-auto grid max-w-7xl gap-10 px-6 py-12 sm:grid-cols-2 lg:px-8"
+        >
             <div>
-                <strong>Лаборатория химии высоких энергий</strong>
-
-                <p>
+                <p class="text-lg font-semibold text-lab-950">
+                    Лаборатория химии высоких энергий
+                </p>
+    
+                <p class="mt-3 max-w-md text-sm leading-6 text-slate-500">
                     Химический факультет МГУ имени М. В. Ломоносова
                 </p>
             </div>
-
-            <div>
-                <p>© {% now "Y" %} ЛХВЭ</p>
+    
+            <div class="sm:text-right">
+                <a
+                    href="{% url 'core:contacts' %}"
+                    class="text-sm font-semibold text-lab-950 hover:text-energy-500"
+                >
+                    Контакты
+                </a>
+    
+                <p class="mt-4 text-sm text-slate-400">
+                    © {% now "Y" %} ЛХВЭ
+                </p>
             </div>
         </div>
     </footer>

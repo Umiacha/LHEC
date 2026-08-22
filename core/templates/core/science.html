@@ -1,35 +1,34 @@
-{% extends "core/base.html" %}
+{% extends "core/_placeholder.html" %}
 
-{% block title %}
-    Наука — ЛХВЭ
-{% endblock %}
+{% block title %}Наука — ЛХВЭ{% endblock %}
 
 {% block description %}
-    Научные направления Лаборатории химии высоких энергий.
+Научные направления Лаборатории химии высоких энергий.
 {% endblock %}
 
-{% block content %}
-<section class="section">
-    <div class="container">
-        <p class="section-label">Исследования</p>
-        <h1>Наука</h1>
+{% block page_label %}Исследования{% endblock %}
 
-        <p>
-            Основные направления исследований лаборатории.
-        </p>
+{% block page_heading %}
+Наука
+{% endblock %}
 
-        <ul>
-            <li>
-                <a href="{% url 'core:projects' %}">
-                    Научные проекты
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'core:publications' %}">
-                    Публикации
-                </a>
-            </li>
-        </ul>
-    </div>
-</section>
+{% block page_intro %}
+Исследования, научные проекты и публикации
+Лаборатории химии высоких энергий.
+{% endblock %}
+
+{% block page_actions %}
+<a
+    href="{% url 'core:projects' %}"
+    class="inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800"
+>
+    Научные проекты →
+</a>
+
+<a
+    href="{% url 'core:publications' %}"
+    class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 text-sm font-semibold text-lab-950 transition-colors hover:border-lab-950 hover:bg-white"
+>
+    Публикации →
+</a>
 {% endblock %}

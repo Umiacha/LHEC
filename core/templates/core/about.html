@@ -1,26 +1,27 @@
-{% extends "core/base.html" %}
+{% extends "core/_placeholder.html" %}
 
-{% block title %}
-    О лаборатории — ЛХВЭ
-{% endblock %}
+{% block title %}О лаборатории — ЛХВЭ{% endblock %}
 
 {% block description %}
-    О Лаборатории химии высоких энергий химического факультета МГУ.
+О Лаборатории химии высоких энергий химического факультета МГУ.
 {% endblock %}
 
-{% block content %}
-<section class="section">
-    <div class="container">
-        <p class="section-label">ЛХВЭ</p>
-        <h1>О лаборатории</h1>
+{% block page_label %}ЛХВЭ{% endblock %}
 
-        <p>
-            Информация о Лаборатории химии высоких энергий.
-        </p>
+{% block page_heading %}
+О лаборатории
+{% endblock %}
 
-        <a href="{% url 'core:history' %}">
-            История лаборатории →
-        </a>
-    </div>
-</section>
+{% block page_intro %}
+Информация о Лаборатории химии высоких энергий,
+её сотрудниках, истории и направлениях работы.
+{% endblock %}
+
+{% block page_actions %}
+<a
+    href="{% url 'core:history' %}"
+    class="inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800"
+>
+    История лаборатории →
+</a>
 {% endblock %}
