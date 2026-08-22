@@ -26,11 +26,11 @@
             </p>
 
             <div class="hero-actions">
-                <a class="button button-primary" href="#science">
+                <a class="button button-primary" href="{% url 'core:science' %}">
                     Наши исследования
                 </a>
 
-                <a class="button button-secondary" href="#students">
+                <a class="button button-secondary" href="{% url 'core:students' %}">
                     Студентам
                 </a>
             </div>
@@ -118,7 +118,7 @@
                 экспериментальные методы.
             </p>
 
-            <a class="text-link" href="#">
+            <a class="text-link" href="{% url 'core:theses' %}">
                 Подробнее о работах →
             </a>
         </div>
