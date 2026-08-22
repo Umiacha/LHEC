@@ -1,8 +1,10 @@
 {% extends "core/base.html" %}
+{% load static %}
 
 {% block content %}
 <section class="bg-paper py-20 sm:py-24 lg:py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
         <div class="max-w-3xl">
             <p
                 class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500"
@@ -33,6 +35,22 @@
                 </a>
             </div>
         </div>
+
+        <div class="mt-16 flex justify-center sm:mt-20">
+            <div
+                class="w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200 bg-white"
+            >
+                <p class="mb-6 text-center text-sm font-medium text-slate-400">
+                    Раздел находится в разработке
+                </p>
+                <img
+                    src="{% static 'core/img/in_development.JPG' %}"
+                    alt="Раздел находится в разработке"
+                    class="block h-auto w-full"
+                >
+            </div>
+        </div>
+
     </div>
 </section>
 {% endblock %}
