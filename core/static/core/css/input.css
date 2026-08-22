@@ -1,4 +1,23 @@
 @import "tailwindcss";
+@theme {
+    --color-lab-950: #071a2b;
+    --color-lab-900: #0d263d;
+    --color-lab-800: #14354f;
+
+    --color-energy-400: #49d4c1;
+    --color-energy-500: #24bda9;
+
+    --color-paper: #f5f7f7;
+    --color-ink: #101820;
+    --color-muted: #66727e;
+
+    --font-sans:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
 
 
 :root {

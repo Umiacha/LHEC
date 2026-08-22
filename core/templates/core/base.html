@@ -21,27 +21,109 @@
 </head>
 
 <body>
-    <header class="site-header">
-        <div class="container header-content">
+    <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur">
+        <div class="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
             <a
-                class="site-logo"
                 href="{% url 'core:home' %}"
+                class="flex items-center gap-4 no-underline"
             >
-                <span class="site-logo-short">ЛХВЭ</span>
-
-                <span class="site-logo-name">
+                <span class="text-2xl font-black tracking-[-0.05em] text-lab-950">
+                    ЛХВЭ
+                </span>
+    
+                <span class="hidden text-xs leading-tight text-slate-500 sm:block">
                     Лаборатория химии<br>
                     высоких энергий
                 </span>
             </a>
-
-            <nav class="main-nav" aria-label="Основная навигация">
-                <a href="{% url 'core:about' %}">О лаборатории</a>
-                <a href="{% url 'core:science' %}">Наука</a>
-                <a href="{% url 'core:students' %}">Студентам</a>
-                <a href="{% url 'core:news' %}">Объявления</a>
-                <a href="{% url 'core:contacts' %}">Контакты</a>
+    
+            <nav
+                class="hidden items-center gap-8 lg:flex"
+                aria-label="Основная навигация"
+            >
+                <a
+                    class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
+                    href="{% url 'core:about' %}"
+                >
+                    О лаборатории
+                </a>
+    
+                <a
+                    class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
+                    href="{% url 'core:science' %}"
+                >
+                    Наука
+                </a>
+    
+                <a
+                    class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
+                    href="{% url 'core:students' %}"
+                >
+                    Студентам
+                </a>
+    
+                <a
+                    class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
+                    href="{% url 'core:news' %}"
+                >
+                    Объявления
+                </a>
+    
+                <a
+                    class="rounded-full bg-lab-950 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-lab-800"
+                    href="{% url 'core:contacts' %}"
+                >
+                    Контакты
+                </a>
             </nav>
+    
+            <details class="relative lg:hidden">
+                <summary
+                    class="cursor-pointer list-none rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 [&::-webkit-details-marker]:hidden"
+                >
+                    Меню
+                </summary>
+    
+                <nav
+                    class="absolute right-0 top-full mt-3 flex w-64 flex-col rounded-2xl border border-slate-200 bg-white p-2 shadow-lg"
+                    aria-label="Мобильная навигация"
+                >
+                    <a
+                        class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
+                        href="{% url 'core:about' %}"
+                    >
+                        О лаборатории
+                    </a>
+    
+                    <a
+                        class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
+                        href="{% url 'core:science' %}"
+                    >
+                        Наука
+                    </a>
+    
+                    <a
+                        class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
+                        href="{% url 'core:students' %}"
+                    >
+                        Студентам
+                    </a>
+    
+                    <a
+                        class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
+                        href="{% url 'core:news' %}"
+                    >
+                        Объявления
+                    </a>
+    
+                    <a
+                        class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
+                        href="{% url 'core:contacts' %}"
+                    >
+                        Контакты
+                    </a>
+                </nav>
+            </details>
         </div>
     </header>
 
