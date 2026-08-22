@@ -36,11 +36,11 @@
             </a>
 
             <nav class="main-nav" aria-label="Основная навигация">
-                <a href="#about">О лаборатории</a>
-                <a href="#science">Наука</a>
-                <a href="#students">Студентам</a>
-                <a href="#announcements">Объявления</a>
-                <a href="#contacts">Контакты</a>
+                <a href="{% url 'core:about' %}">О лаборатории</a>
+                <a href="{% url 'core:science' %}">Наука</a>
+                <a href="{% url 'core:students' %}">Студентам</a>
+                <a href="{% url 'core:news' %}">Объявления</a>
+                <a href="{% url 'core:contacts' %}">Контакты</a>
             </nav>
         </div>
     </header>

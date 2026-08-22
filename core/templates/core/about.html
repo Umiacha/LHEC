@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    О лаборатории — ЛХВЭ
+{% endblock %}
+
+{% block description %}
+    О Лаборатории химии высоких энергий химического факультета МГУ.
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <p class="section-label">ЛХВЭ</p>
+        <h1>О лаборатории</h1>
+
+        <p>
+            Информация о Лаборатории химии высоких энергий.
+        </p>
+
+        <a href="{% url 'core:history' %}">
+            История лаборатории →
+        </a>
+    </div>
+</section>
+{% endblock %}

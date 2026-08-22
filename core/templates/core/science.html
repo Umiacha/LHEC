@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    Наука — ЛХВЭ
+{% endblock %}
+
+{% block description %}
+    Научные направления Лаборатории химии высоких энергий.
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <p class="section-label">Исследования</p>
+        <h1>Наука</h1>
+
+        <p>
+            Основные направления исследований лаборатории.
+        </p>
+
+        <ul>
+            <li>
+                <a href="{% url 'core:projects' %}">
+                    Научные проекты
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'core:publications' %}">
+                    Публикации
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>
+{% endblock %}
