@@ -1,0 +1,69 @@
+{% load static %}
+
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+        {% block title %}
+            Лаборатория химии высоких энергий
+        {% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="{% block description %}Лаборатория химии высоких энергий химического факультета МГУ{% endblock %}"
+    >
+
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a
+                class="site-logo"
+                href="{% url 'core:home' %}"
+            >
+                <span class="site-logo-short">ЛХВЭ</span>
+
+                <span class="site-logo-name">
+                    Лаборатория химии<br>
+                    высоких энергий
+                </span>
+            </a>
+
+            <nav class="main-nav" aria-label="Основная навигация">
+                <a href="#about">О лаборатории</a>
+                <a href="#science">Наука</a>
+                <a href="#students">Студентам</a>
+                <a href="#announcements">Объявления</a>
+                <a href="#contacts">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer" id="contacts">
+        <div class="container footer-content">
+            <div>
+                <strong>Лаборатория химии высоких энергий</strong>
+
+                <p>
+                    Химический факультет МГУ имени М. В. Ломоносова
+                </p>
+            </div>
+
+            <div>
+                <p>© {% now "Y" %} ЛХВЭ</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

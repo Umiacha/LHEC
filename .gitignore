@@ -1,13 +1,27 @@
-# Python-generated files
+# Django
+/staticfiles/
+/media/
+
+# SQLite
+*.sqlite3
+
+# Python
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+*.py[cod]
 
 # Virtual environments
-.venv
+.venv/
+venv/
 
-# Local DB
-db.sqlite3
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
