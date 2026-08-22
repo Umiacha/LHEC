@@ -8,7 +8,7 @@ app_name = 'core'
 urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
-    path('about/history', views.history, name='history'),
+    path('about/history/', views.history, name='history'),
     path('people/', views.people, name='people'),
     path('science/', views.science, name='science'),
     path('science/projects/', views.projects, name='projects'),
@@ -18,5 +18,5 @@ urlpatterns = [
     path('students/theses/', views.theses, name='theses'),
     path('news/', views.news, name='news'),
     path('gallery/', views.gallery, name='gallery'),
-    path('contacts', views.contacts, name='contacts'),
+    path('contacts/', views.contacts, name='contacts'),
 ]
