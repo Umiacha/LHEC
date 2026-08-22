@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from .models import Announcements
+from .models import Announcement
 
 
-@admin.register(Announcements)
+@admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = (
         'title',
@@ -32,5 +32,5 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = 'Администрирование сайта ЛХВЭ'
-admin.site.title = 'ЛХВЭ'
+admin.site.site_title = 'ЛХВЭ'
 admin.site.index_title = 'Управление сайтом'

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class Announcements(models.Model):
+class Announcement(models.Model):
     title = models.CharField(
         'Заголовок',
         max_length=200,
@@ -16,7 +16,7 @@ class Announcements(models.Model):
     )
     published_at = models.DateTimeField(
         'Дата публикации',
-        default=timezone.now()
+        default=timezone.now
     )
     created_at = models.DateTimeField(
         'Создано',
