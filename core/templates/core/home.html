@@ -1,0 +1,142 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+
+{% block title %}
+    ЛХВЭ — Лаборатория химии высоких энергий
+{% endblock %}
+
+
+{% block content %}
+<section class="hero">
+    <div class="container hero-grid">
+        <div class="hero-content">
+            <p class="hero-eyebrow">
+                Химический факультет МГУ
+            </p>
+
+            <h1>
+                Лаборатория химии высоких энергий
+            </h1>
+
+            <p class="hero-description">
+                Исследуем химические процессы, протекающие под воздействием
+                ионизирующего излучения, плазмы и других высокоэнергетических
+                воздействий.
+            </p>
+
+            <div class="hero-actions">
+                <a class="button button-primary" href="#science">
+                    Наши исследования
+                </a>
+
+                <a class="button button-secondary" href="#students">
+                    Студентам
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img
+                src="{% static 'core/img/LHEC-main.jpg' %}"
+                alt="Сотрудники Лаборатории химии высоких энергий"
+            >
+        </div>
+    </div>
+</section>
+
+
+<section class="section" id="about">
+    <div class="container">
+        <p class="section-label">О лаборатории</p>
+
+        <h2>
+            Химия в условиях высокоэнергетических воздействий
+        </h2>
+
+        <p class="section-intro">
+            Лаборатория объединяет фундаментальные исследования,
+            экспериментальную работу и подготовку студентов химического
+            факультета МГУ.
+        </p>
+    </div>
+</section>
+
+
+<section class="section section-muted" id="science">
+    <div class="container">
+        <p class="section-label">Наука</p>
+
+        <h2>Направления исследований</h2>
+
+        <div class="cards">
+            <article class="card">
+                <h3>Радиационная химия</h3>
+
+                <p>
+                    Исследование химических превращений вещества
+                    под действием ионизирующего излучения.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Химия высоких энергий</h3>
+
+                <p>
+                    Изучение процессов, возникающих при передаче веществу
+                    больших количеств энергии.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Современные материалы</h3>
+
+                <p>
+                    Исследование структуры, свойств и поведения материалов
+                    в экстремальных условиях.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+
+<section class="section" id="students">
+    <div class="container split-section">
+        <div>
+            <p class="section-label">Студентам</p>
+
+            <h2>
+                Присоединяйтесь к исследованиям
+            </h2>
+        </div>
+
+        <div>
+            <p>
+                В лаборатории можно выполнять курсовые и дипломные работы,
+                участвовать в научных проектах и осваивать современные
+                экспериментальные методы.
+            </p>
+
+            <a class="text-link" href="#">
+                Подробнее о работах →
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<section class="section section-muted" id="announcements">
+    <div class="container">
+        <p class="section-label">Лаборатория</p>
+
+        <h2>Объявления</h2>
+
+        <div class="empty-state">
+            <p>
+                Здесь будут публиковаться новости и объявления лаборатории.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
