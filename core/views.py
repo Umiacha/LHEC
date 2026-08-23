@@ -1,9 +1,16 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
+
+from .models import Announcement
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/home.html")
+    announcements = Announcement.objects.filter(
+        is_published=True,
+        published_at__lte=timezone.now()
+    ).order_by('-published_at')[:3]
+    return render(request, "core/home.html", {'announcements': announcements})
 
 
 def about(request: HttpRequest) -> HttpResponse:
