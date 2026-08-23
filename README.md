@@ -55,14 +55,13 @@
 
 ### 5. Подготовка к запуску
 
-* [ ] Вынести конфигурацию и секреты в переменные окружения
-* [ ] Настроить production settings
-* [ ] Подключить PostgreSQL для развернутой версии MVP
-* [ ] Настроить static-файлы для production
-* [ ] Добавить production WSGI-сервер
-* [ ] Добавить `Dockerfile`
-* [ ] Добавить `.dockerignore`
-* [ ] Проверить сборку и запуск Docker-образа локально
+* [x] Вынести конфигурацию и секреты в переменные окружения
+* [x] Настроить production settings
+* [x] Настроить static-файлы для production
+* [x] Добавить production WSGI-сервер
+* [x] Добавить `Dockerfile`
+* [x] Добавить `.dockerignore`
+* [x] Проверить сборку и запуск Docker-образа локально
 
 ### 6. Deployment MVP
 
