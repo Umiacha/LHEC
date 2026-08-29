@@ -37,14 +37,6 @@ def publications(request: HttpRequest) -> HttpResponse:
     return render(request, "core/publications.html")
 
 
-def students(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/students.html")
-
-
-def study_materials(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/study_materials.html")
-
-
 def theses(request: HttpRequest) -> HttpResponse:
     return render(request, "core/theses.html")
 
