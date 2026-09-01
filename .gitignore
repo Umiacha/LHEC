@@ -2,6 +2,9 @@
 /staticfiles/
 /media/
 
+# Files
+education/materials/
+
 # SQLite
 *.sqlite3
 
