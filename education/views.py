@@ -20,9 +20,9 @@ def study_materials(request: HttpRequest) -> HttpResponse:
             access_level=TeachingMaterial.AccessLevel.PUBLIC,
         )
     lab_works = LabWork.objects.filter(is_published=True).prefetch_related(
-        Prefetch('materials', queryset=visible_materials.order_by('order_by', 'pk'), to_attr='visible_materials',)
-    ).order_by('order_by', 'pk')
-    standalone_materials = visible_materials.filter(lab_work__is_null=True,).order_by('order_by', 'pk')
+        Prefetch('materials', queryset=visible_materials.order_by('order', 'pk'), to_attr='visible_materials',)
+    ).order_by('order', 'pk')
+    standalone_materials = visible_materials.filter(lab_work__isnull=True,).order_by('order', 'pk')
     return render(
         request, "education/study_materials.html",
         {'lab_works': lab_works,
