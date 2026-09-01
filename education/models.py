@@ -26,7 +26,7 @@ class TeachingMaterial(models.Model):
     )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to='education/materials/')  # FIXME: поменять потом на путь из настроек
+    file = models.FileField(upload_to='education/materials/')
     access_level = models.CharField(
         max_length=16,
         choices=AccessLevel.choices,
