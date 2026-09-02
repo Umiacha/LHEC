@@ -40,7 +40,7 @@ class LoginForm(AuthenticationForm):
 
 
 class RoleUserCreationForm(UserCreationForm):
-    role = forms.CharField(
+    role = forms.ChoiceField(
         label='Роль',
         choices=UserRole.choices,
         initial=UserRole.EMPLOYEE,
@@ -52,7 +52,7 @@ class RoleUserCreationForm(UserCreationForm):
 
 
 class RoleUserChangeForm(UserChangeForm):
-    role = forms.CharField(
+    role = forms.ChoiceField(
             label='Роль',
             choices=UserRole.choices,
         )
