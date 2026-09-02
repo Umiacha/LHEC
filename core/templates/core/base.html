@@ -75,6 +75,57 @@
                 >
                     Контакты
                 </a>
+                {% if user.is_authenticated %}
+                    <div
+                        class="ml-1 flex items-center gap-3 border-l border-slate-200 pl-5"
+                    >
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400">
+                                Вы вошли как
+                            </p>
+                
+                            <p class="text-sm font-semibold text-lab-950">
+                                {{ user.username }}
+                            </p>
+                
+                            {% if current_user_role_label %}
+                                <p class="text-xs text-slate-500">
+                                    {{ current_user_role_label }}
+                                </p>
+                            {% endif %}
+                        </div>
+                
+                        {% if user.is_superuser %}
+                            <a
+                                href="{% url 'admin:index' %}"
+                                class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-lab-950 hover:text-lab-950"
+                            >
+                                Админ
+                            </a>
+                        {% endif %}
+                
+                        <form
+                            method="post"
+                            action="{% url 'users:logout' %}"
+                        >
+                            {% csrf_token %}
+                
+                            <button
+                                type="submit"
+                                class="text-sm font-medium text-slate-500 transition-colors hover:text-lab-950"
+                            >
+                                Выйти
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                <a
+                    href="{% url 'users:login' %}"
+                    class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-lab-950 hover:text-lab-950"
+                >
+                    Войти
+                </a>
+            {% endif %}
             </nav>
     
             <details class="relative lg:hidden">
@@ -122,6 +173,55 @@
                     >
                         Контакты
                     </a>
+                    <div class="my-1 border-t border-slate-100"></div>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="px-4 py-3">
+                            <p class="text-xs text-slate-400">
+                                Вы вошли как
+                            </p>
+                    
+                            <p class="mt-1 text-sm font-semibold text-lab-950">
+                                {{ user.username }}
+                            </p>
+                    
+                            {% if current_user_role_label %}
+                                <p class="mt-0.5 text-xs text-slate-500">
+                                    {{ current_user_role_label }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    
+                        {% if user.is_superuser %}
+                            <a
+                                class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
+                                href="{% url 'admin:index' %}"
+                            >
+                                Админ-панель
+                            </a>
+                        {% endif %}
+                    
+                        <form
+                            method="post"
+                            action="{% url 'users:logout' %}"
+                        >
+                            {% csrf_token %}
+                    
+                            <button
+                                type="submit"
+                                class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            >
+                                Выйти
+                            </button>
+                        </form>
+                    {% else %}
+                        <a
+                            class="rounded-xl px-4 py-3 text-sm font-semibold text-lab-950 hover:bg-slate-50"
+                            href="{% url 'users:login' %}"
+                        >
+                            Войти
+                        </a>
+                    {% endif %}
                 </nav>
             </details>
         </div>
