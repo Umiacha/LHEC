@@ -8,7 +8,7 @@ class UserRole(models.TextChoices):
 
 
 EMPLOYEE_GROUP_NAME = 'Сотрудники'
-INTERNAL_MATERIALS_PERMISSION = 'education.views_internal_materials'
+INTERNAL_MATERIALS_PERMISSION = 'education.view_internal_materials'
 
 
 def get_user_role(user: User) -> UserRole | None:
@@ -40,4 +40,4 @@ def set_user_role(user: User, role: UserRole):
         user.is_superuser = False
     user.save(update_fields=['is_staff', 'is_superuser',])
     if role == UserRole.EMPLOYEE:
-        user.group.add(employee_group)
+        user.groups.add(employee_group)
