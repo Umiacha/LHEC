@@ -38,3 +38,14 @@ tailwind:
 # Запустить Django и Tailwind одновременно.
 dev:
 	$(MAKE) --no-print-directory -j2 run tailwind
+
+
+
+# Проверить: есть ли суперпользователь
+check-admin-exist:
+	$(MANAGE) shell -c "from django.contrib.auth import get_user_model; print(get_user_model().objects.filter(is_superuser=True).exists())"
+
+
+# Создать тестового админа
+create-test-admin:
+	$(MANAGE) createsuperuser --noinput
