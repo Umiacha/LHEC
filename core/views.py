@@ -21,10 +21,6 @@ def history(request: HttpRequest) -> HttpResponse:
     return render(request, "core/history.html")
 
 
-def people(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/people.html")
-
-
 def science(request: HttpRequest) -> HttpResponse:
     return render(request, "core/science.html")
 
