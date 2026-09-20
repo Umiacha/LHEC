@@ -4,6 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from .forms import LoginForm
+from .models import Employee
 
 
 class UserLoginView(LoginView):
@@ -18,7 +19,8 @@ class UserLogoutView(LogoutView):
 
 def people(request: HttpRequest) -> HttpResponse:
     """Страница со списком сотрудников."""
-    return render(request, "core/people.html")
+    employees = Employee.objects.published().by_position()
+    return render(request, "core/people.html", {'employees': employees})
 
 
 def employe_card(request: HttpRequest, pk: int):
