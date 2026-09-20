@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class SciencePositions(models.TextChoices):
+class SciencePosition(models.TextChoices):
     """Научно-исследовательские должности."""
     HEAD_OF_THE_LABORATORY = 'head_of_the_laboratory', 'зав. лаб.'
     DEPUTY_HEAD_OF_THE_LABORATORY = 'deputy_head_of_the_laboratory', 'зам. зав. лаб.'
@@ -11,7 +11,7 @@ class SciencePositions(models.TextChoices):
     JUNIOR_RESEARCH_FELLOW = 'junior_research_fellow', 'м.н.с.'
 
 
-class EngineerPositions(models.TextChoices):
+class EngineerPosition(models.TextChoices):
     """Инженерно-технические должности."""
     LEADING_ENGINEER = 'leading_engineer', 'вед.инж.'
     SENIOR_ENGINEER = 'senior_engineer', 'ст.инж.'
@@ -26,12 +26,12 @@ class Employee(models.Model):
     science_position = models.CharField(
         verbose_name='Научная должность',
         max_length=50,
-        choices=SciencePositions.choices,
+        choices=SciencePosition.choices,
         blank=True
     )
     engineer_position = models.CharField(
         verbose_name='Научная должность',
         max_length=50,
-        choices=EngineerPositions.choices,
+        choices=EngineerPosition.choices,
         blank=True
     )
