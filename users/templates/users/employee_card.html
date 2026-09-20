@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ employee.last_name }} {{ employee.first_name }} — ЛХВЭ{% endblock %}
+
+{% block content %}
+<section class="bg-paper py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+        <a href="{% url 'users:people' %}" class="text-sm font-semibold text-lab-950 hover:underline">← Все сотрудники</a>
+        <div class="mt-10 grid gap-10 sm:grid-cols-[minmax(0,18rem)_1fr]">
+            <div class="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl bg-slate-100 sm:aspect-[3/4]">
+                {% if employee.photo %}
+                    <img src="{{ employee.photo.url }}" alt="Портрет: {{ employee.last_name }} {{ employee.first_name }} {{ employee.mid_name }}" class="h-full w-full object-cover">
+                {% else %}
+                    <svg class="h-24 w-24 text-slate-300" viewBox="0 0 80 80" fill="none" aria-hidden="true"><circle cx="40" cy="27" r="14" fill="currentColor"/><path d="M12 72c0-15 12-25 28-25s28 10 28 25" fill="currentColor"/></svg>
+                {% endif %}
+            </div>
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Сотрудник лаборатории</p>
+                <h1 class="mt-4 text-4xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-5xl">{{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}</h1>
+                {% if employee.science_position %}<p class="mt-6 text-lg text-slate-600">{{ employee.get_science_position_display }}</p>{% endif %}
+                {% if employee.engineer_position %}<p class="mt-2 text-lg text-slate-600">{{ employee.get_engineer_position_display }}</p>{% endif %}
+                {% if employee.bio %}<div class="mt-8 whitespace-pre-line text-base leading-7 text-slate-700">{{ employee.bio }}</div>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

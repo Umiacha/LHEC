@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 from .forms import LoginForm
 from .models import Employee
@@ -20,9 +20,10 @@ class UserLogoutView(LogoutView):
 def people(request: HttpRequest) -> HttpResponse:
     """Страница со списком сотрудников."""
     employees = Employee.objects.published().by_position()
-    return render(request, "core/people.html", {'employees': employees})
+    return render(request, "users/people.html", {'employees': employees})
 
 
-def employe_card(request: HttpRequest, pk: int):
+def employe_card(request: HttpRequest, pk: int) -> HttpResponse:
     """Страница карточки сотрудника."""
-    ...
+    employee = get_object_or_404(Employee.objects.published(), pk=pk)
+    return render(request, "users/employee_card.html", {'employee': employee})
