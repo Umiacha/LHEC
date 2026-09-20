@@ -15,7 +15,7 @@
         {% if employees %}
             <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {% for employee in employees %}
-                    <li class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+                    <li class="min-w-0 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
                         <div class="flex aspect-[4/3] items-center justify-center bg-slate-100">
                             {% if employee.photo %}
                                 <img src="{{ employee.photo.url }}" alt="Портрет: {{ employee.last_name }} {{ employee.first_name }} {{ employee.mid_name }}" loading="lazy" class="h-full w-full object-cover">
@@ -26,8 +26,8 @@
                                 </svg>
                             {% endif %}
                         </div>
-                        <div class="p-6">
-                            <h2 class="text-xl font-semibold leading-snug text-lab-950">
+                        <div class="min-w-0 p-6">
+                            <h2 class="break-words text-xl font-semibold leading-snug text-lab-950">
                                 <a href="{% url 'users:employe_card' employee.pk %}" class="hover:text-lab-800 hover:underline focus-visible:underline">
                                     {{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}
                                 </a>

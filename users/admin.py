@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group, User
 
 from .forms import RoleUserChangeForm, RoleUserCreationForm
 from .roles import get_user_role, set_user_role
+from .models import Employee
 
 
 admin.site.unregister(User)
@@ -129,3 +130,33 @@ class UserAdmin(DjangoUserAdmin):
 
     def has_view_permission(self, request, obj=None):
         return request.user.is_superuser
+
+
+@admin.register(Employee)
+class EmployeeProfileAdmin(admin.ModelAdmin):
+    """
+    Карточка сотрудника.
+    
+    Без обязательной привязки к аккаунту.
+    """
+    fieldsets = (
+        ('Основное', {
+            'fields': ('last_name', 'first_name', 'mid_name', 'photo'),
+        }),
+        ('Работа и описание', {
+            'fields': ('science_position', 'engineer_position', 'bio'),
+        }),
+        ('Аккаунт и публикации', {
+            'fields': ('user', 'is_published'),
+        }),
+    )
+    list_display = (
+        'last_name',
+        'first_name',
+        'science_position',
+        'engineer_position',
+        'user',
+        'is_published',
+    )
+    list_filter = ("is_published", "science_position", "engineer_position")
+    search_fields = ("last_name", "first_name", "mid_name", "user__username")
