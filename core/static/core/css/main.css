@@ -329,6 +329,9 @@
   .h-24 {
     height: calc(var(--spacing) * 24);
   }
+  .h-32 {
+    height: calc(var(--spacing) * 32);
+  }
   .h-auto {
     height: auto;
   }
@@ -349,6 +352,9 @@
   }
   .w-24 {
     width: calc(var(--spacing) * 24);
+  }
+  .w-32 {
+    width: calc(var(--spacing) * 32);
   }
   .w-64 {
     width: calc(var(--spacing) * 64);
@@ -483,6 +489,9 @@
     --tw-border-style: dashed;
     border-style: dashed;
   }
+  .border-lab-950 {
+    border-color: var(--color-lab-950);
+  }
   .border-red-200 {
     border-color: var(--color-red-200);
   }
@@ -545,6 +554,9 @@
   }
   .p-2 {
     padding: calc(var(--spacing) * 2);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
   }
   .p-5 {
     padding: calc(var(--spacing) * 5);
@@ -807,6 +819,32 @@
     --tw-outline-style: none;
     outline-style: none;
   }
+  .file\:mr-4::file-selector-button {
+    margin-right: calc(var(--spacing) * 4);
+  }
+  .file\:rounded-full::file-selector-button {
+    border-radius: calc(infinity * 1px);
+  }
+  .file\:border-0::file-selector-button {
+    border-style: var(--tw-border-style);
+    border-width: 0px;
+  }
+  .file\:bg-lab-950::file-selector-button {
+    background-color: var(--color-lab-950);
+  }
+  .file\:px-4::file-selector-button {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .file\:py-2\.5::file-selector-button {
+    padding-block: calc(var(--spacing) * 2.5);
+  }
+  .file\:font-semibold::file-selector-button {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+  .file\:text-white::file-selector-button {
+    color: var(--color-white);
+  }
   .first\:pt-0:first-child {
     padding-top: 0px;
   }
@@ -822,6 +860,9 @@
     }
     .hover\:bg-lab-800:hover {
       background-color: var(--color-lab-800);
+    }
+    .hover\:bg-lab-950:hover {
+      background-color: var(--color-lab-950);
     }
     .hover\:bg-slate-50:hover {
       background-color: var(--color-slate-50);
@@ -846,8 +887,14 @@
     .hover\:text-lab-950:hover {
       color: var(--color-lab-950);
     }
+    .hover\:text-white:hover {
+      color: var(--color-white);
+    }
     .hover\:underline:hover {
       text-decoration-line: underline;
+    }
+    .hover\:file\:bg-lab-800:hover::file-selector-button {
+      background-color: var(--color-lab-800);
     }
   }
   .focus\:border-energy-500:focus {
@@ -866,7 +913,24 @@
   .focus-visible\:underline:focus-visible {
     text-decoration-line: underline;
   }
+  .focus-visible\:outline:focus-visible {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
+  .focus-visible\:outline-2:focus-visible {
+    outline-style: var(--tw-outline-style);
+    outline-width: 2px;
+  }
+  .focus-visible\:outline-offset-2:focus-visible {
+    outline-offset: 2px;
+  }
+  .focus-visible\:outline-lab-950:focus-visible {
+    outline-color: var(--color-lab-950);
+  }
   @media (width >= 40rem) {
+    .sm\:col-span-2 {
+      grid-column: span 2 / span 2;
+    }
     .sm\:mt-20 {
       margin-top: calc(var(--spacing) * 20);
     }
@@ -1431,6 +1495,11 @@ img {
   syntax: "*";
   inherits: false;
 }
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -1463,6 +1532,7 @@ img {
       --tw-backdrop-opacity: initial;
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
+      --tw-outline-style: solid;
     }
   }
 }

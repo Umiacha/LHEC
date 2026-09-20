@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+
+{% block title %}Редактировать карточку — ЛХВЭ{% endblock %}
+
+{% block content %}
+<section class="bg-paper py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-3xl px-6 lg:px-8">
+        <a href="{% url 'users:employe_card' employee.pk %}" class="text-sm font-semibold text-lab-950 hover:underline">← К карточке</a>
+        <header class="mt-10">
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Профиль сотрудника</p>
+            <h1 class="mt-4 text-4xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-5xl">Редактировать карточку</h1>
+            <p class="mt-4 text-base leading-7 text-slate-600">Изменения появятся в вашей карточке после сохранения.</p>
+        </header>
+
+        <form method="post" enctype="multipart/form-data" class="mt-10 space-y-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="grid gap-6 sm:grid-cols-2">
+                {% for field in form %}
+                    <div class="{% if field.name == 'bio' or field.name == 'photo' %}sm:col-span-2{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-lab-950">{{ field.label }}{% if field.field.required %} <span class="text-energy-500" aria-label="обязательное поле">*</span>{% endif %}</label>
+                        {% if field.name == 'photo' and employee.photo %}
+                            <img src="{{ employee.photo.url }}" alt="Текущее фото сотрудника" class="mt-3 h-32 w-32 rounded-2xl object-cover">
+                        {% endif %}
+                        <div class="mt-2">{{ field }}</div>
+                        {% if field.help_text %}<p class="mt-2 text-sm text-slate-500">{{ field.help_text }}</p>{% endif %}
+                        {% for error in field.errors %}<p class="mt-2 text-sm text-red-700" role="alert">{{ error }}</p>{% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 border-t border-slate-200 pt-6">
+                <button type="submit" class="rounded-full bg-lab-950 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-lab-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lab-950">Сохранить изменения</button>
+                <a href="{% url 'users:employe_card' employee.pk %}" class="text-sm font-semibold text-slate-600 hover:text-lab-950 hover:underline">Отмена</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

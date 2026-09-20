@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.models import User
 from .roles import UserRole, get_user_role
+from .models import Employee
 
 
 INPUT_CLASSES = (
@@ -65,3 +66,21 @@ class RoleUserChangeForm(UserChangeForm):
         role = get_user_role(self.instance)
         if role is not None:
             self.fields['role'].initial = role
+
+
+class EmployeeEditForm(forms.ModelForm):
+    """Форма для изменения своей карточки сотрудником на сайте."""
+
+    class Meta:
+        model = Employee
+        fields = ('last_name', 'first_name', 'mid_name', 'photo', 'bio')
+        widgets = {
+            'last_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),
+            'first_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),
+            'mid_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),
+            'photo': forms.ClearableFileInput(attrs={
+                'class': 'block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 file:bg-lab-950 file:px-4 file:py-2.5 file:font-semibold file:text-white hover:file:bg-lab-800',
+                'accept': 'image/*',
+            }),
+            'bio': forms.Textarea(attrs={'class': INPUT_CLASSES, 'rows': 8}),
+        }

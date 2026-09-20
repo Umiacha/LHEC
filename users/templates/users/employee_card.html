@@ -5,7 +5,12 @@
 {% block content %}
 <section class="bg-paper py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-5xl px-6 lg:px-8">
-        <a href="{% url 'users:people' %}" class="text-sm font-semibold text-lab-950 hover:underline">← Все сотрудники</a>
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <a href="{% url 'users:people' %}" class="text-sm font-semibold text-lab-950 hover:underline">← Все сотрудники</a>
+            {% if user.is_authenticated and employee.user_id == user.id %}
+                <a href="{% url 'users:edit_employe_card' employee.pk %}" class="rounded-full border border-lab-950 px-5 py-2.5 text-sm font-semibold text-lab-950 transition-colors hover:bg-lab-950 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lab-950">Редактировать</a>
+            {% endif %}
+        </div>
         <div class="mt-10 grid gap-10 sm:grid-cols-[minmax(0,18rem)_1fr]">
             <div class="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl bg-slate-100 sm:aspect-[3/4]">
                 {% if employee.photo %}
