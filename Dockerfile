@@ -19,6 +19,7 @@ RUN useradd --create-home appuser
 COPY entrypoint.sh /app/entrypoint.sh
 
 ENV DJANGO_IN_DOCKER=1
+ENV DJANGO_DEBUG=False
 
 USER appuser
 
