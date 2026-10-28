@@ -1,10 +1,16 @@
 from django.contrib import admin
 
-from .models import Publication
+from .models import Publication, PublicationFile
+
+
+class PublicationFileInline(admin.TabularInline):
+    model = PublicationFile
+    extra = 1
 
 
 @admin.register(Publication)
 class PublicationAdmin(admin.ModelAdmin):
+    inlines = (PublicationFileInline,)
     list_display = (
         'title',
         'year',

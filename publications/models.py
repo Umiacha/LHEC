@@ -1,4 +1,8 @@
+from pathlib import Path
+
 from django.db import models
+
+from .storage import publication_file_storage
 
 
 class Publication(models.Model):
@@ -53,3 +57,31 @@ class Publication(models.Model):
 
     def __str__(self):
         return f'{self.authors_text}: {self.title} ({self.year})'
+
+
+def publication_file_path(instance, filename):
+    """Размещать новые файлы по году публикации."""
+    return f'publications/{instance.publication.year}/{filename}'
+
+
+class PublicationFile(models.Model):
+    publication = models.ForeignKey(
+        Publication, on_delete=models.CASCADE, related_name='files',
+        verbose_name='Публикация',
+    )
+    file = models.FileField(
+        'Файл', storage=publication_file_storage, upload_to=publication_file_path,
+        max_length=500,
+    )
+
+    class Meta:
+        verbose_name = 'Файл публикации'
+        verbose_name_plural = 'Файлы публикации'
+        ordering = ('pk',)
+
+    @property
+    def filename(self):
+        return Path(self.file.name).name if self.file.name else ''
+
+    def __str__(self):
+        return self.filename

@@ -60,6 +60,21 @@
                     </ul>
                 </section>
             {% endif %}
+
+            {% if can_download_files %}
+                {% with files=publication.files.all %}
+                    {% if files %}
+                        <section class="mt-10">
+                            <h2 class="text-xl font-semibold text-lab-950">Файлы статьи</h2>
+                            <ul class="mt-3 grid gap-4 text-sm font-semibold text-lab-950">
+                                {% for attachment in files %}
+                                    <li><a href="{{ attachment.file.url }}" class="hover:underline focus-visible:underline">Скачать: {{ attachment.filename }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
         </article>
     </div>
 </section>
