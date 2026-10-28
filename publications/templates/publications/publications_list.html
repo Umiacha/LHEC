@@ -1,0 +1,37 @@
+{% extends "core/base.html" %}
+
+{% block title %}Публикации — ЛХВЭ{% endblock %}
+{% block description %}Научные публикации сотрудников Лаборатории химии высоких энергий.{% endblock %}
+
+{% block content %}
+<section class="bg-paper py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+        <header class="max-w-3xl">
+            <a href="{% url 'core:science' %}" class="text-sm font-semibold text-lab-950 hover:underline">← Наука</a>
+            <h1 class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Публикации</h1>
+            <p class="mt-6 text-lg leading-8 text-slate-600">Научные публикации сотрудников лаборатории.</p>
+        </header>
+
+        <ul class="mt-12 grid gap-6">
+            {% for publication in publications %}
+                <li class="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <article>
+                        <p class="text-sm font-semibold text-slate-500">
+                            {{ publication.year }} · {{ publication.get_kind_display }}{% if publication.is_featured %} · Избранная{% endif %}
+                        </p>
+                        <h2 class="mt-3 break-words text-xl font-semibold leading-snug text-lab-950">
+                            <a href="{% url 'publications:publication' publication.pk %}" class="hover:text-lab-800 hover:underline focus-visible:underline">{{ publication.title }}</a>
+                        </h2>
+                        <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.authors_text }}</p>
+                        {% if publication.venue %}
+                            <p class="mt-2 break-words text-sm leading-6 text-slate-500">{{ publication.venue }}</p>
+                        {% endif %}
+                    </article>
+                </li>
+            {% empty %}
+                <li class="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">Публикаций пока нет.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}
