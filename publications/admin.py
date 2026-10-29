@@ -18,7 +18,7 @@ class PublicationAdmin(admin.ModelAdmin):
         'is_published',
         'is_featured',
     )
-    list_filter = ('is_published', 'is_featured', 'kind', 'year')
+    list_filter = ('is_published', 'is_featured', 'kind', 'year', 'research_directions')
     search_fields = ('title', 'authors_text', 'venue', 'doi')
-    filter_horizontal = ('employees',)
+    filter_horizontal = ('employees', 'research_directions')
     readonly_fields = ('created_at', 'updated_at')

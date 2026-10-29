@@ -2,6 +2,8 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
+from research.models import ResearchDirection
+
 from .models import Announcement
 
 
@@ -22,7 +24,9 @@ def history(request: HttpRequest) -> HttpResponse:
 
 
 def science(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/science.html")
+    return render(request, "core/science.html", {
+        "directions": ResearchDirection.objects.filter(is_published=True),
+    })
 
 
 def projects(request: HttpRequest) -> HttpResponse:

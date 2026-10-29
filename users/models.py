@@ -59,7 +59,7 @@ class EmployeeQuerySet(models.QuerySet):
         )
 
 
-class Employee(models.Model):  # TODO: сделать ссылки на istina.msu, а также связь с научной группой и публикациями.
+class Employee(models.Model):  # TODO: сделать ссылки на istina.msu и пр., а также связь с научной группой и публикациями.
     """Модель данных сотрудника."""
     last_name = models.CharField(verbose_name='Фамилия', max_length=200)
     first_name = models.CharField(verbose_name='Имя', max_length=200)

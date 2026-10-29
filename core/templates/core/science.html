@@ -1,34 +1,29 @@
-{% extends "core/_placeholder.html" %}
+{% extends "core/base.html" %}
 
 {% block title %}Наука — ЛХВЭ{% endblock %}
+{% block description %}Научные направления Лаборатории химии высоких энергий.{% endblock %}
 
-{% block description %}
-Научные направления Лаборатории химии высоких энергий.
-{% endblock %}
-
-{% block page_label %}Исследования{% endblock %}
-
-{% block page_heading %}
-Наука
-{% endblock %}
-
-{% block page_intro %}
-Исследования, научные проекты и публикации
-Лаборатории химии высоких энергий.
-{% endblock %}
-
-{% block page_actions %}
-<a
-    href="{% url 'core:projects' %}"
-    class="inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800"
->
-    Научные проекты →
-</a>
-
-<a
-    href="{% url 'publications:publications' %}"
-    class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 text-sm font-semibold text-lab-950 transition-colors hover:border-lab-950 hover:bg-white"
->
-    Публикации →
-</a>
+{% block content %}
+<section class="bg-paper py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+        <h1 class="text-5xl font-semibold text-lab-950">Наука</h1>
+        <p class="mt-6 text-lg leading-8 text-slate-600">Исследования, научные проекты и публикации Лаборатории химии высоких энергий.</p>
+        <nav class="mt-10 flex flex-wrap gap-6" aria-label="Разделы науки">
+            <a href="{% url 'core:projects' %}" class="font-semibold text-lab-950 hover:underline">Научные проекты →</a>
+            <a href="{% url 'publications:publications' %}" class="font-semibold text-lab-950 hover:underline">Публикации →</a>
+        </nav>
+        <section id="directions" class="mt-12">
+            <h2 class="text-3xl font-semibold text-lab-950">Научные направления</h2>
+            <ul class="mt-6 grid gap-6">
+                {% for direction in directions %}
+                    <li class="rounded-2xl border border-slate-200 bg-white p-6">
+                        <a href="{% url 'research:direction_detail' direction.slug %}" class="text-xl font-semibold text-lab-950 hover:underline">{{ direction.name }}</a>
+                    </li>
+                {% empty %}
+                    <li class="text-slate-600">Информация о направлениях скоро появится.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</section>
 {% endblock %}

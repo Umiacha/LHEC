@@ -23,6 +23,12 @@ class Publication(models.Model):
         related_name='publications',
         verbose_name='Сотрудники лаборатории среди авторов'
     )
+    research_directions = models.ManyToManyField(
+        'research.ResearchDirection',
+        blank=True,
+        related_name='publications',
+        verbose_name='Научные направления',
+    )
     kind = models.CharField(
         'Тип',
         max_length=20,
