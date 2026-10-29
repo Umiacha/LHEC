@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.urls import reverse
 
-from .models import Dissertation, ProjectParticipation, ResearchDirection, ResearchMembership, ResearchProject
+from .models import Diploma, Dissertation, ProjectParticipation, ResearchDirection, ResearchMembership, ResearchProject
 
 
 class ResearchMembershipInline(admin.TabularInline):
@@ -128,3 +128,15 @@ class DissertationAdmin(admin.ModelAdmin):
     list_editable = ('is_published', 'sort_order')
     search_fields = ('title', 'author', 'specialty', 'supervisors')
     fields = ('title', 'external_url', 'author', 'year', 'degree', 'specialty', 'supervisors', 'file', 'is_published', 'sort_order')
+
+
+@admin.register(Diploma)
+class DiplomaAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'year', 'level', 'is_published', 'sort_order')
+    list_select_related = ('author',)
+    list_filter = ('is_published', 'level', 'year')
+    list_editable = ('is_published', 'sort_order')
+    search_fields = ('title', 'author__last_name', 'author__first_name', 'external_supervisors')
+    autocomplete_fields = ('author', 'supervisors')
+    fields = ('title', 'external_url', 'author', 'year', 'level', 'supervisors',
+              'external_supervisors', 'file', 'is_published', 'sort_order')

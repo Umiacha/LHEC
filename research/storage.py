@@ -13,3 +13,14 @@ class DissertationFileStorage(PublicationFileStorage):
 
 
 dissertation_file_storage = DissertationFileStorage()
+
+
+@deconstructible
+class DiplomaFileStorage(PublicationFileStorage):
+    """Тексты ВКР в закрытом хранилище материалов."""
+
+    def url(self, name):
+        return reverse('research:download_diploma', kwargs={'file_name': name})
+
+
+diploma_file_storage = DiplomaFileStorage()

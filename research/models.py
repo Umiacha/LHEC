@@ -1,6 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from .storage import dissertation_file_storage
+from .storage import dissertation_file_storage, diploma_file_storage
 
 
 class ResearchDirection(models.Model):  # TODO: сделать отображения карточек сотрудников, а не просто ФИО
@@ -203,6 +203,50 @@ class Dissertation(models.Model):
         verbose_name = 'Диссертация'
         verbose_name_plural = 'Диссертации'
         ordering = ('-year', 'sort_order', 'author', 'pk')
+
+    def __str__(self):
+        return f'{self.author} — {self.title}'
+
+
+def diploma_file_path(instance, filename):
+    return f'diplomas/{instance.year}/{filename}'
+
+
+class Diploma(models.Model):
+    """Защищённая выпускная квалификационная работа."""
+
+    class Level(models.TextChoices):
+        BACHELOR = 'bachelor', 'Бакалаврская работа'
+        MASTER = 'master', 'Магистерская диссертация'
+        SPECIALIST = 'specialist', 'Дипломная работа специалиста'
+
+    title = models.CharField('Название', max_length=1000)
+    external_url = models.URLField('Внешняя страница работы', max_length=1000)
+    author = models.ForeignKey(
+        'users.Employee', on_delete=models.PROTECT, related_name='diplomas',
+        verbose_name='Автор',
+    )
+    year = models.PositiveSmallIntegerField('Год защиты', validators=[MinValueValidator(1)])
+    level = models.CharField('Уровень работы', max_length=20, choices=Level.choices)
+    supervisors = models.ManyToManyField(
+        'users.Employee', blank=True, related_name='supervised_diplomas',
+        verbose_name='Научные руководители',
+    )
+    external_supervisors = models.CharField(
+        'ФИО внешних научных руководителей', max_length=1000, blank=True,
+        help_text='Для руководителей, у которых нет карточки на сайте.',
+    )
+    file = models.FileField(
+        'Текст работы', upload_to=diploma_file_path, storage=diploma_file_storage,
+        blank=True, help_text='Скачивание доступно только сотрудникам и администраторам.',
+    )
+    is_published = models.BooleanField('Показывать на сайте', default=False)
+    sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
+
+    class Meta:
+        verbose_name = 'Выпускная квалификационная работа'
+        verbose_name_plural = 'Выпускные квалификационные работы'
+        ordering = ('-year', 'sort_order', 'pk')
 
     def __str__(self):
         return f'{self.author} — {self.title}'

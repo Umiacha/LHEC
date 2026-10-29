@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from .models import Dissertation, ProjectParticipation, ResearchDirection, ResearchProject
+from .models import Diploma, Dissertation, ProjectParticipation, ResearchDirection, ResearchProject
 
 
 def direction_detail(request: HttpRequest, slug: str) -> HttpResponse:
@@ -73,6 +73,11 @@ def project_detail(request: HttpRequest, slug: str) -> HttpResponse:
 
 @never_cache
 def download_dissertation(request: HttpRequest, file_name: str) -> FileResponse:
+    """
+    Скачивание текста опубликованной диссертации.
+    
+    Только для сотрудников.
+    """
     if not request.user.has_perm(INTERNAL_MATERIALS_PERMISSION):
         raise PermissionDenied
     dissertation = get_object_or_404(Dissertation, file=file_name, is_published=True)
@@ -83,4 +88,22 @@ def download_dissertation(request: HttpRequest, file_name: str) -> FileResponse:
     return FileResponse(stream, as_attachment=True, filename=Path(dissertation.file.name).name,
                         content_type='application/octet-stream')
 
-# TODO: Проверить функционал диссертаций и добавить функционал для дипломов.
+
+@never_cache
+def download_diploma(request: HttpRequest, file_name: str) -> FileResponse:
+    """
+    Скачивание текста опубликованной ВКР.
+    
+    Только для сотрудников.
+    """
+    if not request.user.has_perm(INTERNAL_MATERIALS_PERMISSION):
+        raise PermissionDenied
+    diploma = get_object_or_404(Diploma, file=file_name, is_published=True)
+    try:
+        stream = diploma.file.open('rb')
+    except FileNotFoundError:
+        raise Http404('Файл не найден')
+    return FileResponse(
+        stream, as_attachment=True, filename=Path(diploma.file.name).name,
+        content_type='application/octet-stream',
+    )

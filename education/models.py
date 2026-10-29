@@ -1,5 +1,7 @@
 from django.db import models
 
+from research.models import diploma_file_path  # Совместимость с миграцией 0002.
+
 
 class LabWork(models.Model):
     title = models.CharField(max_length=255)
