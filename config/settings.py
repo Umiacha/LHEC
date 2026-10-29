@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'education.apps.EducationConfig',
     'users.apps.UsersConfig',
     'publications.apps.PublicationsConfig',
+    'research.apps.ResearchConfig',
 ]
 
 MIDDLEWARE = [
