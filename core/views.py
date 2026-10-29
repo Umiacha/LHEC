@@ -2,7 +2,8 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
-from research.models import Diploma, Dissertation, ResearchDirection
+from publications.models import Publication
+from research.models import Diploma, Dissertation, ResearchDirection, ResearchProject
 from users.roles import INTERNAL_MATERIALS_PERMISSION
 
 from .models import Announcement
@@ -25,8 +26,13 @@ def history(request: HttpRequest) -> HttpResponse:
 
 
 def science(request: HttpRequest) -> HttpResponse:  # TODO: перенести этот view и url в research.
+    year = timezone.localdate().year
     return render(request, "core/science.html", {
         "directions": ResearchDirection.objects.filter(is_published=True),
+        "projects": ResearchProject.objects.filter(
+            is_published=True, start_year__lte=year, end_year__gte=year,
+        ),
+        "publications": Publication.objects.filter(is_published=True, is_featured=True),
         "dissertations": Dissertation.objects.filter(is_published=True),
         "diplomas": Diploma.objects.filter(is_published=True).select_related("author").prefetch_related("supervisors"),
         "can_download_diplomas": request.user.has_perm(INTERNAL_MATERIALS_PERMISSION),
