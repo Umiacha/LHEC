@@ -103,3 +103,110 @@ class PublicationFileTests(TestCase):
         response = self.client.get(attachment.file.url)
         self.assertEqual(b''.join(response.streaming_content), b'%PDF-new')
         response.close()
+
+
+class PublicationSearchTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        from research.models import ResearchDirection
+        from users.models import Employee
+
+        cls.employee = Employee.objects.create(last_name='Иванов', first_name='Иван')
+        cls.direction = ResearchDirection.objects.create(
+            name='Радиохимия', slug='radiochemistry', is_published=True,
+        )
+        cls.paper = Publication.objects.create(
+            title='Radiation chemistry', year=2025, authors_text='Ivanov, Smith',
+            venue='Chemical Journal', doi='10.1234/example', is_published=True,
+        )
+        cls.paper.employees.add(cls.employee)
+        cls.paper.research_directions.add(cls.direction)
+        cls.other = Publication.objects.create(
+            title='Other paper', year=2024, authors_text='Petrov', is_published=True,
+        )
+        cls.hidden = Publication.objects.create(
+            title='Radiation draft', year=2026, authors_text='Smith', is_published=False,
+        )
+        cls.url = reverse('publications:publications')
+
+    def results(self, params):
+        response = self.client.get(self.url, params)
+        self.assertEqual(response.status_code, 200)
+        return list(response.context['publications'])
+
+    def test_search_fields_and_whitespace(self):
+        for query in ('radiation', 'SMITH', 'chemical journal', '10.1234/example', '  Radiation  '):
+            with self.subTest(query=query):
+                self.assertEqual(self.results({'q': query}), [self.paper])
+
+    def test_filters_separately_and_together(self):
+        params = {
+            'employee': self.employee.pk, 'year': 2025,
+            'direction': self.direction.pk, 'q': 'Smith',
+        }
+        for key, value in params.items():
+            with self.subTest(field=key):
+                self.assertEqual(self.results({key: value}), [self.paper])
+        self.assertEqual(self.results(params), [self.paper])
+        self.assertEqual(self.results({**params, 'year': 2024}), [])
+
+    def test_default_order_and_publication_visibility(self):
+        self.assertEqual(self.results({}), [self.paper, self.other])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.hidden.title)
+        self.assertNotIn((2026, 2026), response.context['form'].fields['year'].choices)
+
+    def test_choices_exclude_unpublished_and_unused_relations(self):
+        from research.models import ResearchDirection
+        from users.models import Employee
+
+        employee = Employee.objects.create(last_name='Скрытый', first_name='Автор', is_published=False)
+        direction = ResearchDirection.objects.create(name='Скрытое', slug='hidden')
+        self.paper.employees.add(employee)
+        self.paper.research_directions.add(direction)
+        unused_employee = Employee.objects.create(last_name='Другой', first_name='Автор')
+        unused_direction = ResearchDirection.objects.create(name='Другое', slug='unused', is_published=True)
+        self.hidden.employees.add(unused_employee)
+        self.hidden.research_directions.add(unused_direction)
+        form = self.client.get(self.url).context['form']
+        self.assertEqual(list(form.fields['employee'].queryset), [self.employee])
+        self.assertEqual(list(form.fields['direction'].queryset), [self.direction])
+
+    def test_invalid_filters_show_errors(self):
+        for params in ({'year': 'bad'}, {'year': 1900}, {'employee': 99999},
+                       {'direction': 'bad'}, {'q': 'x' * 501}):
+            with self.subTest(params=params):
+                response = self.client.get(self.url, params)
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.context['form'].errors)
+                self.assertEqual(list(response.context['publications']), [])
+                self.assertContains(response, 'Проверьте параметры поиска')
+
+    def test_no_matches(self):
+        response = self.client.get(self.url, {'q': 'no match'})
+        self.assertContains(response, 'Публикации не найдены')
+        self.assertContains(response, 'Найдено публикаций: 0')
+
+    def test_pagination_preserves_filters_and_selection(self):
+        for index in range(21):
+            paper = Publication.objects.create(
+                title=f'Search & find {index}', year=2025,
+                authors_text='Author', is_published=True,
+            )
+            paper.employees.add(self.employee)
+            paper.research_directions.add(self.direction)
+        params = {
+            'q': 'Search & find', 'employee': self.employee.pk,
+            'direction': self.direction.pk, 'year': 2025,
+        }
+        response = self.client.get(self.url, params)
+        self.assertEqual(len(response.context['publications']), 20)
+        from urllib.parse import urlencode
+        from django.utils.html import escape
+        self.assertContains(response, escape('?' + urlencode({**params, 'page': 2})))
+        self.assertContains(response, 'value="Search &amp; find"')
+        second = self.client.get(self.url, {**params, 'page': 2})
+        self.assertEqual(len(second.context['publications']), 1)
+        self.assertFalse(set(response.context['publications']) & set(second.context['publications']))
+        for page, expected in [('bad', 1), ('999', 2)]:
+            self.assertEqual(self.client.get(self.url, {**params, 'page': page}).context['page_obj'].number, expected)
