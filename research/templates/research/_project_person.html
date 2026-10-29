@@ -1,0 +1,5 @@
+{% if participation.employee %}
+    <a href="{% url 'users:employe_card' participation.employee.pk %}" class="font-semibold text-lab-950 hover:underline">{{ participation.employee }}</a>
+{% else %}
+    {{ participation.external_name }}{% if participation.external_organization %} ({{ participation.external_organization }}){% endif %}
+{% endif %}

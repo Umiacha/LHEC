@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% block title %}{{ project.name }} — ЛХВЭ{% endblock %}
+{% block content %}
+<section class="bg-paper py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+        <a href="{% url 'research:projects' %}" class="font-semibold text-lab-950 hover:underline">← Научные проекты</a>
+        <h1 class="mt-4 break-words text-5xl font-semibold text-lab-950">{{ project.name }}</h1>
+        <p class="mt-6 text-lg text-slate-600">{{ project.start_year }}–{{ project.end_year }}</p>
+        {% if project.funding_source %}<p class="mt-3 text-slate-600">Источник финансирования: {{ project.funding_source }}</p>{% endif %}
+        {% if project.funding_kind or project.funding_number or project.customer or project.funding_program or project.external_url %}
+            <details class="mt-6">
+                <summary class="cursor-pointer font-semibold text-lab-950">Реквизиты проекта</summary>
+                <dl class="mt-3 grid gap-3 text-slate-600">
+                    {% if project.funding_kind %}<div><dt>Тип основания</dt><dd>{{ project.get_funding_kind_display }}</dd></div>{% endif %}
+                    {% if project.funding_number %}<div><dt>Номер гранта, договора или задания</dt><dd>{{ project.funding_number }}</dd></div>{% endif %}
+                    {% if project.customer %}<div><dt>Заказчик</dt><dd>{{ project.customer }}</dd></div>{% endif %}
+                    {% if project.funding_program %}<div><dt>Программа или конкурс</dt><dd>{{ project.funding_program }}</dd></div>{% endif %}
+                    {% if project.external_url %}<div><dt>Внешняя страница</dt><dd><a href="{{ project.external_url }}" class="hover:underline">Страница проекта →</a></dd></div>{% endif %}
+                </dl>
+            </details>
+        {% endif %}
+        {% if leader %}
+            <h2 class="mt-10 text-3xl font-semibold text-lab-950">Руководитель</h2>
+            <p class="mt-4">{% include 'research/_project_person.html' with participation=leader %}</p>
+        {% endif %}
+        {% if executors %}
+            <h2 class="mt-10 text-3xl font-semibold text-lab-950">Основные исполнители</h2>
+            <ul class="mt-4 grid gap-3">{% for entry in executors %}<li>{% include 'research/_project_person.html' with participation=entry %}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if project.abstract %}
+            <h2 class="mt-10 text-3xl font-semibold text-lab-950">Аннотация</h2>
+            <div class="mt-4 text-lg leading-8 text-slate-600">{{ project.abstract|linebreaks }}</div>
+        {% endif %}
+        {% if directions %}
+            <h2 class="mt-10 text-3xl font-semibold text-lab-950">Научные направления</h2>
+            <ul class="mt-4 grid gap-3">{% for direction in directions %}<li><a href="{% url 'research:direction_detail' direction.slug %}" class="font-semibold text-lab-950 hover:underline">{{ direction.name }}</a></li>{% endfor %}</ul>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

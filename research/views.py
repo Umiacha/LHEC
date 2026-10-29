@@ -1,11 +1,14 @@
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
 
-from .models import ResearchDirection
+from .models import ProjectParticipation, ResearchDirection, ResearchProject
 
 
 def direction_detail(request: HttpRequest, slug: str) -> HttpResponse:
+    """Страница научного направления."""
     direction = get_object_or_404(
         ResearchDirection.objects.select_related('leader'),
         slug=slug,
@@ -25,4 +28,38 @@ def direction_detail(request: HttpRequest, slug: str) -> HttpResponse:
         'employees': employees,
         'publications': page_obj,
         'page_obj': page_obj,
+    })
+
+
+def projects(request: HttpRequest) -> HttpResponse:
+    """Все опубликованные научные проекты, включая завершённые."""
+    projects = ResearchProject.objects.filter(is_published=True)
+    year = timezone.localdate().year
+    current, completed, upcoming = [], [], []
+    for project in projects:
+        if project.end_year < year:
+            completed.append(project)
+        elif project.start_year > year:
+            upcoming.append(project)
+        else:
+            current.append(project)
+    groups = [
+        {'title': 'Текущие', 'projects': current, 'empty_message': 'Текущих проектов пока нет.'},
+        {'title': 'Завершенные', 'projects': completed, 'empty_message': 'Завершенных проектов пока нет.'},
+    ]
+    if upcoming:
+        groups.append({'title': 'Предстоящие', 'projects': upcoming})
+    return render(request, 'research/projects_list.html', {'project_groups': groups})
+
+
+def project_detail(request: HttpRequest, slug: str) -> HttpResponse:
+    project = get_object_or_404(ResearchProject, slug=slug, is_published=True)
+    participations = project.participations.select_related('employee').filter(
+        Q(employee__isnull=True) | Q(employee__is_published=True),
+    )
+    return render(request, 'research/project_detail.html', {
+        'project': project,
+        'leader': next((entry for entry in participations if entry.role == ProjectParticipation.Role.LEADER), None),
+        'executors': [entry for entry in participations if entry.role == ProjectParticipation.Role.EXECUTOR],
+        'directions': project.research_directions.filter(is_published=True),
     })

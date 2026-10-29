@@ -29,8 +29,9 @@ def science(request: HttpRequest) -> HttpResponse:
     })
 
 
-def projects(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/projects.html")
+# Проекты перенесены в research.views.
+# def projects(request: HttpRequest) -> HttpResponse:
+#     return render(request, "core/projects.html")
 
 
 def publications(request: HttpRequest) -> HttpResponse:
