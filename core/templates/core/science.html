@@ -11,6 +11,7 @@
         <nav class="mt-10 flex flex-wrap gap-6" aria-label="Разделы науки">
             <a href="{% url 'research:projects' %}" class="font-semibold text-lab-950 hover:underline">Научные проекты →</a>
             <a href="{% url 'publications:publications' %}" class="font-semibold text-lab-950 hover:underline">Публикации →</a>
+            <a href="#dissertations" class="font-semibold text-lab-950 hover:underline">Диссертации ↓</a>
         </nav>
         <section id="directions" class="mt-12">
             <h2 class="text-3xl font-semibold text-lab-950">Научные направления</h2>
@@ -21,6 +22,27 @@
                     </li>
                 {% empty %}
                     <li class="text-slate-600">Информация о направлениях скоро появится.</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section id="dissertations" class="mt-12">
+            <h2 class="text-3xl font-semibold text-lab-950">Защищённые диссертации</h2>
+            <ul class="mt-6 grid gap-6">
+                {% for dissertation in dissertations %}
+                    <li class="rounded-2xl border border-slate-200 bg-white p-6">
+                        <p class="text-sm text-slate-600">{{ dissertation.year }} · {{ dissertation.get_degree_display }}</p>
+                        <h3 class="mt-2 text-xl font-semibold text-lab-950">
+                            <a href="{{ dissertation.external_url }}" target="_blank" rel="noopener noreferrer" class="hover:underline">{{ dissertation.title }}</a>
+                        </h3>
+                        <p class="mt-4 text-slate-600">Автор: {{ dissertation.author }}</p>
+                        {% if dissertation.specialty %}<p class="mt-2 text-slate-600">Специальность: {{ dissertation.specialty }}</p>{% endif %}
+                        {% if dissertation.supervisors %}<p class="mt-2 text-slate-600">Научные руководители / консультанты: {{ dissertation.supervisors }}</p>{% endif %}
+                        {% if can_download_dissertations and dissertation.file %}
+                            <a href="{{ dissertation.file.url }}" class="mt-4 inline-block font-semibold text-lab-950 hover:underline">Скачать диссертацию ↓</a>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class="text-slate-600">Информация о защищённых диссертациях скоро появится.</li>
                 {% endfor %}
             </ul>
         </section>

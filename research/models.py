@@ -1,4 +1,6 @@
+from django.core.validators import MinValueValidator
 from django.db import models
+from .storage import dissertation_file_storage
 
 
 class ResearchDirection(models.Model):  # TODO: сделать отображения карточек сотрудников, а не просто ФИО
@@ -169,3 +171,38 @@ class ProjectParticipation(models.Model):
     def __str__(self):
         person = str(self.employee) if self.employee_id else self.external_name
         return f'{person} — {self.project}'
+
+
+def dissertation_file_path(instance, filename):
+    return f'dissertations/{instance.year}/{filename}'
+
+
+class Dissertation(models.Model):
+    """Защищённая в лаборатории диссертация."""
+
+    class Degree(models.TextChoices):
+        CANDIDATE = 'candidate', 'Кандидатская диссертация'
+        DOCTOR = 'doctor', 'Докторская диссертация'
+
+    title = models.CharField('Название', max_length=1000)
+    external_url = models.URLField('Внешняя страница диссертации', max_length=1000)
+    author = models.CharField('Автор (ФИО)', max_length=255)
+    year = models.PositiveSmallIntegerField('Год защиты', validators=[MinValueValidator(1)])
+    degree = models.CharField('Вид диссертации', max_length=20, choices=Degree.choices, default=Degree.CANDIDATE)
+    specialty = models.CharField('Шифр и название специальности', max_length=500, blank=True)
+    supervisors = models.CharField('Научные руководители / консультанты', max_length=1000, blank=True)
+    file = models.FileField(
+        'Текст диссертации', upload_to=dissertation_file_path,
+        storage=dissertation_file_storage, blank=True,
+        help_text='Скачивание доступно только сотрудникам и администраторам.',
+    )
+    is_published = models.BooleanField('Показывать на сайте', default=False)
+    sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
+
+    class Meta:
+        verbose_name = 'Диссертация'
+        verbose_name_plural = 'Диссертации'
+        ordering = ('-year', 'sort_order', 'author', 'pk')
+
+    def __str__(self):
+        return f'{self.author} — {self.title}'

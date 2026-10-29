@@ -1,10 +1,16 @@
+from pathlib import Path
+from django.core.exceptions import PermissionDenied
+from django.http import FileResponse, Http404
+from django.views.decorators.cache import never_cache
+from users.roles import INTERNAL_MATERIALS_PERMISSION
+
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from .models import ProjectParticipation, ResearchDirection, ResearchProject
+from .models import Dissertation, ProjectParticipation, ResearchDirection, ResearchProject
 
 
 def direction_detail(request: HttpRequest, slug: str) -> HttpResponse:
@@ -63,3 +69,18 @@ def project_detail(request: HttpRequest, slug: str) -> HttpResponse:
         'executors': [entry for entry in participations if entry.role == ProjectParticipation.Role.EXECUTOR],
         'directions': project.research_directions.filter(is_published=True),
     })
+
+
+@never_cache
+def download_dissertation(request: HttpRequest, file_name: str) -> FileResponse:
+    if not request.user.has_perm(INTERNAL_MATERIALS_PERMISSION):
+        raise PermissionDenied
+    dissertation = get_object_or_404(Dissertation, file=file_name, is_published=True)
+    try:
+        stream = dissertation.file.open('rb')
+    except FileNotFoundError:
+        raise Http404('Файл не найден')
+    return FileResponse(stream, as_attachment=True, filename=Path(dissertation.file.name).name,
+                        content_type='application/octet-stream')
+
+# TODO: Проверить функционал диссертаций и добавить функционал для дипломов.

@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.urls import reverse
 
-from .models import ProjectParticipation, ResearchDirection, ResearchMembership, ResearchProject
+from .models import Dissertation, ProjectParticipation, ResearchDirection, ResearchMembership, ResearchProject
 
 
 class ResearchMembershipInline(admin.TabularInline):
@@ -119,3 +119,12 @@ class ResearchProjectAdmin(admin.ModelAdmin):
         if obj.is_published:
             return reverse('research:project_detail', kwargs={'slug': obj.slug})
         return None
+
+
+@admin.register(Dissertation)
+class DissertationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'year', 'degree', 'is_published', 'sort_order')
+    list_filter = ('is_published', 'degree', 'year')
+    list_editable = ('is_published', 'sort_order')
+    search_fields = ('title', 'author', 'specialty', 'supervisors')
+    fields = ('title', 'external_url', 'author', 'year', 'degree', 'specialty', 'supervisors', 'file', 'is_published', 'sort_order')
