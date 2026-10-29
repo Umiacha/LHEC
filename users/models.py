@@ -59,6 +59,7 @@ class EmployeeQuerySet(models.QuerySet):
         )
 
 
+# TODO: Добавить статус "студент/аспирант" (мб еще кто?), кроме научной и инженерной должностей.
 class Employee(models.Model):  # TODO: сделать ссылки на istina.msu и пр., а также связь с научной группой и публикациями.
     """Модель данных сотрудника."""
     last_name = models.CharField(verbose_name='Фамилия', max_length=200)
