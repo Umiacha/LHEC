@@ -4,6 +4,9 @@ from django.urls import reverse_lazy
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_http_methods
+from django.db.models import Q
+
+from research.models import ResearchDirection
 
 from .forms import LoginForm, EmployeeEditForm
 from .models import Employee
@@ -32,7 +35,14 @@ def employe_card(request: HttpRequest, pk: int) -> HttpResponse:
         not request.user.is_authenticated or employee.user_id != request.user.pk
     ):
         employee = get_object_or_404(Employee.objects.published(), pk=pk)
-    return render(request, "users/employee_card.html", {'employee': employee})
+    research_directions = ResearchDirection.objects.filter(
+        Q(employees=employee) | Q(leader=employee),
+        is_published=True,
+    ).distinct()
+    return render(request, "users/employee_card.html", {
+        'employee': employee,
+        'research_directions': research_directions,
+    })
 
 
 @login_required

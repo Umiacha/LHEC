@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from research.models import ResearchDirection
+
 from .models import Employee, SciencePosition
 
 
@@ -29,6 +31,34 @@ class PeoplePageTests(TestCase):
         response = self.client.get(reverse("users:employe_card", args=[employee.pk]))
 
         self.assertEqual(response.status_code, 404)
+
+    def test_card_shows_public_directions_for_member_and_leader_without_duplicates(self):
+        employee = Employee.objects.create(last_name="Иванов", first_name="Иван")
+        other = Employee.objects.create(last_name="Петров", first_name="Пётр")
+        member = ResearchDirection.objects.create(name="Участие", slug="member", is_published=True, sort_order=1)
+        member.employees.add(employee)
+        leader = ResearchDirection.objects.create(name="Руководство", slug="leader", leader=employee, is_published=True)
+        leader.employees.add(employee, other)
+        hidden = ResearchDirection.objects.create(name="Скрытое направление", slug="hidden", leader=employee)
+        hidden.employees.add(employee)
+        ResearchDirection.objects.create(name="Чужое направление", slug="unrelated", is_published=True)
+
+        response = self.client.get(reverse("users:employe_card", args=[employee.pk]))
+
+        self.assertEqual(list(response.context["research_directions"]), [leader, member])
+        self.assertContains(response, "Научные направления")
+        for direction in (leader, member):
+            self.assertContains(response, reverse("research:direction_detail", args=[direction.slug]), count=1)
+        self.assertNotContains(response, "Скрытое направление")
+        self.assertNotContains(response, "Чужое направление")
+
+    def test_card_hides_directions_section_when_no_public_directions(self):
+        employee = Employee.objects.create(last_name="Иванов", first_name="Иван")
+        ResearchDirection.objects.create(name="Скрытое направление", slug="hidden", leader=employee)
+
+        response = self.client.get(reverse("users:employe_card", args=[employee.pk]))
+
+        self.assertNotContains(response, "Научные направления")
 
 
 class EmployeeEditTests(TestCase):
