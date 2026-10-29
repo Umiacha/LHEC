@@ -109,3 +109,57 @@ class ResearchViewTests(TestCase):
         self.assertEqual(len(first.context['publications']), 20)
         self.assertEqual(len(second.context['publications']), 1)
         self.assertContains(first, '?page=2')
+
+
+class ResearchProjectTests(TestCase):
+    def setUp(self):
+        from .models import ResearchProject
+        self.project = ResearchProject.objects.create(
+            name='Проект', slug='project', start_year=2026, end_year=2028,
+        )
+        self.employee = Employee.objects.create(first_name='Иван', last_name='Иванов')
+
+    def test_staff_leader_and_external_executor(self):
+        from .models import ProjectParticipation
+        leader = ProjectParticipation(
+            project=self.project, employee=self.employee, role=ProjectParticipation.Role.LEADER,
+        )
+        leader.full_clean()
+        leader.save()
+        external = ProjectParticipation(
+            project=self.project, external_name='Пётр Петров', external_organization='МГУ',
+        )
+        external.full_clean()
+        external.save()
+        self.assertEqual(self.project.participations.count(), 2)
+        self.assertEqual(self.employee.project_participations.get(), leader)
+
+    def test_identity_requires_employee_or_external_name(self):
+        from django.core.exceptions import ValidationError
+        from .models import ProjectParticipation
+        for values in ({}, {'employee': self.employee, 'external_name': 'Пётр Петров'},
+                       {'external_name': '   '}):
+            with self.subTest(values=values), self.assertRaises(ValidationError):
+                ProjectParticipation(project=self.project, **values).full_clean()
+
+    def test_database_rejects_duplicate_employee_and_second_leader(self):
+        from .models import ProjectParticipation
+        ProjectParticipation.objects.create(
+            project=self.project, employee=self.employee, role='leader',
+        )
+        for values in ({'employee': self.employee}, {'external_name': 'Пётр Петров', 'role': 'leader'}):
+            with self.subTest(values=values), self.assertRaises(IntegrityError), transaction.atomic():
+                ProjectParticipation.objects.create(project=self.project, **values)
+
+    def test_invalid_years(self):
+        from django.core.exceptions import ValidationError
+        self.project.end_year = 2025
+        with self.assertRaises(ValidationError):
+            self.project.full_clean()
+
+    def test_deleting_employee_preserves_project_participation(self):
+        from django.db.models.deletion import ProtectedError
+        from .models import ProjectParticipation
+        ProjectParticipation.objects.create(project=self.project, employee=self.employee)
+        with self.assertRaises(ProtectedError):
+            self.employee.delete()
