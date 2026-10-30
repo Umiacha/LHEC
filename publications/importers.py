@@ -145,7 +145,21 @@ def _name(value):
     return value.strip()
 
 
+def _ris_body(text):
+    """Skip publisher metadata only before the first RIS record."""
+    lines = text.splitlines()
+    start = 0
+    for line in lines:
+        if line.strip() and not re.fullmatch(
+            r'(?:Provider|Database|Content):[^\n]*', line, flags=re.I,
+        ):
+            break
+        start += 1
+    return '\n'.join(lines[start:])
+
+
 def _ris(text):
+    text = _ris_body(text)
     # rispy tolerates an unfinished last record and text outside records.
     # Validate boundaries first so that no publication is silently discarded.
     active = False
@@ -192,7 +206,7 @@ def parse_publication(source, *, format=None):
     Unknown and unsupported source fields are retained in unmapped_fields.
     """
     text = _read(source)
-    source_format = (format or ('ris' if text.startswith('TY  -') else 'bibtex')).lower().lstrip('.')
+    source_format = (format or ('ris' if _ris_body(text).startswith('TY  -') else 'bibtex')).lower().lstrip('.')
     if source_format == 'bib':
         source_format = 'bibtex'
     if source_format not in {'bibtex', 'ris'}:

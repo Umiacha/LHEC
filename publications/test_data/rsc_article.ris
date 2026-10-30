@@ -1,0 +1,27 @@
+Provider: Silverchair
+Database: TheRoyalSocietyofChemistry
+Content: text/plain; charset="UTF-8"
+
+TY  - JOUR
+AU  - Zasimov, Pavel V.
+AU  - Sanochkina, Elizaveta V.
+AU  - Tyurin, Daniil A.
+AU  - Feldman, Vladimir I.
+T1  - Radiation-induced transformations of matrix-isolated ethanol molecules at cryogenic temperatures: an FTIR study
+PY  - 2023
+Y1  - 2023/09/07
+DO  - 10.1039/d3cp02834h
+JO  - Physical Chemistry Chemical Physics
+JA  - Phys. Chem. Chem. Phys.
+VL  - 25
+IS  - 33
+SP  - 21883
+EP  - 21896
+SN  - 1463-9076
+AB  -  Ethanol (C2H5OH) is one of the most common alcohol molecules observed in various space media (molecular clouds, star formation regions, and, highly likely, interstellar ices), where it is exposed to light and ionizing radiation, leading to more complex organic molecules and eventually to the biologically important species. To better understand the radiation-induced evolution of ethanol molecules in icy media, we have examined the transformations of isolated C2H5OH and C2D5OH under the action of X-rays and vacuum ultraviolet (VUV) radiation in solid inert matrices (Ne, Ar, Kr, and Xe) at 4.4 K using Fourier transform infrared (FTIR) spectroscopy. The results obtained with X-ray irradiation demonstrate the formation of a variety of radiolysis products corresponding to dehydrogenation (CH3CHOH˙, CH3CHO, CH2CHOH, CH3CO˙, H2CCO–H2, H2CCO, HCCO˙, CCO) and C–C bond rupture (H2CO, HCO˙, CO, CH4, and CH3˙). The absorptions of the CH3CHOH˙ radical related to the CCO stretching (the bands at 1249.1, 1247.0, 1246.2, and 1245.1 cm−1, in Ne, Ar, Kr, and Xe, respectively) were first tentatively characterized on the basis of comparison with available computational data. In addition, the C2H2⋯H2O complex, which corresponds to dehydrogenation, was found followed by C–O bond cleavage. The results were confirmed by experiments with isotopic substitution. It was found that dehydrogenation strongly predominated in a xenon matrix, while skeleton bond rupture is more feasible in neon and argon. The matrix effect was attributed to a significant role of “hot” reaction channels in neon and argon, which are efficiently quenched due to relaxation in more polarizable xenon. The VUV photolysis (185 nm) in Ar and Xe matrices yields a similar set of products, except for CH3CHOH˙ and CH2CHOH, which were not found (the nonobservation of the former species may be explained by its efficient secondary photolysis). The plausible mechanisms of product formation and astrochemical implications of the results are discussed. 
+Y2  - 10/30/2026
+UR  - https://doi.org/10.1039/d3cp02834h
+ER  - 
+
+
+

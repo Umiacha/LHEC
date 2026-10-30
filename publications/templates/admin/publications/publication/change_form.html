@@ -1,0 +1,66 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block form_top %}
+{{ block.super }}
+{% if add %}
+<fieldset class="module aligned">
+  <h2>Заполнить из файла</h2>
+  <div class="form-row">
+    <p>Одна публикация в формате BibTeX или RIS, UTF-8, до 2 МБ. Импорт заполняет форму без сохранения. Сначала импортируйте описание, затем добавьте вложения.</p>
+    {{ import_form.bibliography.errors }}
+    {{ import_form.bibliography.label_tag }} {{ import_form.bibliography }}
+    <button type="submit" name="_import" value="1" formnovalidate id="publication-import-button">Прочитать файл</button>
+  </div>
+</fieldset>
+{% endif %}
+{% if import_result %}
+<div class="module">
+  <h2>Результат импорта</h2>
+  <p>Данные перенесены в форму. Проверьте их перед сохранением.</p>
+  {% for warning in import_result.warnings %}<p class="help">{{ warning }}</p>{% endfor %}
+  {% for name, errors in import_result.errors.items %}
+    {% for error in errors %}<p class="errornote">{{ name }}: {{ error }}</p>{% endfor %}
+  {% endfor %}
+  {% if import_result.unmapped_fields %}
+  <details><summary>Неперенесённые поля</summary>
+    <dl>{% for name, value in import_result.unmapped_fields.items %}<dt>{{ name }}</dt><dd>{{ value }}</dd>{% endfor %}</dl>
+  </details>
+  {% endif %}
+</div>
+{% endif %}
+{% with matches=import_duplicates|default:adminform.form.duplicate_matches %}
+{% if matches %}
+<div class="module">
+  <h2>Возможные дубли</h2>
+  <ul>{% for match in matches %}
+    <li><a href="{% url 'admin:publications_publication_change' match.publication.pk %}" target="_blank" rel="noopener">{{ match.publication.title }} ({{ match.publication.year }})</a> — {% if match.reason == 'doi' %}совпадает DOI{% else %}совпадают название и год{% endif %}</li>
+  {% endfor %}</ul>
+</div>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+{% if add %}
+<script>
+(function () {
+  const button = document.getElementById('publication-import-button');
+  const form = button.form;
+  let dirty = false;
+  form.addEventListener('change', function (event) {
+    if (event.target.name !== 'bibliography') dirty = true;
+  });
+  form.addEventListener('input', function (event) {
+    if (event.target.name !== 'bibliography') dirty = true;
+  });
+  button.addEventListener('click', function (event) {
+    if (dirty && !window.confirm('Импорт заменит библиографические поля. Выбранные вложения и изменения в блоке файлов потребуется добавить заново. Продолжить?')) {
+      event.preventDefault();
+    }
+  });
+})();
+</script>
+{% endif %}
+{% endblock %}

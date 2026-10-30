@@ -7,6 +7,7 @@ from .models import Publication
 
 
 class PublicationSearchForm(forms.Form):
+    """Панель поиска и фильтров публикаций."""
     q = forms.CharField(
         label='Поиск', required=False, max_length=500,
         widget=forms.TextInput(attrs={
@@ -44,3 +45,37 @@ class PublicationSearchForm(forms.Form):
                 'bg-white px-4 py-3 text-base text-slate-700 '
                 'focus:border-lab-800 focus:outline-none focus:ring-2 focus:ring-lab-800'
             )
+
+
+class PublicationImportForm(forms.Form):
+    bibliography = forms.FileField(
+        label='Файл BibTeX или RIS',
+        widget=forms.ClearableFileInput(attrs={'accept': '.bib,.ris'}),
+    )
+
+
+class PublicationAdminForm(forms.ModelForm):
+    duplicate_matches = ()
+
+    confirm_duplicate = forms.BooleanField(
+        label='Подтверждаю создание отдельной записи при найденном совпадении',
+        required=False,
+    )
+
+    class Meta:
+        model = Publication
+        fields = '__all__'
+
+    def clean(self):
+        from .importers import ImportResult, find_duplicates
+
+        data = super().clean()
+        self.duplicate_matches = find_duplicates(
+            ImportResult(data, '', ''), exclude_pk=self.instance.pk,
+        )
+        if self.duplicate_matches and not data.get('confirm_duplicate'):
+            raise forms.ValidationError(
+                'Найдены возможные дубли. Проверьте ссылки над формой и подтвердите '
+                'сохранение отдельной записи, если это необходимо.'
+            )
+        return data

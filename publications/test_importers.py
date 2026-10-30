@@ -10,6 +10,27 @@ FIXTURES = Path(__file__).parent / 'test_data'
 
 
 class ParserTests(SimpleTestCase):
+    def test_rsc_publisher_headers(self):
+        content = (FIXTURES / 'rsc_article.ris').read_bytes()
+        for explicit_format in (None, 'ris'):
+            with self.subTest(format=explicit_format):
+                result = parse_publication(content, format=explicit_format)
+                self.assertEqual(result.source_format, 'ris')
+                self.assertEqual(result.errors, {})
+                self.assertEqual(result.data['doi'], '10.1039/d3cp02834h')
+                self.assertEqual(result.data['year'], 2023)
+                self.assertEqual(result.data['pages'], '21883–21896')
+                self.assertIn('Pavel V. Zasimov', result.data['authors_text'])
+                self.assertNotIn('Provider', result.unmapped_fields)
+
+    def test_ris_headers_do_not_hide_invalid_records(self):
+        header = 'Provider: Silverchair\nDatabase: RSC\nContent: text/plain\n\n'
+        record = 'TY  - JOUR\nTI  - Title\nER  -\n'
+        for text in (header + record * 2, header + 'TY  - JOUR\nTI  - Title',
+                     header + 'garbage\n' + record, header + record + 'Provider: Other'):
+            with self.subTest(text=text), self.assertRaises(PublicationImportError):
+                parse_publication(text, format='ris')
+
     def test_publisher_exports_match(self):
         results = []
         for extension in ('bib', 'ris'):
