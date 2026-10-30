@@ -14,6 +14,10 @@ class LabWork(models.Model):
     order = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = 'Лабораторная работа'
+        verbose_name_plural = 'Лабораторные работы'
+
 
 class TeachingMaterial(models.Model):
     class AccessLevel(models.TextChoices):
@@ -39,6 +43,8 @@ class TeachingMaterial(models.Model):
     is_published = models.BooleanField(default=True)
 
     class Meta:
+        verbose_name = 'Учебный материал'
+        verbose_name_plural = 'Учебные материалы'
         permissions = [
             ('view_internal_materials', 'Can view internal teaching materials'),
         ]

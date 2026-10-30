@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
+from django.urls import reverse
 
 from .models import Lecture, LectureCourse, LectureFile
 
@@ -70,3 +71,28 @@ class LectureDownloadTests(TestCase):
         self.login_employee()
         self.attachment.file.storage.delete(self.attachment.file.name)
         self.assertEqual(self.client.get(self.url).status_code, 404)
+
+    def test_pdf_preview_requires_permission_and_is_not_cached(self):
+        url = reverse('education:view_lecture_file', args=[self.attachment.file.name])
+        self.assertEqual(self.client.get(url).status_code, 403)
+        self.login_employee()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertIn('inline;', response['Content-Disposition'])
+        self.assertIn('no-store', response['Cache-Control'])
+        response.close()
+        self.course.is_published = False
+        self.course.save()
+        self.assertEqual(self.client.get(url).status_code, 404)
+
+    def test_non_pdf_preview_downloads_instead(self):
+        self.login_employee()
+        self.attachment.file.name = 'education/lectures/demo.html'
+        self.attachment.file.save('demo.html', SimpleUploadedFile('demo.html', b'<html>demo</html>'))
+        response = self.client.get(reverse(
+            'education:view_lecture_file', args=[self.attachment.file.name],
+        ))
+        self.assertEqual(response['Content-Type'], 'application/octet-stream')
+        self.assertIn('attachment;', response['Content-Disposition'])
+        response.close()
