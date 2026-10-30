@@ -410,3 +410,8 @@ img {
         flex-direction: column;
     }
 }
+/* Visible markers for the student research topics. */
+.student-topics {
+    list-style: disc outside;
+    padding-left: 1.5rem;
+}

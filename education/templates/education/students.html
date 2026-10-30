@@ -1,23 +1,15 @@
-{% extends "core/_placeholder.html" %}
+{% extends "core/base.html" %}
 
 {% block title %}Студентам — ЛХВЭ{% endblock %}
+{% block description %}Студентам в Лаборатории химии высоких энергий.{% endblock %}
 
-{% block description %}
-Возможности для студентов в Лаборатории химии высоких энергий.
-{% endblock %}
-
-{% block page_label %}Образование{% endblock %}
-
-{% block page_heading %}
-Студентам
-{% endblock %}
-
-{% block page_intro %}
-Информация об учебных материалах, курсовых и выпускных
-работах и участии студентов в научной деятельности лаборатории.
-{% endblock %}
-
-{% block page_actions %}
+{% block content %}
+<section class="bg-paper py-20 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="max-w-3xl">
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Образование</p>
+            <h1 class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Студентам</h1>
+<div class="mt-10 flex flex-wrap gap-3">
 <a
     href="{% url 'education:study_materials' %}"
     class="inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800"
@@ -31,4 +23,31 @@
 >
     Курсовые и дипломные →
 </a>
+</div>
+<div class="mt-10 space-y-6 text-lg leading-8 text-slate-600">
+<p><strong class="font-bold">Приглашаем студентов 4 и 3 курса, интересующихся физической химией (как экспериментальной, так и теоретической), для научно-исследовательской работы</strong>. Наши исследования посвящены изучению структуры и свойств различных высокореакционных интермедиатов и необычных молекул в условиях сверхнизких температур.</p>
+<p>В ходе выполнения работы планируется получить уникальную информацию, представляющую интерес для различных отраслей химии и химической физики, таких как:</p>
+<ul class="student-topics list-disc space-y-3 pl-6">
+    <li>Химия межзвёздного пространства и планетарных атмосфер</li>
+    <li>Радиационная химия и фотохимия</li>
+    <li>Динамика атомов и молекул в конденсированных средах</li>
+    <li>Развитие новых принципов манипулирования химическими реакциями при низких температурах</li>
+</ul>
+<p>Участие в проекте открывает возможность активно заниматься перспективными научными исследованиями с использованием современных методик эксперимента при криогенных температурах, основанных на использовании спектроскопии ИК-, видимого и УФ-диапазона, а также электронного парамагнитного резонанса. Одновременно можно выполнить дипломную или курсовую работу, связанную с указанной проблематикой.</p>
+<p><strong class="font-bold">Аспиранты и студенты старших курсов, работающие в ЛХВЭ, регулярно представляют результаты своих исследований на различных международных научных конференциях.</strong></p>
+<p>Статьи, отражающие содержание работ, выполненных в лаборатории публикуются в ведущих международных научных журналах:</p>
+<ul class="list-disc space-y-3 pl-6">
+    <li>Journal of the American Chemical Society (IF = 15.801)</li>
+    <li>The Journal of Physical Chemistry Letters (IF = 7.643)</li>
+    <li>Monthly Notices of the Royal Astronomical Society (IF = 5.25)</li>
+    <li>The Journal of Physical Chemistry C (IF = 4.467)</li>
+    <li>Physical Chemistry Chemical Physics (IF = 3.802)</li>
+    <li>The Journal of Chemical Physics (IF = 3.166)</li>
+    <li>The Journal of Physical Chemistry A (IF = 2.725)</li>
+    <li>Radiation Physics and Chemistry (IF = 2.411)</li>
+</ul>
+</div>
+        </div>
+    </div>
+</section>
 {% endblock %}
