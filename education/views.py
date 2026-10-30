@@ -3,10 +3,29 @@ from pathlib import Path
 
 from django.db.models import Prefetch
 from django.core.exceptions import PermissionDenied
-from django.http import HttpRequest, HttpResponse, FileResponse
+from django.http import HttpRequest, HttpResponse, FileResponse, Http404
 from django.shortcuts import render, get_object_or_404
 
-from .models import TeachingMaterial, LabWork
+from .models import TeachingMaterial, LabWork, LectureFile
+from users.roles import INTERNAL_MATERIALS_PERMISSION
+
+
+def download_lecture_file(request: HttpRequest, file_name: str) -> FileResponse:
+    """Скачивание опубликованных лекций только сотрудниками и администраторами."""
+    if not request.user.has_perm(INTERNAL_MATERIALS_PERMISSION):
+        raise PermissionDenied
+    attachment = get_object_or_404(
+        LectureFile, file=file_name,
+        lecture__is_published=True, lecture__course__is_published=True,
+    )
+    try:
+        stream = attachment.file.open('rb')
+    except FileNotFoundError:
+        raise Http404('Файл не найден')
+    return FileResponse(
+        stream, as_attachment=True, filename=Path(attachment.file.name).name,
+        content_type='application/octet-stream',
+    )
 
 
 def students(request: HttpRequest) -> HttpResponse:

@@ -6,6 +6,7 @@ from . import views
 app_name = 'education'
 
 urlpatterns = [
+    path('lectures/files/<path:file_name>/', views.download_lecture_file, name='download_lecture_file'),
     path('students/', views.students, name='students',),
     path('students/study_materials/', views.study_materials, name='study_materials',),
     path('students/theses/', views.theses, name='theses'),
