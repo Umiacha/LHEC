@@ -1,9 +1,11 @@
+from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
 from publications.models import Publication
 from research.models import Diploma, Dissertation, ResearchDirection, ResearchProject
+from users.models import AcademicDegree, Employee, SciencePosition
 from users.roles import INTERNAL_MATERIALS_PERMISSION
 
 from .models import Announcement
@@ -22,7 +24,18 @@ def about(request: HttpRequest) -> HttpResponse:
 
 
 def history(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/history.html")
+    scientific = Q(science_position__in=SciencePosition.values)
+    staff_statistics = Employee.objects.current().aggregate(  # TODO: Сейчас из-за разного числа сотрудников в тексте может быть дичь в падежах...
+        total=Count('pk'),
+        scientific=Count('pk', filter=scientific),
+        doctors=Count('pk', filter=scientific & Q(
+            academic_degree__in=AcademicDegree.doctors(),
+        )),
+        candidates=Count('pk', filter=scientific & Q(
+            academic_degree__in=AcademicDegree.candidates(),
+        )),
+    )
+    return render(request, "core/history.html", {'staff_statistics': staff_statistics})
 
 
 def science(request: HttpRequest) -> HttpResponse:  # TODO: перенести этот view и url в research.
