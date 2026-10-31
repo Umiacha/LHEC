@@ -105,3 +105,26 @@ class EducationProfileTests(TestCase):
         self.assertTrue(administrator.is_staff)
         self.assertTrue(administrator.is_superuser)
         self.assertTrue(other.is_staff)
+
+
+    def test_former_participants_appear_only_in_last_section(self):
+        current_staff = self.person()
+        current_student = self.person(education_status=EducationStatus.STUDENT)
+        current_postgraduate = self.person(education_status=EducationStatus.POSTGRADUATE)
+        former_staff = self.person(is_current=False, science_position=SciencePosition.RESEARCH_FELLOW)
+        former_student = self.person(is_current=False, education_status=EducationStatus.STUDENT)
+        former_postgraduate = self.person(is_current=False, education_status=EducationStatus.POSTGRADUATE)
+        hidden = self.person(is_current=False, is_published=False)
+        response = self.client.get(reverse('users:people'))
+        sections = response.context['people_sections']
+        self.assertEqual(list(sections[0][1]), [current_staff])
+        self.assertEqual(list(sections[1][1]), [current_postgraduate])
+        self.assertEqual(list(sections[2][1]), [current_student])
+        title, former = sections[-1]
+        self.assertEqual(title, 'Сотрудники и студенты лаборатории в прошлом')
+        self.assertCountEqual(former, [former_staff, former_student, former_postgraduate])
+        for person in [former_staff, former_student, former_postgraduate]:
+            self.assertContains(response, reverse('users:employe_card', args=[person.pk]), count=1)
+        self.assertNotContains(response, reverse('users:employe_card', args=[hidden.pk]))
+        content = response.content.decode()
+        self.assertGreater(content.index(title), content.index('>Студенты</h2>'))

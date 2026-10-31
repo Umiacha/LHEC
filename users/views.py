@@ -25,14 +25,17 @@ class UserLogoutView(LogoutView):
 def people(request: HttpRequest) -> HttpResponse:
     """Страница со списком сотрудников."""
     employees = Employee.objects.published().by_position()
-    staff = employees.staff()
-    learners = employees.filter(science_position='', engineer_position='').order_by(
+    current = employees.current()
+    staff = current.staff()
+    learners = current.filter(science_position='', engineer_position='').order_by(
         'last_name', 'first_name', 'mid_name', 'pk',
     )
     sections = [
         ('Сотрудники', staff),
         ('Аспиранты', learners.filter(education_status=EducationStatus.POSTGRADUATE)),
         ('Студенты', learners.filter(education_status=EducationStatus.STUDENT)),
+        ('Сотрудники и студенты лаборатории в прошлом',
+         employees.filter(is_current=False).order_by('last_name', 'first_name', 'mid_name', 'pk')),
     ]
     return render(request, "users/people.html", {
         'employees': employees, 'people_sections': sections,
