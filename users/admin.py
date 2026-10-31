@@ -135,7 +135,7 @@ class UserAdmin(DjangoUserAdmin):
 @admin.register(Employee)
 class EmployeeProfileAdmin(admin.ModelAdmin):
     """
-    Карточка сотрудника.
+    Карточка участника лаборатории.
     
     Без обязательной привязки к аккаунту.
     """
@@ -146,6 +146,9 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
         ('Работа и описание', {
             'fields': ('science_position', 'engineer_position', 'academic_degree',
                        'academic_title', 'is_current', 'bio'),
+        }),
+        ('Обучение', {
+            'fields': ('education_status', 'study_year'),
         }),
         ('Аккаунт и публикации', {
             'fields': ('user', 'is_published'),
@@ -158,10 +161,12 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
         'engineer_position',
         'academic_degree',
         'academic_title',
+        'education_status',
+        'study_year',
         'is_current',
         'user',
         'is_published',
     )
-    list_filter = ("is_current", "is_published", "academic_degree", "academic_title",
+    list_filter = ("education_status", "is_current", "is_published", "academic_degree", "academic_title",
                    "science_position", "engineer_position")
     search_fields = ("last_name", "first_name", "mid_name", "user__username")

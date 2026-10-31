@@ -9,7 +9,7 @@ from django.db.models import Q
 from research.models import ResearchDirection
 
 from .forms import LoginForm, EmployeeEditForm
-from .models import Employee
+from .models import EducationStatus, Employee
 
 
 class UserLoginView(LoginView):
@@ -25,7 +25,18 @@ class UserLogoutView(LogoutView):
 def people(request: HttpRequest) -> HttpResponse:
     """Страница со списком сотрудников."""
     employees = Employee.objects.published().by_position()
-    return render(request, "users/people.html", {'employees': employees})
+    staff = employees.staff()
+    learners = employees.filter(science_position='', engineer_position='').order_by(
+        'last_name', 'first_name', 'mid_name', 'pk',
+    )
+    sections = [
+        ('Сотрудники', staff),
+        ('Аспиранты', learners.filter(education_status=EducationStatus.POSTGRADUATE)),
+        ('Студенты', learners.filter(education_status=EducationStatus.STUDENT)),
+    ]
+    return render(request, "users/people.html", {
+        'employees': employees, 'people_sections': sections,
+    })
 
 
 def employe_card(request: HttpRequest, pk: int) -> HttpResponse:

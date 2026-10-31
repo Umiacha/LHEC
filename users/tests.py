@@ -153,7 +153,7 @@ class EmployeeAcademicProfileTests(TestCase):
         self.client.force_login(user)
         response = self.client.post(reverse('users:edit_employe_card', args=[employee.pk]), {
             'last_name': 'Иванов', 'first_name': 'Иван', 'mid_name': '', 'bio': '',
-            'academic_degree': AcademicDegree.DOCTOR,
+            'academic_degree': AcademicDegree.DOCTOR_CHEMISTRY,
             'academic_title': AcademicTitle.PROFESSOR, 'is_current': '',
         })
         self.assertEqual(response.status_code, 302)
@@ -163,13 +163,13 @@ class EmployeeAcademicProfileTests(TestCase):
         self.assertTrue(employee.is_current)
 
 
-    def test_degree_groups_include_all_disciplines_and_unspecified_values(self):
+    def test_degree_groups_include_all_disciplines(self):
         from .models import AcademicDegree
 
         for degree in AcademicDegree:
             Employee.objects.create(last_name=degree.value, first_name='Тест', academic_degree=degree)
         candidates = Employee.objects.filter(academic_degree__in=AcademicDegree.candidates())
         doctors = Employee.objects.filter(academic_degree__in=AcademicDegree.doctors())
-        self.assertEqual(candidates.count(), 4)
-        self.assertEqual(doctors.count(), 3)
+        self.assertEqual(candidates.count(), 3)
+        self.assertEqual(doctors.count(), 2)
         self.assertEqual(candidates.count() + doctors.count(), Employee.objects.count())

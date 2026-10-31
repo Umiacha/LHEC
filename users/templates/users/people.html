@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 
 {% block title %}Сотрудники — ЛХВЭ{% endblock %}
-{% block description %}Сотрудники Лаборатории химии высоких энергий.{% endblock %}
+{% block description %}Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий.{% endblock %}
 
 {% block content %}
 <section class="bg-paper py-16 sm:py-20 lg:py-24">
@@ -9,12 +9,16 @@
         <header class="max-w-3xl">
             <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Лаборатория</p>
             <h1 class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Сотрудники</h1>
-            <p class="mt-6 text-lg leading-8 text-slate-600">Сотрудники Лаборатории химии высоких энергий.</p>
+            <p class="mt-6 text-lg leading-8 text-slate-600">Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий.</p>
         </header>
 
         {% if employees %}
+            {% for section_title, section_employees in people_sections %}
+            {% if section_employees %}
+            <section class="mt-12">
+            <h2 class="text-3xl font-semibold text-lab-950">{{ section_title }}</h2>
             <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {% for employee in employees %}
+                {% for employee in section_employees %}
                     <li class="min-w-0 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
                         <div class="flex aspect-[4/3] items-center justify-center bg-slate-100">
                             {% if employee.photo %}
@@ -27,17 +31,20 @@
                             {% endif %}
                         </div>
                         <div class="min-w-0 p-6">
-                            <h2 class="break-words text-xl font-semibold leading-snug text-lab-950">
+                            <h3 class="break-words text-xl font-semibold leading-snug text-lab-950">
                                 <a href="{% url 'users:employe_card' employee.pk %}" class="hover:text-lab-800 hover:underline focus-visible:underline">
                                     {{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}
                                 </a>
-                            </h2>
+                            </h3>
                             {% if employee.science_position or employee.engineer_position %}
                                 <p class="mt-3 text-sm leading-6 text-slate-600">
                                     {% if employee.science_position %}{{ employee.get_science_position_display }}{% endif %}
                                     {% if employee.science_position and employee.engineer_position %}<br>{% endif %}
                                     {% if employee.engineer_position %}{{ employee.get_engineer_position_display }}{% endif %}
                                 </p>
+                            {% endif %}
+                            {% if employee.education_status %}
+                                <p class="mt-3 text-sm leading-6 text-slate-600">{{ employee.education_label }}</p>
                             {% endif %}
                             {% if employee.academic_degree or employee.academic_title %}
                                 <p class="mt-3 text-sm leading-6 text-slate-600">{% if employee.academic_degree %}{{ employee.get_academic_degree_display }}{% endif %}{% if employee.academic_degree and employee.academic_title %}, {% endif %}{% if employee.academic_title %}{{ employee.get_academic_title_display }}{% endif %}</p>
@@ -46,6 +53,9 @@
                     </li>
                 {% endfor %}
             </ul>
+            </section>
+            {% endif %}
+            {% endfor %}
         {% else %}
             <p class="mt-12 rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">Список сотрудников пока пуст.</p>
         {% endif %}

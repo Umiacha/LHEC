@@ -26,7 +26,7 @@ def set_user_role(user: User, role: UserRole):
     Назначить пользователю одну из UserRole.
 
     Администратор == Django superuser.
-    Сотрудник == обычный пользователь группы 'Сотрудник'.
+    Сотрудник == пользователь с доступом к внутренним материалам без входа в админку.
     """
     role = UserRole(role)
     employee_group = Group.objects.get(name=EMPLOYEE_GROUP_NAME)
@@ -36,7 +36,7 @@ def set_user_role(user: User, role: UserRole):
         user.is_staff = True
         user.is_superuser = True
     elif role == UserRole.EMPLOYEE:
-        user.is_staff = True
+        user.is_staff = False
         user.is_superuser = False
     user.save(update_fields=['is_staff', 'is_superuser',])
     if role == UserRole.EMPLOYEE:

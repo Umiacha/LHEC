@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 
 
 class SciencePosition(models.TextChoices):
@@ -50,10 +52,23 @@ class AcademicTitle(models.TextChoices):
     PROFESSOR = 'professor', 'проф.'
 
 
+class EducationStatus(models.TextChoices):
+    STUDENT = 'student', 'Студент'
+    POSTGRADUATE = 'postgraduate', 'Аспирант'
+
+
 class EmployeeQuerySet(models.QuerySet):
     def current(self):
-        """Действующие сотрудники независимо от видимости карточки."""
+        """Действующие участники независимо от видимости карточки."""
         return self.filter(is_current=True)
+
+    def staff(self):
+        """Сотрудники, включая обучающихся с должностью."""
+        return self.filter(
+            models.Q(education_status='')
+            | ~models.Q(science_position='')
+            | ~models.Q(engineer_position='')
+        )
 
     def published(self):
         """Получение только опубликованных Employee."""
@@ -86,9 +101,8 @@ class EmployeeQuerySet(models.QuerySet):
         )
 
 
-# TODO: Добавить статус "студент/аспирант" (мб еще кто?), кроме научной и инженерной должностей.
 class Employee(models.Model):  # TODO: сделать ссылки на istina.msu и пр., а также связь с научной группой и публикациями.
-    """Модель данных сотрудника."""
+    """Публичная карточка участника лаборатории с необязательным аккаунтом."""
     last_name = models.CharField(verbose_name='Фамилия', max_length=200)
     first_name = models.CharField(verbose_name='Имя', max_length=200)
     mid_name = models.CharField(verbose_name='Отчество', max_length=200, blank=True)
@@ -105,6 +119,14 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
         choices=EngineerPosition.choices,
         blank=True
     )
+    education_status = models.CharField(
+        'Статус обучения', max_length=20, choices=EducationStatus.choices,
+        blank=True, default='',
+    )
+    study_year = models.PositiveSmallIntegerField(
+        'Курс', null=True, blank=True, validators=[MinValueValidator(1)],
+        help_text='Только для студентов. Обновляется вручную.',
+    )
     academic_degree = models.CharField(
         'Учёная степень', max_length=20, choices=AcademicDegree.choices, blank=True,
     )
@@ -113,8 +135,8 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
         help_text='Учёное звание, а не занимаемая должность.',
     )
     is_current = models.BooleanField(
-        'Действующий сотрудник', default=True,
-        help_text='Снимите для бывшего сотрудника. Не влияет на публикацию карточки и доступ к аккаунту.',
+        'Действующий участник', default=True,
+        help_text='Снимите для бывшего участника. Не влияет на публикацию карточки и доступ к аккаунту.',
     )
     bio = models.TextField(verbose_name='Описание', blank=True)
     user = models.OneToOneField(
@@ -127,6 +149,22 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
     )
     is_published = models.BooleanField(verbose_name='Опубликовано', default=True)
     objects = EmployeeQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = 'Карточка участника лаборатории'
+        verbose_name_plural = 'Карточки участников лаборатории'
+
+    def clean(self):
+        super().clean()
+        if self.study_year is not None and self.education_status != EducationStatus.STUDENT:
+            raise ValidationError({'study_year': 'Курс можно указать только для студента.'})
+
+    @property
+    def education_label(self):
+        label = self.get_education_status_display()
+        if self.education_status == EducationStatus.STUDENT and self.study_year is not None:
+            return f'{label}, {self.study_year} курс'
+        return label
 
     def __str__(self):
         return f'{self.last_name} {self.first_name}'.strip()

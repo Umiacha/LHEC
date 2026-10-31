@@ -6,7 +6,8 @@ from django.test import TransactionTestCase
 class DiplomaMigrationTests(TransactionTestCase):
     def test_existing_work_and_supervisors_survive_move(self):
         executor = MigrationExecutor(connection)
-        before = [('education', '0002_diploma'), ('research', '0007_alter_dissertation_file')]
+        before = [('education', '0002_diploma'), ('research', '0007_alter_dissertation_file'),
+                  ('users', '0006_employee_role_without_admin_access')]
         after = [('research', '0008_diploma')]
         executor.migrate(before)
         try:

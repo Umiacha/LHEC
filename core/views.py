@@ -25,7 +25,7 @@ def about(request: HttpRequest) -> HttpResponse:
 
 def history(request: HttpRequest) -> HttpResponse:
     scientific = Q(science_position__in=SciencePosition.values)
-    staff_statistics = Employee.objects.current().aggregate(  # TODO: Сейчас из-за разного числа сотрудников в тексте может быть дичь в падежах...
+    staff_statistics = Employee.objects.current().staff().aggregate(  # TODO: Сейчас из-за разного числа сотрудников в тексте может быть дичь в падежах...
         total=Count('pk'),
         scientific=Count('pk', filter=scientific),
         doctors=Count('pk', filter=scientific & Q(
