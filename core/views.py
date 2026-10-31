@@ -19,10 +19,6 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, "core/home.html", {'announcements': announcements})
 
 
-def about(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/about.html")
-
-
 def history(request: HttpRequest) -> HttpResponse:
     scientific = Q(science_position__in=SciencePosition.values)
     staff_statistics = Employee.objects.current().staff().aggregate(  # TODO: Сейчас из-за разного числа сотрудников в тексте может быть дичь в падежах...
