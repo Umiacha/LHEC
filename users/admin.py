@@ -144,7 +144,8 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
             'fields': ('last_name', 'first_name', 'mid_name', 'photo'),
         }),
         ('Работа и описание', {
-            'fields': ('science_position', 'engineer_position', 'bio'),
+            'fields': ('science_position', 'engineer_position', 'academic_degree',
+                       'academic_title', 'is_current', 'bio'),
         }),
         ('Аккаунт и публикации', {
             'fields': ('user', 'is_published'),
@@ -155,8 +156,12 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
         'first_name',
         'science_position',
         'engineer_position',
+        'academic_degree',
+        'academic_title',
+        'is_current',
         'user',
         'is_published',
     )
-    list_filter = ("is_published", "science_position", "engineer_position")
+    list_filter = ("is_current", "is_published", "academic_degree", "academic_title",
+                   "science_position", "engineer_position")
     search_fields = ("last_name", "first_name", "mid_name", "user__username")

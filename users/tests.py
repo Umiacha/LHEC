@@ -115,3 +115,61 @@ class EmployeeEditTests(TestCase):
         self.assertContains(response, "Текст")
 
 # Create your tests here.
+
+
+class EmployeeAcademicProfileTests(TestCase):
+    def test_current_filter_is_independent_of_publication(self):
+        current = Employee.objects.create(
+            last_name='Действующий', first_name='Сотрудник', is_published=False,
+        )
+        former = Employee.objects.create(
+            last_name='Бывший', first_name='Сотрудник', is_current=False,
+        )
+        self.assertEqual(list(Employee.objects.current()), [current])
+        self.assertEqual(list(Employee.objects.published()), [former])
+        self.assertEqual(current.academic_degree, '')
+        self.assertEqual(current.academic_title, '')
+
+    def test_degree_and_title_are_visible_on_list_and_card(self):
+        from .models import AcademicDegree, AcademicTitle
+
+        employee = Employee.objects.create(
+            last_name='Иванов', first_name='Иван',
+            academic_degree=AcademicDegree.DOCTOR_CHEMISTRY,
+            academic_title=AcademicTitle.PROFESSOR,
+            is_current=False,
+        )
+        for url in (reverse('users:people'), reverse('users:employe_card', args=[employee.pk])):
+            response = self.client.get(url)
+            self.assertContains(response, 'д.х.н.')
+            self.assertContains(response, 'проф.')
+            self.assertNotContains(response, 'Действующий сотрудник')
+
+    def test_profile_owner_cannot_change_employment_or_academic_fields(self):
+        from .models import AcademicDegree, AcademicTitle
+
+        user = User.objects.create_user(username='academic-owner')
+        employee = Employee.objects.create(last_name='Иванов', first_name='Иван', user=user)
+        self.client.force_login(user)
+        response = self.client.post(reverse('users:edit_employe_card', args=[employee.pk]), {
+            'last_name': 'Иванов', 'first_name': 'Иван', 'mid_name': '', 'bio': '',
+            'academic_degree': AcademicDegree.DOCTOR,
+            'academic_title': AcademicTitle.PROFESSOR, 'is_current': '',
+        })
+        self.assertEqual(response.status_code, 302)
+        employee.refresh_from_db()
+        self.assertEqual(employee.academic_degree, '')
+        self.assertEqual(employee.academic_title, '')
+        self.assertTrue(employee.is_current)
+
+
+    def test_degree_groups_include_all_disciplines_and_unspecified_values(self):
+        from .models import AcademicDegree
+
+        for degree in AcademicDegree:
+            Employee.objects.create(last_name=degree.value, first_name='Тест', academic_degree=degree)
+        candidates = Employee.objects.filter(academic_degree__in=AcademicDegree.candidates())
+        doctors = Employee.objects.filter(academic_degree__in=AcademicDegree.doctors())
+        self.assertEqual(candidates.count(), 4)
+        self.assertEqual(doctors.count(), 3)
+        self.assertEqual(candidates.count() + doctors.count(), Employee.objects.count())

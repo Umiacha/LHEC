@@ -27,7 +27,34 @@ class EngineerPosition(models.TextChoices):
     TECHNICIAN = 'technician', 'техн.'
 
 
+class AcademicDegree(models.TextChoices):
+    # CANDIDATE = 'candidate', 'к.н. (отрасль не указана)'
+    CANDIDATE_CHEMISTRY = 'candidate_chemistry', 'к.х.н.'
+    CANDIDATE_PHYS_MATH = 'candidate_phys_math', 'к.ф.-м.н.'
+    CANDIDATE_BIOLOGY = 'candidate_biology', 'к.б.н.'
+    # DOCTOR = 'doctor', 'д.н. (отрасль не указана)'
+    DOCTOR_CHEMISTRY = 'doctor_chemistry', 'д.х.н.'
+    DOCTOR_PHYS_MATH = 'doctor_phys_math', 'д.ф.-м.н.'
+
+    @classmethod
+    def candidates(cls):
+        return [degree.value for degree in cls if degree.value.startswith('candidate')]
+
+    @classmethod
+    def doctors(cls):
+        return [degree.value for degree in cls if degree.value.startswith('doctor')]
+
+
+class AcademicTitle(models.TextChoices):
+    DOCENT = 'docent', 'доц.'
+    PROFESSOR = 'professor', 'проф.'
+
+
 class EmployeeQuerySet(models.QuerySet):
+    def current(self):
+        """Действующие сотрудники независимо от видимости карточки."""
+        return self.filter(is_current=True)
+
     def published(self):
         """Получение только опубликованных Employee."""
         return self.filter(is_published=True)
@@ -77,6 +104,17 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
         max_length=50,
         choices=EngineerPosition.choices,
         blank=True
+    )
+    academic_degree = models.CharField(
+        'Учёная степень', max_length=20, choices=AcademicDegree.choices, blank=True,
+    )
+    academic_title = models.CharField(
+        'Учёное звание', max_length=20, choices=AcademicTitle.choices, blank=True,
+        help_text='Учёное звание, а не занимаемая должность.',
+    )
+    is_current = models.BooleanField(
+        'Действующий сотрудник', default=True,
+        help_text='Снимите для бывшего сотрудника. Не влияет на публикацию карточки и доступ к аккаунту.',
     )
     bio = models.TextField(verbose_name='Описание', blank=True)
     user = models.OneToOneField(

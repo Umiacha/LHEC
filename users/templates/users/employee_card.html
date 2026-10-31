@@ -34,6 +34,9 @@
                         </ul>
                     </div>
                 {% endif %}
+                {% if employee.academic_degree or employee.academic_title %}
+                    <p class="mt-3 text-lg text-slate-600">{% if employee.academic_degree %}{{ employee.get_academic_degree_display }}{% endif %}{% if employee.academic_degree and employee.academic_title %}, {% endif %}{% if employee.academic_title %}{{ employee.get_academic_title_display }}{% endif %}</p>
+                {% endif %}
                 {% if employee.bio %}<div class="mt-8 whitespace-pre-line text-base leading-7 text-slate-700">{{ employee.bio }}</div>{% endif %}
             </div>
         </div>

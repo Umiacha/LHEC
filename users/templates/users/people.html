@@ -39,6 +39,9 @@
                                     {% if employee.engineer_position %}{{ employee.get_engineer_position_display }}{% endif %}
                                 </p>
                             {% endif %}
+                            {% if employee.academic_degree or employee.academic_title %}
+                                <p class="mt-3 text-sm leading-6 text-slate-600">{% if employee.academic_degree %}{{ employee.get_academic_degree_display }}{% endif %}{% if employee.academic_degree and employee.academic_title %}, {% endif %}{% if employee.academic_title %}{{ employee.get_academic_title_display }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </li>
                 {% endfor %}
