@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -8,7 +9,7 @@ from research.models import Diploma, Dissertation, ResearchDirection, ResearchPr
 from users.models import AcademicDegree, Employee, SciencePosition
 from users.roles import INTERNAL_MATERIALS_PERMISSION
 
-from .models import Announcement
+from .models import Announcement, GalleryPhoto
 
 
 def home(request: HttpRequest) -> HttpResponse:
@@ -66,7 +67,9 @@ def news(request: HttpRequest) -> HttpResponse:
 
 
 def gallery(request: HttpRequest) -> HttpResponse:
-    return render(request, "core/gallery.html")
+    photos = GalleryPhoto.objects.filter(is_published=True)
+    page = Paginator(photos, 24).get_page(request.GET.get('page'))
+    return render(request, "core/gallery.html", {'page_obj': page})
 
 
 def contacts(request: HttpRequest) -> HttpResponse:
