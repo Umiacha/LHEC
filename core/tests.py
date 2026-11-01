@@ -2,6 +2,40 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from users.models import AcademicDegree, Employee, EngineerPosition, SciencePosition
+from publications.models import Publication
+
+
+@override_settings(STORAGES={
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+})
+class HomepagePublicationTests(TestCase):
+    def test_selection_order_and_optional_content(self):
+        def publication(title, **fields):
+            return Publication.objects.create(
+                title=title, authors_text='Авторы', year=2025, **fields,
+            )
+
+        second = publication('Вторая работа', is_published=True, is_on_homepage=True,
+                             homepage_order=2, note='Значимый результат', doi='10.1234/example')
+        first = publication('Первая работа', is_published=True, is_on_homepage=True,
+                            homepage_order=1)
+        publication('Скрытая работа', is_on_homepage=True)
+        publication('Только избранная', is_published=True, is_featured=True)
+        response = self.client.get(reverse('core:home'))
+        self.assertEqual(list(response.context['homepage_publications']), [first, second])
+        self.assertContains(response, reverse('publications:publication', args=[first.pk]))
+        self.assertContains(response, 'Значимый результат')
+        self.assertContains(response, 'https://doi.org/10.1234/example')
+        self.assertNotContains(response, 'Скрытая работа')
+        self.assertNotContains(response, 'Только избранная')
+        content = response.content.decode()
+        self.assertLess(content.index('id="science"'), content.index('id="publications"'))
+        self.assertLess(content.index('id="publications"'), content.index('id="students"'))
+
+    def test_empty_selection_hides_section(self):
+        response = self.client.get(reverse('core:home'))
+        self.assertNotContains(response, 'id="publications"')
 
 
 @override_settings(STORAGES={

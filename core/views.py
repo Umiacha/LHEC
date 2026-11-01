@@ -20,6 +20,9 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, "core/home.html", {
         'announcements': announcements,
         'directions': ResearchDirection.objects.filter(is_published=True),
+        'homepage_publications': Publication.objects.filter(
+            is_published=True, is_on_homepage=True,
+        ).order_by('homepage_order', '-year', '-pk'),
     })
 
 

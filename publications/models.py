@@ -53,6 +53,11 @@ class Publication(models.Model):
 
     is_published = models.BooleanField('Показывать на сайте', default=False)
     is_featured = models.BooleanField('Избранная', default=False)
+    is_on_homepage = models.BooleanField('На главной', default=False)
+    homepage_order = models.PositiveIntegerField(
+        'Порядок на главной', default=0, blank=True,
+        help_text='Меньшие значения показываются первыми. При совпадении — сначала новые работы.',
+    )
     created_at = models.DateTimeField('Запись создана', auto_now_add=True)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
 

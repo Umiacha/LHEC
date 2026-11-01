@@ -1026,9 +1026,6 @@
     .sm\:mt-20 {
       margin-top: calc(var(--spacing) * 20);
     }
-    .sm\:block {
-      display: block;
-    }
     .sm\:aspect-\[3\/4\] {
       aspect-ratio: 3/4;
     }

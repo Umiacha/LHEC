@@ -34,7 +34,7 @@ class PublicationAdmin(admin.ModelAdmin):
         initial = request.POST.dict()
         for name in ('employees', 'research_directions'):
             initial[name] = request.POST.getlist(name)
-        for name in ('is_published', 'is_featured', 'confirm_duplicate'):
+        for name in ('is_published', 'is_featured', 'is_on_homepage', 'confirm_duplicate'):
             initial[name] = name in request.POST
         if upload_form.is_valid():
             upload = upload_form.cleaned_data['bibliography']
@@ -67,8 +67,11 @@ class PublicationAdmin(admin.ModelAdmin):
         'kind',
         'is_published',
         'is_featured',
+        'is_on_homepage',
+        'homepage_order',
     )
-    list_filter = ('is_published', 'is_featured', 'kind', 'year', 'research_directions')
+    list_editable = ('is_on_homepage', 'homepage_order')
+    list_filter = ('is_published', 'is_featured', 'is_on_homepage', 'kind', 'year', 'research_directions')
     search_fields = ('title', 'authors_text', 'venue', 'doi')
     filter_horizontal = ('employees', 'research_directions')
     readonly_fields = ('created_at', 'updated_at')
