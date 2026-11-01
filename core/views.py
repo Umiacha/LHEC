@@ -16,7 +16,10 @@ def home(request: HttpRequest) -> HttpResponse:
         is_published=True,
         published_at__lte=timezone.now()
     ).order_by('-published_at')[:3]
-    return render(request, "core/home.html", {'announcements': announcements})
+    return render(request, "core/home.html", {
+        'announcements': announcements,
+        'directions': ResearchDirection.objects.filter(is_published=True),
+    })
 
 
 def history(request: HttpRequest) -> HttpResponse:
