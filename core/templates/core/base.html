@@ -17,6 +17,7 @@
         content="{% block description %}Лаборатория химии высоких энергий химического факультета МГУ{% endblock %}"
     >
 
+    <link rel="icon" type="image/jpeg" href="{% static 'core/img/LHEC_emblem.jpg' %}">
     <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
 </head>
 
@@ -27,13 +28,15 @@
                 href="{% url 'core:home' %}"
                 class="flex items-center gap-4 no-underline"
             >
+                <img
+                    src="{% static 'core/img/LHEC_emblem.jpg' %}"
+                    alt=""
+                    class="h-auto w-24 shrink-0"
+                    width="170"
+                    height="60"
+                >
                 <span class="text-2xl font-black tracking-[-0.05em] text-lab-950">
                     ЛХВЭ
-                </span>
-    
-                <span class="hidden text-xs leading-tight text-slate-500 sm:block">
-                    Лаборатория химии<br>
-                    высоких энергий
                 </span>
             </a>
     
@@ -54,13 +57,6 @@
                     href="{% url 'education:students' %}"
                 >
                     Студентам
-                </a>
-    
-                <a
-                    class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
-                    href="{% url 'core:news' %}"
-                >
-                    Объявления
                 </a>
     
                 <a class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
@@ -149,13 +145,6 @@
                         href="{% url 'education:students' %}"
                     >
                         Студентам
-                    </a>
-    
-                    <a
-                        class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
-                        href="{% url 'core:news' %}"
-                    >
-                        Объявления
                     </a>
     
                     <a
