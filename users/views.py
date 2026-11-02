@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -31,10 +32,10 @@ def people(request: HttpRequest) -> HttpResponse:
         'last_name', 'first_name', 'mid_name', 'pk',
     )
     sections = [
-        ('Сотрудники', staff),
-        ('Аспиранты', learners.filter(education_status=EducationStatus.POSTGRADUATE)),
-        ('Студенты', learners.filter(education_status=EducationStatus.STUDENT)),
-        ('Сотрудники и студенты лаборатории в прошлом',
+        (_('Сотрудники'), staff),
+        (_('Аспиранты'), learners.filter(education_status=EducationStatus.POSTGRADUATE)),
+        (_('Студенты'), learners.filter(education_status=EducationStatus.STUDENT)),
+        (_('Сотрудники и студенты лаборатории в прошлом'),
          employees.filter(is_current=False).order_by('last_name', 'first_name', 'mid_name', 'pk')),
     ]
     return render(request, "users/people.html", {

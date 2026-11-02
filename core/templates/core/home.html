@@ -1,7 +1,8 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 {% load static %}
 
-{% block title %}ЛХВЭ — Лаборатория химии высоких энергий{% endblock %}
+{% block title %}{% translate "ЛХВЭ — Лаборатория химии высоких энергий" %}{% endblock %}
 
 {% block content %}
 
@@ -16,21 +17,19 @@
             <p
                 class="mb-6 page-label text-energy-400"
             >
-                Химический факультет МГУ
+                {% translate "Химический факультет МГУ" %}
             </p>
 
             <h1
                 class="max-w-3xl hero-title"
             >
-                Лаборатория химии высоких энергий
+                {% translate "Лаборатория химии высоких энергий" %}
             </h1>
 
             <p
                 class="mt-8 max-w-2xl text-lg leading-8 text-slate-300"
             >
-                Исследуем химические процессы, протекающие под воздействием
-                ионизирующего излучения, плазмы и других высокоэнергетических
-                воздействий.
+                {% translate "Исследуем химические процессы, протекающие под воздействием ионизирующего излучения, плазмы и других высокоэнергетических воздействий." %}
             </p>
 
             <div class="mt-10 flex flex-wrap gap-3">
@@ -38,14 +37,14 @@
                     href="{% url 'users:people' %}"
                     class="button button-accent"
                 >
-                    Сотрудники
+                    {% translate "Сотрудники" %}
                 </a>
 
                 <a
                     href="{% url 'core:history' %}"
                     class="button button-inverse"
                 >
-                    История
+                    {% translate "История" %}
                 </a>
             </div>
         </div>
@@ -55,7 +54,7 @@
             <div class="w-full overflow-hidden rounded-[1.25rem]">
                 <img
                     src="{% static 'core/img/LHEC-main.jpg' %}"
-                    alt="Сотрудники Лаборатории химии высоких энергий"
+                    alt="{% translate "Сотрудники Лаборатории химии высоких энергий" %}"
                     class="block h-auto w-full"
                 >
             </div>
@@ -74,13 +73,13 @@
                 <p
                     class="page-label"
                 >
-                    Наука
+                    {% translate "Наука" %}
                 </p>
 
                 <h2
                     class="mt-4 max-w-3xl feature-title"
                 >
-                    Научные направления
+                    {% translate "Научные направления" %}
                 </h2>
             </div>
 
@@ -88,7 +87,7 @@
                 href="{% url 'core:science' %}"
                 class="shrink-0 text-sm text-link"
             >
-                Вся научная работа →
+                {% translate "Вся научная работа →" %}
             </a>
         </div>
 
@@ -105,18 +104,18 @@
                         <h3
                             class="card-title"
                         >
-                            <a href="{% url 'research:direction_detail' direction.slug %}" class="text-link">{{ direction.name }}</a>
+                            <a href="{% url 'research:direction_detail' direction.slug %}" class="text-link">{{ direction.localized_name }}</a>
                         </h3>
 
-                        {% if direction.description %}
+                        {% if direction.localized_description %}
                             <p class="mt-4 leading-7 text-slate-600">
-                                {{ direction.description|truncatewords:30 }}
+                                {{ direction.localized_description|truncatewords:30 }}
                             </p>
                         {% endif %}
                     </div>
                 </article>
             {% empty %}
-                <p class="empty-state lg:col-span-3">Научные направления пока не добавлены.</p>
+                <p class="empty-state lg:col-span-3">{% translate "Научные направления пока не добавлены." %}</p>
             {% endfor %}
         </div>
     </div>
@@ -129,10 +128,10 @@
     <div class="page-container">
         <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <h2 class="feature-title">
-                Избранные публикации
+                {% translate "Избранные публикации" %}
             </h2>
             <a href="{% url 'publications:publications' %}" class="shrink-0 text-sm text-link">
-                Все публикации →
+                {% translate "Все публикации →" %}
             </a>
         </div>
 
@@ -143,19 +142,19 @@
                         <h3 class="break-words text-xl card-title">
                             <a href="{% url 'publications:publication' publication.pk %}" class="hover:underline focus-visible:underline">{{ publication.title }}</a>
                         </h3>
-                        {% if publication.note %}
-                            <p class="mt-3 break-words whitespace-pre-line leading-7 text-slate-700">{{ publication.note }}</p>
+                        {% if publication.localized_note %}
+                            <p class="mt-3 break-words whitespace-pre-line leading-7 text-slate-700">{{ publication.localized_note }}</p>
                         {% endif %}
-                        <p class="mt-3 break-words text-sm leading-6 text-slate-600">{{ publication.authors_text|truncatewords:25 }}</p>
+                        <p class="mt-3 break-words text-sm leading-6 text-slate-600">{{ publication.localized_authors_text|truncatewords:25 }}</p>
                         <p class="mt-2 break-words text-sm leading-6 text-slate-500">
                             {% if publication.venue %}{{ publication.venue }} · {% endif %}{{ publication.year }}
                         </p>
                         {% if publication.doi %}
                             <a href="https://doi.org/{{ publication.doi|urlencode }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">DOI ↗</a>
                         {% elif publication.external_url %}
-                            <a href="{{ publication.external_url }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">Страница публикации ↗</a>
+                            <a href="{{ publication.external_url }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">{% translate "Страница публикации ↗" %}</a>
                         {% elif publication.istina_url %}
-                            <a href="{{ publication.istina_url }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">ИСТИНА ↗</a>
+                            <a href="{{ publication.istina_url }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">{% translate "ИСТИНА ↗" %}</a>
                         {% endif %}
                     </article>
                 </li>
@@ -177,40 +176,38 @@
                     <p
                         class="page-label text-energy-400"
                     >
-                        Студентам
+                        {% translate "Студентам" %}
                     </p>
 
                     <h2
                         class="mt-4 max-w-xl feature-title"
                     >
-                        Начните заниматься наукой вместе с нами
+                        {% translate "Начните заниматься наукой вместе с нами" %}
                     </h2>
                 </div>
 
                 <div class="lg:pt-8">
                     <p class="max-w-xl text-lg leading-8 text-slate-300">
-                        В лаборатории можно выполнять курсовые и
-                        выпускные работы, участвовать в научных проектах
-                        и осваивать современные экспериментальные методы.
+                        {% translate "В лаборатории можно выполнять курсовые и выпускные работы, участвовать в научных проектах и осваивать современные экспериментальные методы." %}
                     </p>
 
                     <div class="mt-7 flex flex-wrap gap-2">
                         <span
                             class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-300"
                         >
-                            Курсовые работы
+                            {% translate "Курсовые работы" %}
                         </span>
 
                         <span
                             class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-300"
                         >
-                            Выпускные работы
+                            {% translate "Выпускные работы" %}
                         </span>
 
                         <span
                             class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-300"
                         >
-                            Научные проекты
+                            {% translate "Научные проекты" %}
                         </span>
                     </div>
 
@@ -218,7 +215,7 @@
                         href="{% url 'education:students' %}"
                         class="mt-10 button button-accent"
                     >
-                        Подробнее
+                        {% translate "Подробнее" %}
                     </a>
                 </div>
             </div>
@@ -237,13 +234,13 @@
                 <p
                     class="page-label"
                 >
-                    Лаборатория
+                    {% translate "Лаборатория" %}
                 </p>
 
                 <h2
                     class="mt-4 feature-title"
                 >
-                    Объявления
+                    {% translate "Объявления" %}
                 </h2>
             </div>
 
@@ -251,7 +248,7 @@
                 href="{% url 'core:news' %}"
                 class="text-sm text-link"
             >
-                Все объявления →
+                {% translate "Все объявления →" %}
             </a>
         </div>
 
@@ -271,11 +268,11 @@
                         <h3
                             class="mt-4 card-title"
                         >
-                            {{ announcement.title }}
+                            {{ announcement.localized_title }}
                         </h3>
         
                         <div class="mt-4 leading-7 text-slate-600">
-                            {{ announcement.text|linebreaksbr }}
+                            {{ announcement.localized_text|linebreaksbr }}
                         </div>
                     </article>
                 {% endfor %}
@@ -285,7 +282,7 @@
                 class="mt-12 empty-state"
             >
                 <p class="max-w-2xl page-intro">
-                    Сейчас новых объявлений нет.
+                    {% translate "Сейчас новых объявлений нет." %}
                 </p>
             </div>
         {% endif %}

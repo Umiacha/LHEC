@@ -1,0 +1,10 @@
+{% load i18n %}
+{% get_current_language as current_language %}
+<form action="{% url 'set_language' %}" method="post" class="flex items-center gap-3">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    <button type="submit" name="language" value="ru" lang="ru"
+            class="text-sm text-link" {% if current_language == 'ru' %}aria-current="true"{% endif %}>RU</button>
+    <button type="submit" name="language" value="en" lang="en"
+            class="text-sm text-link" {% if current_language == 'en' %}aria-current="true"{% endif %}>EN</button>
+</form>

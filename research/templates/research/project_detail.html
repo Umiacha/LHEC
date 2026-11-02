@@ -1,40 +1,41 @@
 {% extends "core/base.html" %}
-{% block title %}{{ project.name }} — ЛХВЭ{% endblock %}
+{% load i18n %}
+{% block title %}{{ project.localized_name }} {% translate "— ЛХВЭ" %}{% endblock %}
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         {% url 'research:projects' as back_url %}
-        {% include "core/components/back_link.html" with back_label="Научные проекты" back_anchor="" %}
-        <h1 class="mt-4 break-words page-title">{{ project.name }}</h1>
+        {% include "core/components/back_link.html" with back_label=_("Научные проекты") back_anchor="" %}
+        <h1 class="mt-4 break-words page-title">{{ project.localized_name }}</h1>
         <p class="mt-6 text-lg text-slate-600">{{ project.start_year }}–{{ project.end_year }}</p>
-        {% if project.funding_source %}<p class="mt-3 text-slate-600">Источник финансирования: {{ project.funding_source }}</p>{% endif %}
-        {% if project.funding_kind or project.funding_number or project.customer or project.funding_program or project.external_url %}
+        {% if project.localized_funding_source %}<p class="mt-3 text-slate-600">{% translate "Источник финансирования:" %} {{ project.localized_funding_source }}</p>{% endif %}
+        {% if project.funding_kind or project.funding_number or project.localized_customer or project.localized_funding_program or project.external_url %}
             <details class="mt-6">
-                <summary class="cursor-pointer font-semibold text-lab-950">Реквизиты проекта</summary>
+                <summary class="cursor-pointer font-semibold text-lab-950">{% translate "Реквизиты проекта" %}</summary>
                 <dl class="mt-3 grid gap-3 text-slate-600">
-                    {% if project.funding_kind %}<div><dt>Тип основания</dt><dd>{{ project.get_funding_kind_display }}</dd></div>{% endif %}
-                    {% if project.funding_number %}<div><dt>Номер гранта, договора или задания</dt><dd>{{ project.funding_number }}</dd></div>{% endif %}
-                    {% if project.customer %}<div><dt>Заказчик</dt><dd>{{ project.customer }}</dd></div>{% endif %}
-                    {% if project.funding_program %}<div><dt>Программа или конкурс</dt><dd>{{ project.funding_program }}</dd></div>{% endif %}
-                    {% if project.external_url %}<div><dt>Внешняя страница</dt><dd><a href="{{ project.external_url }}" class="text-link">Страница проекта ↗</a></dd></div>{% endif %}
+                    {% if project.funding_kind %}<div><dt>{% translate "Тип основания" %}</dt><dd>{{ project.get_funding_kind_display }}</dd></div>{% endif %}
+                    {% if project.funding_number %}<div><dt>{% translate "Номер гранта, договора или задания" %}</dt><dd>{{ project.funding_number }}</dd></div>{% endif %}
+                    {% if project.localized_customer %}<div><dt>{% translate "Заказчик" %}</dt><dd>{{ project.localized_customer }}</dd></div>{% endif %}
+                    {% if project.localized_funding_program %}<div><dt>{% translate "Программа или конкурс" %}</dt><dd>{{ project.localized_funding_program }}</dd></div>{% endif %}
+                    {% if project.external_url %}<div><dt>{% translate "Внешняя страница" %}</dt><dd><a href="{{ project.external_url }}" class="text-link">{% translate "Страница проекта ↗" %}</a></dd></div>{% endif %}
                 </dl>
             </details>
         {% endif %}
         {% if leader %}
-            <h2 class="mt-10 section-title">Руководитель</h2>
+            <h2 class="mt-10 section-title">{% translate "Руководитель" %}</h2>
             <p class="mt-4">{% include 'research/_project_person.html' with participation=leader %}</p>
         {% endif %}
         {% if executors %}
-            <h2 class="mt-10 section-title">Основные исполнители</h2>
+            <h2 class="mt-10 section-title">{% translate "Основные исполнители" %}</h2>
             <ul class="mt-4 grid gap-3">{% for entry in executors %}<li>{% include 'research/_project_person.html' with participation=entry %}</li>{% endfor %}</ul>
         {% endif %}
-        {% if project.abstract %}
-            <h2 class="mt-10 section-title">Аннотация</h2>
-            <div class="mt-4 page-intro">{{ project.abstract|linebreaks }}</div>
+        {% if project.localized_abstract %}
+            <h2 class="mt-10 section-title">{% translate "Аннотация" %}</h2>
+            <div class="mt-4 page-intro">{{ project.localized_abstract|linebreaks }}</div>
         {% endif %}
         {% if directions %}
-            <h2 class="mt-10 section-title">Научные направления</h2>
-            <ul class="mt-4 grid gap-3">{% for direction in directions %}<li><a href="{% url 'research:direction_detail' direction.slug %}" class="text-link">{{ direction.name }}</a></li>{% endfor %}</ul>
+            <h2 class="mt-10 section-title">{% translate "Научные направления" %}</h2>
+            <ul class="mt-4 grid gap-3">{% for direction in directions %}<li><a href="{% url 'research:direction_detail' direction.slug %}" class="text-link">{{ direction.localized_name }}</a></li>{% endfor %}</ul>
         {% endif %}
     </div>
 </section>

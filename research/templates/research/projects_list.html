@@ -1,20 +1,21 @@
 {% extends "core/base.html" %}
-{% block title %}Научные проекты — ЛХВЭ{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Научные проекты — ЛХВЭ" %}{% endblock %}
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         {% url 'core:science' as back_url %}
-        {% include "core/components/back_link.html" with back_label="Наука" back_anchor="" %}
-        <h1 class="mt-4 page-title">Научные проекты</h1>
+        {% include "core/components/back_link.html" with back_label=_("Наука") back_anchor="" %}
+        <h1 class="mt-4 page-title">{% translate "Научные проекты" %}</h1>
         {% for group in project_groups %}
         <section class="mt-10">
         <h2 class="section-title">{{ group.title }}</h2>
         <ul class="mt-6 grid gap-6">
             {% for project in group.projects %}
                 <li class="content-card">
-                    <a href="{% url 'research:project_detail' project.slug %}" class="text-xl text-link">{{ project.name }}</a>
+                    <a href="{% url 'research:project_detail' project.slug %}" class="text-xl text-link">{{ project.localized_name }}</a>
                     <p class="mt-3 text-slate-600">{{ project.start_year }}–{{ project.end_year }}</p>
-                    {% if project.funding_source %}<p class="mt-2 text-slate-600">{{ project.funding_source }}</p>{% endif %}
+                    {% if project.localized_funding_source %}<p class="mt-2 text-slate-600">{{ project.localized_funding_source }}</p>{% endif %}
                 </li>
             {% empty %}
                 <li class="empty-state">{{ group.empty_message }}</li>

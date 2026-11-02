@@ -1,4 +1,7 @@
+from django.utils.translation import gettext_lazy as _
 from django.db import models
+
+from core.i18n import localized_value
 
 from research.models import diploma_file_path  # Совместимость с миграцией 0002.
 from .storage import lecture_file_storage
@@ -14,6 +17,28 @@ class LabWork(models.Model):
     order = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=True)
 
+    short_description_en = models.TextField('Краткое описание — EN', blank=True)
+    equipment_en = models.TextField('Оборудование — EN', blank=True)
+    description_en = models.TextField('Описание — EN', blank=True)
+
+    @property
+    def localized_short_description(self):
+        return localized_value(self, "short_description")
+
+    @property
+    def localized_equipment(self):
+        return localized_value(self, "equipment")
+
+    @property
+    def localized_description(self):
+        return localized_value(self, "description")
+
+    title_en = models.CharField('Название — EN', max_length=255, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
+
     class Meta:
         verbose_name = 'Лабораторная работа'
         verbose_name_plural = 'Лабораторные работы'
@@ -21,8 +46,8 @@ class LabWork(models.Model):
 
 class TeachingMaterial(models.Model):
     class AccessLevel(models.TextChoices):
-        PUBLIC = 'public', 'Для всех'
-        INTERNAL = 'internal', 'Только для сотрудников'
+        PUBLIC = 'public', _('Для всех')
+        INTERNAL = 'internal', _('Только для сотрудников')
 
     lab_work = models.ForeignKey(
         LabWork,
@@ -41,6 +66,18 @@ class TeachingMaterial(models.Model):
     )
     order = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=True)
+
+    description_en = models.TextField('Описание — EN', blank=True)
+
+    @property
+    def localized_description(self):
+        return localized_value(self, "description")
+
+    title_en = models.CharField('Название — EN', max_length=255, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
 
     class Meta:
         verbose_name = 'Учебный материал'
@@ -63,6 +100,18 @@ class LectureCourse(models.Model):
     order = models.PositiveIntegerField('Порядок отображения', default=0)
     is_published = models.BooleanField('Показывать на сайте', default=False)
 
+    description_en = models.TextField('Описание — EN', blank=True)
+
+    @property
+    def localized_description(self):
+        return localized_value(self, "description")
+
+    title_en = models.CharField('Название — EN', max_length=255, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
+
     class Meta:
         verbose_name = 'Курс лекций'
         verbose_name_plural = 'Курсы лекций'
@@ -84,6 +133,18 @@ class Lecture(models.Model):
     order = models.PositiveIntegerField('Порядок отображения', default=0)
     is_published = models.BooleanField('Показывать на сайте', default=False)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
+
+    note_en = models.TextField('Примечание лектора — EN', blank=True)
+
+    @property
+    def localized_note(self):
+        return localized_value(self, "note")
+
+    title_en = models.CharField('Название — EN', max_length=255, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
 
     class Meta:
         verbose_name = 'Лекция'
@@ -113,6 +174,16 @@ class LectureFile(models.Model):
     title = models.CharField('Подпись', max_length=255, blank=True)
     order = models.PositiveIntegerField('Порядок отображения', default=0)
 
+    title_en = models.CharField('Подпись — EN', max_length=255, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
+
+    @property
+    def localized_label(self):
+        return self.localized_title or self.file.name.rsplit("/", 1)[-1]
+
     class Meta:
         verbose_name = 'Файл лекции'
         verbose_name_plural = 'Файлы лекций'
@@ -120,3 +191,37 @@ class LectureFile(models.Model):
 
     def __str__(self):
         return self.title or self.file.name.rsplit('/', 1)[-1]
+
+
+class StudentWorkTopic(models.Model):
+    """Редактируемый архив тем дипломных и курсовых работ."""
+
+    class Kind(models.TextChoices):
+        DIPLOMA = 'diploma', _('Дипломная работа')
+        COURSE = 'course', _('Курсовая работа')
+
+    class Subject(models.TextChoices):
+        INORGANIC = 'inorganic', _('Неорганическая химия')
+        ANALYTICAL = 'analytical', _('Аналитическая химия')
+        ORGANIC = 'organic', _('Органическая химия')
+        PHYSICAL = 'physical', _('Физическая химия')
+        MOLECULAR = 'molecular', _('Строение молекул')
+
+    title = models.CharField('Название — RU', max_length=1000)
+    title_en = models.CharField('Название — EN', max_length=1000, blank=True)
+    kind = models.CharField('Вид работы', max_length=20, choices=Kind.choices)
+    subject = models.CharField('Раздел', max_length=20, choices=Subject.choices, blank=True)
+    sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
+    is_published = models.BooleanField('Показывать на сайте', default=True)
+
+    class Meta:
+        verbose_name = 'Тема дипломной или курсовой работы'
+        verbose_name_plural = 'Темы дипломных и курсовых работ'
+        ordering = ('sort_order', 'pk')
+
+    @property
+    def localized_title(self):
+        return localized_value(self, 'title')
+
+    def __str__(self):
+        return self.title

@@ -7,7 +7,7 @@ from django.http import HttpRequest, HttpResponse, FileResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import never_cache
 
-from .models import TeachingMaterial, LabWork, LectureFile, LectureCourse, Lecture
+from .models import TeachingMaterial, LabWork, LectureFile, LectureCourse, Lecture, StudentWorkTopic
 from users.roles import INTERNAL_MATERIALS_PERMISSION
 
 
@@ -87,7 +87,17 @@ def study_materials(request: HttpRequest) -> HttpResponse:
 
 
 def theses(request: HttpRequest) -> HttpResponse:
-    return render(request, "education/theses.html")
+    topics = list(StudentWorkTopic.objects.filter(is_published=True))
+    groups = []
+    for subject, label in [*StudentWorkTopic.Subject.choices, ('', '')]:
+        works = [topic for topic in topics
+                 if topic.kind == StudentWorkTopic.Kind.COURSE and topic.subject == subject]
+        if works:
+            groups.append({'label': label, 'topics': works})
+    return render(request, "education/theses.html", {
+        'diploma_topics': [topic for topic in topics if topic.kind == StudentWorkTopic.Kind.DIPLOMA],
+        'course_topic_groups': groups,
+    })
 
 
 def download_material(request, pk):

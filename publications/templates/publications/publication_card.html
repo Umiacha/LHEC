@@ -1,34 +1,35 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}{{ publication.title }} — ЛХВЭ{% endblock %}
+{% block title %}{{ publication.title }} {% translate "— ЛХВЭ" %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         {% firstof return_to publications_url as back_url %}
-        {% include "core/components/back_link.html" with back_label="Все публикации" %}
+        {% include "core/components/back_link.html" with back_label=_("Все публикации") %}
 
         <article class="mt-10 reading-width">
             <header>
                 <p class="metadata">
-                    {{ publication.year }} · {{ publication.get_kind_display }}{% if publication.is_featured %} · Избранная{% endif %}{% for direction in publication.research_directions.all %} · {{ direction.name }}{% endfor %}
+                    {{ publication.year }} · {{ publication.get_kind_display }}{% if publication.is_featured %} {% translate "· Избранная" %}{% endif %}{% for direction in publication.research_directions.all %} · {{ direction.localized_name }}{% endfor %}
                 </p>
                 <h1 class="mt-4 page-title">{{ publication.title }}</h1>
-                <p class="mt-6 break-words whitespace-pre-line page-intro">{{ publication.authors_text }}</p>
+                <p class="mt-6 break-words whitespace-pre-line page-intro">{{ publication.localized_authors_text }}</p>
             </header>
 
             <dl class="mt-8 grid gap-4 text-sm leading-6">
                 {% if publication.venue %}
-                    <div><dt class="font-semibold text-lab-950">Журнал, сборник или конференция</dt><dd class="break-words text-slate-600">{{ publication.venue }}</dd></div>
+                    <div><dt class="font-semibold text-lab-950">{% translate "Журнал, сборник или конференция" %}</dt><dd class="break-words text-slate-600">{{ publication.venue }}</dd></div>
                 {% endif %}
                 {% if publication.volume %}
-                    <div><dt class="font-semibold text-lab-950">Том</dt><dd class="break-words text-slate-600">{{ publication.volume }}</dd></div>
+                    <div><dt class="font-semibold text-lab-950">{% translate "Том" %}</dt><dd class="break-words text-slate-600">{{ publication.volume }}</dd></div>
                 {% endif %}
                 {% if publication.issue %}
-                    <div><dt class="font-semibold text-lab-950">Номер</dt><dd class="break-words text-slate-600">{{ publication.issue }}</dd></div>
+                    <div><dt class="font-semibold text-lab-950">{% translate "Номер" %}</dt><dd class="break-words text-slate-600">{{ publication.issue }}</dd></div>
                 {% endif %}
                 {% if publication.pages %}
-                    <div><dt class="font-semibold text-lab-950">Страницы или номер статьи</dt><dd class="break-words text-slate-600">{{ publication.pages }}</dd></div>
+                    <div><dt class="font-semibold text-lab-950">{% translate "Страницы или номер статьи" %}</dt><dd class="break-words text-slate-600">{{ publication.pages }}</dd></div>
                 {% endif %}
                 {% if publication.doi %}
                     <div><dt class="font-semibold text-lab-950">DOI</dt><dd class="break-words text-slate-600">{{ publication.doi }}</dd></div>
@@ -37,26 +38,26 @@
 
             {% if publication.abstract %}
                 <section class="mt-10">
-                    <h2 class="section-title">Аннотация</h2>
+                    <h2 class="section-title">{% translate "Аннотация" %}</h2>
                     <p class="mt-3 break-words whitespace-pre-line text-base leading-7 text-slate-700">{{ publication.abstract }}</p>
                 </section>
             {% endif %}
-            {% if publication.note %}
+            {% if publication.localized_note %}
                 <section class="mt-10">
-                    <h2 class="section-title">Примечание лаборатории</h2>
-                    <p class="mt-3 break-words whitespace-pre-line text-base leading-7 text-slate-700">{{ publication.note }}</p>
+                    <h2 class="section-title">{% translate "Примечание лаборатории" %}</h2>
+                    <p class="mt-3 break-words whitespace-pre-line text-base leading-7 text-slate-700">{{ publication.localized_note }}</p>
                 </section>
             {% endif %}
 
             {% if publication.istina_url or publication.external_url %}
                 <section class="mt-10">
-                    <h2 class="section-title">Ссылки</h2>
+                    <h2 class="section-title">{% translate "Ссылки" %}</h2>
                     <ul class="mt-3 grid gap-4 text-sm font-semibold text-lab-950">
                         {% if publication.istina_url %}
-                            <li><a href="{{ publication.istina_url }}" class="hover:underline focus-visible:underline">Публикация в ИСТИНЕ ↗</a></li>
+                            <li><a href="{{ publication.istina_url }}" class="hover:underline focus-visible:underline">{% translate "Публикация в ИСТИНЕ ↗" %}</a></li>
                         {% endif %}
                         {% if publication.external_url %}
-                            <li><a href="{{ publication.external_url }}" class="hover:underline focus-visible:underline">Внешний источник ↗</a></li>
+                            <li><a href="{{ publication.external_url }}" class="hover:underline focus-visible:underline">{% translate "Внешний источник ↗" %}</a></li>
                         {% endif %}
                     </ul>
                 </section>
@@ -66,10 +67,10 @@
                 {% with files=publication.files.all %}
                     {% if files %}
                         <section class="mt-10">
-                            <h2 class="section-title">Файлы статьи</h2>
+                            <h2 class="section-title">{% translate "Файлы статьи" %}</h2>
                             <ul class="mt-3 grid gap-4 text-sm font-semibold text-lab-950">
                                 {% for attachment in files %}
-                                    <li><a href="{{ attachment.file.url }}" class="hover:underline focus-visible:underline">Скачать: {{ attachment.filename }} ↓</a></li>
+                                    <li><a href="{{ attachment.file.url }}" class="hover:underline focus-visible:underline">{% translate "Скачать:" %} {{ attachment.filename }} ↓</a></li>
                                 {% endfor %}
                             </ul>
                         </section>

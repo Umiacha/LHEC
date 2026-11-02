@@ -141,11 +141,17 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
     """
     fieldsets = (
         ('Основное', {
-            'fields': ('last_name', 'first_name', 'mid_name', 'photo'),
+            'fields': ('photo',),
         }),
-        ('Работа и описание', {
+        ('Русский текст', {
+            'fields': ('last_name', 'first_name', 'mid_name', 'bio'),
+        }),
+        ('English', {
+            'fields': ('last_name_en', 'first_name_en', 'mid_name_en', 'bio_en'),
+        }),
+        ('Работа', {
             'fields': ('science_position', 'engineer_position', 'academic_degree',
-                       'academic_title', 'is_current', 'bio'),
+                       'academic_title', 'is_current'),
         }),
         ('Обучение', {
             'fields': ('education_status', 'study_year'),
@@ -169,4 +175,5 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
     )
     list_filter = ("education_status", "is_current", "is_published", "academic_degree", "academic_title",
                    "science_position", "engineer_position")
-    search_fields = ("last_name", "first_name", "mid_name", "user__username")
+    search_fields = ("last_name", "first_name", "mid_name",
+                     "last_name_en", "first_name_en", "mid_name_en", "user__username")

@@ -1,37 +1,38 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}{{ employee.last_name }} {{ employee.first_name }} — ЛХВЭ{% endblock %}
+{% block title %}{{ employee.localized_last_name }} {{ employee.localized_first_name }} {% translate "— ЛХВЭ" %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         <div class="flex flex-wrap items-center justify-between gap-4">
             {% url 'users:people' as back_url %}
-        {% include "core/components/back_link.html" with back_label="Все сотрудники" back_anchor="" %}
+        {% include "core/components/back_link.html" with back_label=_("Все сотрудники") back_anchor="" %}
             {% if user.is_authenticated and employee.user_id == user.id %}
-                <a href="{% url 'users:edit_employe_card' employee.pk %}" class="button button-secondary">Редактировать</a>
+                <a href="{% url 'users:edit_employe_card' employee.pk %}" class="button button-secondary">{% translate "Редактировать" %}</a>
             {% endif %}
         </div>
         <div class="mt-10 grid gap-10 sm:grid-cols-[minmax(0,18rem)_1fr]">
             <div class="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[1.25rem] bg-slate-100 sm:aspect-[3/4]">
                 {% if employee.photo %}
-                    <img src="{{ employee.photo.url }}" alt="Портрет: {{ employee.last_name }} {{ employee.first_name }} {{ employee.mid_name }}" class="h-full w-full object-cover">
+                    <img src="{{ employee.photo.url }}" alt="{{ employee.localized_full_name }}" class="h-full w-full object-cover">
                 {% else %}
                     <svg class="h-24 w-24 text-slate-300" viewBox="0 0 80 80" fill="none" aria-hidden="true"><circle cx="40" cy="27" r="14" fill="currentColor"/><path d="M12 72c0-15 12-25 28-25s28 10 28 25" fill="currentColor"/></svg>
                 {% endif %}
             </div>
             <div class="min-w-0">
-                <p class="page-label">Участник лаборатории</p>
-                <h1 class="mt-4 break-words page-title">{{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}</h1>
+                <p class="page-label">{% translate "Участник лаборатории" %}</p>
+                <h1 class="mt-4 break-words page-title">{{ employee.localized_full_name }}</h1>
                 {% if employee.science_position %}<p class="mt-6 text-lg text-slate-600">{{ employee.get_science_position_display }}</p>{% endif %}
                 {% if employee.engineer_position %}<p class="mt-2 text-lg text-slate-600">{{ employee.get_engineer_position_display }}</p>{% endif %}
                 {% if employee.education_status %}<p class="mt-3 text-lg text-slate-600">{{ employee.education_label }}</p>{% endif %}
                 {% if research_directions %}
                     <div class="mt-8">
-                        <h2 class="text-lg section-title">Научные направления</h2>
+                        <h2 class="text-lg section-title">{% translate "Научные направления" %}</h2>
                         <ul class="mt-2 space-y-2">
                             {% for direction in research_directions %}
-                                <li><a href="{% url 'research:direction_detail' direction.slug %}" class="text-base text-lab-950 hover:underline">{{ direction.name }}</a></li>
+                                <li><a href="{% url 'research:direction_detail' direction.slug %}" class="text-base text-lab-950 hover:underline">{{ direction.localized_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -39,7 +40,7 @@
                 {% if employee.academic_degree or employee.academic_title %}
                     <p class="mt-3 text-lg text-slate-600">{% if employee.academic_degree %}{{ employee.get_academic_degree_display }}{% endif %}{% if employee.academic_degree and employee.academic_title %}, {% endif %}{% if employee.academic_title %}{{ employee.get_academic_title_display }}{% endif %}</p>
                 {% endif %}
-                {% if employee.bio %}<div class="mt-8 whitespace-pre-line text-base leading-7 text-slate-700">{{ employee.bio }}</div>{% endif %}
+                {% if employee.localized_bio %}<div class="mt-8 whitespace-pre-line text-base leading-7 text-slate-700">{{ employee.localized_bio }}</div>{% endif %}
             </div>
         </div>
     </div>

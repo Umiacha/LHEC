@@ -1,17 +1,18 @@
 {% extends "core/_placeholder.html" %}
+{% load i18n %}
 
-{% block title %}Объявления — ЛХВЭ{% endblock %}
+{% block title %}{% translate "Объявления — ЛХВЭ" %}{% endblock %}
 
 {% block description %}
-Новости и объявления Лаборатории химии высоких энергий.
+{% translate "Новости и объявления Лаборатории химии высоких энергий." %}
 {% endblock %}
 
-{% block page_label %}Лаборатория{% endblock %}
+{% block page_label %}{% translate "Лаборатория" %}{% endblock %}
 
 {% block page_heading %}
-Объявления
+{% translate "Объявления" %}
 {% endblock %}
 
 {% block page_intro %}
-Новости, события и объявления лаборатории.
+{% translate "Новости, события и объявления лаборатории." %}
 {% endblock %}

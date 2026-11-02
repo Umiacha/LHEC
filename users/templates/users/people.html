@@ -1,15 +1,16 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Сотрудники — ЛХВЭ{% endblock %}
-{% block description %}Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий.{% endblock %}
+{% block title %}{% translate "Сотрудники — ЛХВЭ" %}{% endblock %}
+{% block description %}{% translate "Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий." %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         <header class="max-w-3xl">
-            <p class="page-label">Лаборатория</p>
-            <h1 class="mt-4 page-title">Сотрудники</h1>
-            <p class="mt-6 page-intro">Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий.</p>
+            <p class="page-label">{% translate "Лаборатория" %}</p>
+            <h1 class="mt-4 page-title">{% translate "Сотрудники" %}</h1>
+            <p class="mt-6 page-intro">{% translate "Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий." %}</p>
         </header>
 
         {% if employees %}
@@ -22,7 +23,7 @@
                     <li class="min-w-0 overflow-hidden card-frame">
                         <div class="flex aspect-[4/3] items-center justify-center bg-slate-100">
                             {% if employee.photo %}
-                                <img src="{{ employee.photo.url }}" alt="Портрет: {{ employee.last_name }} {{ employee.first_name }} {{ employee.mid_name }}" loading="lazy" class="h-full w-full object-cover">
+                                <img src="{{ employee.photo.url }}" alt="{{ employee.localized_full_name }}" loading="lazy" class="h-full w-full object-cover">
                             {% else %}
                                 <svg class="h-20 w-20 text-slate-300" viewBox="0 0 80 80" fill="none" aria-hidden="true">
                                     <circle cx="40" cy="27" r="14" fill="currentColor"/>
@@ -33,7 +34,7 @@
                         <div class="min-w-0 p-6">
                             <h3 class="break-words text-xl card-title">
                                 <a href="{% url 'users:employe_card' employee.pk %}" class="text-link">
-                                    {{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}
+                                    {{ employee.localized_full_name }}
                                 </a>
                             </h3>
                             {% if employee.science_position or employee.engineer_position %}
@@ -57,7 +58,7 @@
             {% endif %}
             {% endfor %}
         {% else %}
-            <p class="mt-12 empty-state">Список сотрудников пока пуст.</p>
+            <p class="mt-12 empty-state">{% translate "Список сотрудников пока пуст." %}</p>
         {% endif %}
     </div>
 </section>

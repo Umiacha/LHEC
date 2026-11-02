@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.contrib.auth.forms import (
     AuthenticationForm,
@@ -14,7 +15,7 @@ INPUT_CLASSES = 'form-control'
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
-        label='Логин',
+        label=_('Логин'),
         widget=forms.TextInput(
             attrs={
                 'class': INPUT_CLASSES,
@@ -24,7 +25,7 @@ class LoginForm(AuthenticationForm):
         ),
     )
     password = forms.CharField(
-        label='Пароль',
+        label=_('Пароль'),
         strip=False,
         widget=forms.PasswordInput(
             attrs={
@@ -69,6 +70,10 @@ class EmployeeEditForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ('last_name', 'first_name', 'mid_name', 'photo', 'bio')
+        labels = {
+            'last_name': _('Фамилия'), 'first_name': _('Имя'),
+            'mid_name': _('Отчество'), 'photo': _('Фото'), 'bio': _('Описание'),
+        }
         widgets = {
             'last_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),
             'first_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),

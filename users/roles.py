@@ -1,10 +1,11 @@
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, User
 from django.db import models
 
 
 class UserRole(models.TextChoices):
-    ADMINISTRATOR = 'administrator', 'Администратор'
-    EMPLOYEE = 'employee', 'Сотрудник'
+    ADMINISTRATOR = 'administrator', _('Администратор')
+    EMPLOYEE = 'employee', _('Сотрудник')
 
 
 EMPLOYEE_GROUP_NAME = 'Сотрудники'

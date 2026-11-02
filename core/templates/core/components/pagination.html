@@ -1,11 +1,13 @@
+{% load i18n %}
+{% translate "Страницы" as default_pagination_label %}
 {% if page_obj.has_other_pages %}
-<nav class="pagination" aria-label="{{ pagination_label|default:'Страницы' }}">
+<nav class="pagination" aria-label="{% translate pagination_label|default:default_pagination_label %}">
     {% if page_obj.has_previous %}
-        <a href="{% querystring page=page_obj.previous_page_number %}" class="text-link">← Назад</a>
+        <a href="{% querystring page=page_obj.previous_page_number %}" class="text-link">{% translate "← Назад" %}</a>
     {% endif %}
-    <span class="metadata">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    <span class="metadata">{% blocktranslate with number=page_obj.number total=page_obj.paginator.num_pages %}Страница {{ number }} из {{ total }}{% endblocktranslate %}</span>
     {% if page_obj.has_next %}
-        <a href="{% querystring page=page_obj.next_page_number %}" class="text-link">Далее →</a>
+        <a href="{% querystring page=page_obj.next_page_number %}" class="text-link">{% translate "Далее →" %}</a>
     {% endif %}
 </nav>
 {% endif %}

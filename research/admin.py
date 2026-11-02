@@ -22,14 +22,22 @@ class ResearchDirectionAdmin(admin.ModelAdmin):
     list_filter = ('is_published',)
     list_select_related = ('leader',)
     search_fields = (
-        'name', 'description', 'leader__last_name', 'leader__first_name',
+        'name', 'description', 'name_en', 'description_en',
+        'leader__last_name', 'leader__first_name',
+        'leader__last_name_en', 'leader__first_name_en',
     )
     autocomplete_fields = ('leader',)
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
         ('Научное направление', {
-            'fields': ('name', 'slug', 'description', 'leader'),
+            'fields': ('slug', 'leader'),
+        }),
+        ('Русский текст', {
+            'fields': ('name', 'description'),
+        }),
+        ('English', {
+            'fields': ('name_en', 'description_en'),
         }),
         ('Отображение на сайте', {
             'fields': ('is_published', 'sort_order'),
@@ -75,7 +83,7 @@ class ProjectParticipationInline(admin.TabularInline):
     model = ProjectParticipation
     formset = ProjectParticipationFormSet
     autocomplete_fields = ('employee',)
-    fields = ('role', 'employee', 'external_name', 'external_organization', 'sort_order')
+    fields = ('role', 'employee', 'external_name', 'external_name_en', 'external_organization', 'external_organization_en', 'sort_order')
     extra = 1
     verbose_name_plural = 'Участия в проекте: выберите сотрудника ЛХВЭ либо укажите ФИО и организацию внешнего участника'
 
@@ -88,7 +96,7 @@ class ResearchProjectAdmin(admin.ModelAdmin):
     list_editable = ('is_published', 'sort_order')
     list_filter = ('is_published', 'funding_kind', 'start_year', 'end_year', 'research_directions')
     search_fields = (
-        'name', 'abstract', 'funding_source', 'funding_number', 'customer',
+        'name', 'name_en', 'abstract', 'abstract_en', 'funding_source', 'funding_source_en', 'funding_number', 'customer',
         'funding_program', 'participations__employee__last_name',
         'participations__employee__first_name', 'participations__external_name',
     )
@@ -98,6 +106,9 @@ class ResearchProjectAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Научный проект', {
             'fields': ('name', 'slug', ('start_year', 'end_year'), 'abstract', 'research_directions'),
+        }),
+        ('English', {
+            'fields': ('name_en', 'abstract_en', 'funding_source_en', 'customer_en', 'funding_program_en'),
         }),
         ('Финансирование', {
             'fields': ('funding_source',),
@@ -126,8 +137,8 @@ class DissertationAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'year', 'degree', 'is_published', 'sort_order')
     list_filter = ('is_published', 'degree', 'year')
     list_editable = ('is_published', 'sort_order')
-    search_fields = ('title', 'author', 'specialty', 'supervisors')
-    fields = ('title', 'external_url', 'author', 'year', 'degree', 'specialty', 'supervisors', 'file', 'is_published', 'sort_order')
+    search_fields = ('title', 'title_en', 'author', 'specialty', 'supervisors')
+    fields = ('title', 'title_en', 'external_url', 'author', 'author_en', 'year', 'degree', 'specialty', 'specialty_en', 'supervisors', 'supervisors_en', 'file', 'is_published', 'sort_order')
 
 
 @admin.register(Diploma)
@@ -136,7 +147,7 @@ class DiplomaAdmin(admin.ModelAdmin):
     list_select_related = ('author',)
     list_filter = ('is_published', 'level', 'year')
     list_editable = ('is_published', 'sort_order')
-    search_fields = ('title', 'author__last_name', 'author__first_name', 'external_supervisors')
+    search_fields = ('title', 'title_en', 'author__last_name', 'author__first_name', 'external_supervisors')
     autocomplete_fields = ('author', 'supervisors')
-    fields = ('title', 'external_url', 'author', 'year', 'level', 'supervisors',
-              'external_supervisors', 'file', 'is_published', 'sort_order')
+    fields = ('title', 'title_en', 'external_url', 'author', 'year', 'level', 'supervisors',
+              'external_supervisors', 'external_supervisors_en', 'file', 'is_published', 'sort_order')

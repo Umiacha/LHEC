@@ -1,7 +1,10 @@
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+
+from core.i18n import localized_value
 
 
 class SciencePosition(models.TextChoices):
@@ -10,12 +13,12 @@ class SciencePosition(models.TextChoices):
     
     Порядок перечисления полей должен быть в порядке убывания иерархии.
     """
-    HEAD_OF_THE_LABORATORY = 'head_of_the_laboratory', 'зав. лаб.'
-    DEPUTY_HEAD_OF_THE_LABORATORY = 'deputy_head_of_the_laboratory', 'зам. зав. лаб.'
-    LEADING_RESEARCH_FELLOW = 'leading_research_fellow', 'в.н.с.'
-    SENIOR_RESEARCH_FELLOW = 'senior_research_fellow', 'с.н.с.'
-    RESEARCH_FELLOW = 'research_fellow', 'н.с.'
-    JUNIOR_RESEARCH_FELLOW = 'junior_research_fellow', 'м.н.с.'
+    HEAD_OF_THE_LABORATORY = 'head_of_the_laboratory', _('зав. лаб.')
+    DEPUTY_HEAD_OF_THE_LABORATORY = 'deputy_head_of_the_laboratory', _('зам. зав. лаб.')
+    LEADING_RESEARCH_FELLOW = 'leading_research_fellow', _('в.н.с.')
+    SENIOR_RESEARCH_FELLOW = 'senior_research_fellow', _('с.н.с.')
+    RESEARCH_FELLOW = 'research_fellow', _('н.с.')
+    JUNIOR_RESEARCH_FELLOW = 'junior_research_fellow', _('м.н.с.')
 
 
 class EngineerPosition(models.TextChoices):
@@ -24,19 +27,19 @@ class EngineerPosition(models.TextChoices):
     
     Порядок перечисления полей должен быть в порядке убывания иерархии.
     """
-    LEADING_ENGINEER = 'leading_engineer', 'вед.инж.'
-    SENIOR_ENGINEER = 'senior_engineer', 'ст.инж.'
-    TECHNICIAN = 'technician', 'техн.'
+    LEADING_ENGINEER = 'leading_engineer', _('вед.инж.')
+    SENIOR_ENGINEER = 'senior_engineer', _('ст.инж.')
+    TECHNICIAN = 'technician', _('техн.')
 
 
 class AcademicDegree(models.TextChoices):
     # CANDIDATE = 'candidate', 'к.н. (отрасль не указана)'
-    CANDIDATE_CHEMISTRY = 'candidate_chemistry', 'к.х.н.'
-    CANDIDATE_PHYS_MATH = 'candidate_phys_math', 'к.ф.-м.н.'
-    CANDIDATE_BIOLOGY = 'candidate_biology', 'к.б.н.'
+    CANDIDATE_CHEMISTRY = 'candidate_chemistry', _('к.х.н.')
+    CANDIDATE_PHYS_MATH = 'candidate_phys_math', _('к.ф.-м.н.')
+    CANDIDATE_BIOLOGY = 'candidate_biology', _('к.б.н.')
     # DOCTOR = 'doctor', 'д.н. (отрасль не указана)'
-    DOCTOR_CHEMISTRY = 'doctor_chemistry', 'д.х.н.'
-    DOCTOR_PHYS_MATH = 'doctor_phys_math', 'д.ф.-м.н.'
+    DOCTOR_CHEMISTRY = 'doctor_chemistry', _('д.х.н.')
+    DOCTOR_PHYS_MATH = 'doctor_phys_math', _('д.ф.-м.н.')
 
     @classmethod
     def candidates(cls):
@@ -48,13 +51,13 @@ class AcademicDegree(models.TextChoices):
 
 
 class AcademicTitle(models.TextChoices):
-    DOCENT = 'docent', 'доц.'
-    PROFESSOR = 'professor', 'проф.'
+    DOCENT = 'docent', _('доц.')
+    PROFESSOR = 'professor', _('проф.')
 
 
 class EducationStatus(models.TextChoices):
-    STUDENT = 'student', 'Студент'
-    POSTGRADUATE = 'postgraduate', 'Аспирант'
+    STUDENT = 'student', _('Студент')
+    POSTGRADUATE = 'postgraduate', _('Аспирант')
 
 
 class EmployeeQuerySet(models.QuerySet):
@@ -150,6 +153,33 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
     is_published = models.BooleanField(verbose_name='Опубликовано', default=True)
     objects = EmployeeQuerySet.as_manager()
 
+    last_name_en = models.CharField('Фамилия — EN', max_length=200, blank=True)
+    first_name_en = models.CharField('Имя — EN', max_length=200, blank=True)
+    mid_name_en = models.CharField('Отчество — EN', max_length=200, blank=True)
+    bio_en = models.TextField('Описание — EN', blank=True)
+
+    @property
+    def localized_last_name(self):
+        return localized_value(self, "last_name")
+
+    @property
+    def localized_first_name(self):
+        return localized_value(self, "first_name")
+
+    @property
+    def localized_mid_name(self):
+        return localized_value(self, "mid_name")
+
+    @property
+    def localized_bio(self):
+        return localized_value(self, "bio")
+
+    @property
+    def localized_full_name(self):
+        return ' '.join(filter(None, (
+            self.localized_last_name, self.localized_first_name, self.localized_mid_name,
+        )))
+
     class Meta:
         verbose_name = 'Карточка участника лаборатории'
         verbose_name_plural = 'Карточки участников лаборатории'
@@ -163,7 +193,7 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
     def education_label(self):
         label = self.get_education_status_display()
         if self.education_status == EducationStatus.STUDENT and self.study_year is not None:
-            return f'{label}, {self.study_year} курс'
+            return _('%(status)s, %(year)s курс') % {'status': label, 'year': self.study_year}
         return label
 
     def __str__(self):

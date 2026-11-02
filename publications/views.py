@@ -23,6 +23,7 @@ def publications(request: HttpRequest) -> HttpResponse:
         if query:
             publs = publs.filter(
                 Q(title__icontains=query) | Q(authors_text__icontains=query)
+                | Q(authors_text_en__icontains=query)
                 | Q(venue__icontains=query) | Q(doi__icontains=query)
             )
         if employee := form.cleaned_data['employee']:

@@ -1,5 +1,5 @@
 {% if participation.employee %}
-    <a href="{% url 'users:employe_card' participation.employee.pk %}" class="text-link">{{ participation.employee }}</a>
+    <a href="{% url 'users:employe_card' participation.employee.pk %}" class="text-link">{{ participation.employee.localized_full_name }}</a>
 {% else %}
-    {{ participation.external_name }}{% if participation.external_organization %} ({{ participation.external_organization }}){% endif %}
+    {{ participation.localized_external_name }}{% if participation.localized_external_organization %} ({{ participation.localized_external_organization }}){% endif %}
 {% endif %}

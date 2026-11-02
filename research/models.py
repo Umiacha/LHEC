@@ -1,5 +1,9 @@
+from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from django.db import models
+
+from core.i18n import localized_value
+
 from .storage import dissertation_file_storage, diploma_file_storage
 
 
@@ -29,6 +33,17 @@ class ResearchDirection(models.Model):  # TODO: сделать отображе�
     is_published = models.BooleanField('Показывать на сайте', default=False)
     created_at = models.DateTimeField('Запись создана', auto_now_add=True)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
+
+    name_en = models.CharField('Название — EN', max_length=255, blank=True)
+    description_en = models.TextField('Описание — EN', blank=True)
+
+    @property
+    def localized_name(self):
+        return localized_value(self, "name")
+
+    @property
+    def localized_description(self):
+        return localized_value(self, "description")
 
     class Meta:
         verbose_name = 'Научное направление'
@@ -76,10 +91,10 @@ class ResearchProject(models.Model):
     """Научный проект и реквизиты его финансирования."""
 
     class FundingKind(models.TextChoices):
-        GRANT = 'grant', 'Грант'
-        CONTRACT = 'contract', 'Договор'
-        STATE_ASSIGNMENT = 'state_assignment', 'Государственное задание'
-        OTHER = 'other', 'Другое'
+        GRANT = 'grant', _('Грант')
+        CONTRACT = 'contract', _('Договор')
+        STATE_ASSIGNMENT = 'state_assignment', _('Государственное задание')
+        OTHER = 'other', _('Другое')
 
     name = models.CharField('Название', max_length=500)
     slug = models.SlugField('Slug', max_length=255, unique=True)
@@ -101,6 +116,32 @@ class ResearchProject(models.Model):
     created_at = models.DateTimeField('Запись создана', auto_now_add=True)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
 
+    name_en = models.CharField('Название — EN', max_length=500, blank=True)
+    abstract_en = models.TextField('Аннотация — EN', blank=True)
+    funding_source_en = models.CharField('Источник финансирования — EN', max_length=500, blank=True)
+    customer_en = models.CharField('Заказчик — EN', max_length=500, blank=True)
+    funding_program_en = models.CharField('Программа или конкурс — EN', max_length=500, blank=True)
+
+    @property
+    def localized_name(self):
+        return localized_value(self, "name")
+
+    @property
+    def localized_abstract(self):
+        return localized_value(self, "abstract")
+
+    @property
+    def localized_funding_source(self):
+        return localized_value(self, "funding_source")
+
+    @property
+    def localized_customer(self):
+        return localized_value(self, "customer")
+
+    @property
+    def localized_funding_program(self):
+        return localized_value(self, "funding_program")
+
     class Meta:
         verbose_name = 'Научный проект'
         verbose_name_plural = 'Научные проекты'
@@ -120,8 +161,8 @@ class ProjectParticipation(models.Model):
     """Участие в научном проекте."""
 
     class Role(models.TextChoices):
-        LEADER = 'leader', 'Руководитель'
-        EXECUTOR = 'executor', 'Основной исполнитель'
+        LEADER = 'leader', _('Руководитель')
+        EXECUTOR = 'executor', _('Основной исполнитель')
 
     project = models.ForeignKey(
         ResearchProject, on_delete=models.CASCADE, related_name='participations',
@@ -135,6 +176,17 @@ class ProjectParticipation(models.Model):
     external_organization = models.CharField('Организация внешнего участника', max_length=500, blank=True)
     role = models.CharField('Роль', max_length=20, choices=Role.choices, default=Role.EXECUTOR)
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
+
+    external_name_en = models.CharField('ФИО внешнего участника — EN', max_length=255, blank=True)
+    external_organization_en = models.CharField('Организация внешнего участника — EN', max_length=500, blank=True)
+
+    @property
+    def localized_external_name(self):
+        return localized_value(self, "external_name")
+
+    @property
+    def localized_external_organization(self):
+        return localized_value(self, "external_organization")
 
     class Meta:
         verbose_name = 'Участие в научном проекте'
@@ -181,8 +233,8 @@ class Dissertation(models.Model):
     """Защищённая в лаборатории диссертация."""
 
     class Degree(models.TextChoices):
-        CANDIDATE = 'candidate', 'Кандидатская диссертация'
-        DOCTOR = 'doctor', 'Докторская диссертация'
+        CANDIDATE = 'candidate', _('Кандидатская диссертация')
+        DOCTOR = 'doctor', _('Докторская диссертация')
 
     title = models.CharField('Название', max_length=1000)
     external_url = models.URLField('Внешняя страница диссертации', max_length=1000)
@@ -198,6 +250,28 @@ class Dissertation(models.Model):
     )
     is_published = models.BooleanField('Показывать на сайте', default=False)
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
+
+    author_en = models.CharField('Автор — EN', max_length=255, blank=True)
+    specialty_en = models.CharField('Специальность — EN', max_length=500, blank=True)
+    supervisors_en = models.CharField('Научные руководители / консультанты — EN', max_length=1000, blank=True)
+
+    @property
+    def localized_author(self):
+        return localized_value(self, "author")
+
+    @property
+    def localized_specialty(self):
+        return localized_value(self, "specialty")
+
+    @property
+    def localized_supervisors(self):
+        return localized_value(self, "supervisors")
+
+    title_en = models.CharField('Название — EN', max_length=1000, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
 
     class Meta:
         verbose_name = 'Диссертация'
@@ -216,9 +290,9 @@ class Diploma(models.Model):
     """Защищённая выпускная квалификационная работа."""
 
     class Level(models.TextChoices):
-        BACHELOR = 'bachelor', 'Бакалаврская работа'
-        MASTER = 'master', 'Магистерская диссертация'
-        SPECIALIST = 'specialist', 'Дипломная работа специалиста'
+        BACHELOR = 'bachelor', _('Бакалаврская работа')
+        MASTER = 'master', _('Магистерская диссертация')
+        SPECIALIST = 'specialist', _('Дипломная работа специалиста')
 
     title = models.CharField('Название', max_length=1000)
     external_url = models.URLField('Внешняя страница работы', max_length=1000)
@@ -242,6 +316,18 @@ class Diploma(models.Model):
     )
     is_published = models.BooleanField('Показывать на сайте', default=False)
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
+
+    external_supervisors_en = models.CharField('ФИО внешних научных руководителей — EN', max_length=1000, blank=True)
+
+    @property
+    def localized_external_supervisors(self):
+        return localized_value(self, "external_supervisors")
+
+    title_en = models.CharField('Название — EN', max_length=1000, blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
 
     class Meta:
         verbose_name = 'Выпускная квалификационная работа'

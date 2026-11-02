@@ -1,6 +1,9 @@
+from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 
 from django.db import models
+
+from core.i18n import localized_value
 
 from .storage import publication_file_storage
 
@@ -8,11 +11,11 @@ from .storage import publication_file_storage
 class Publication(models.Model):
     """Научная публикация."""
     class Kind(models.TextChoices):
-        ARTICLE = 'article', 'Статья'
-        CONFERENCE = 'conference', 'Материалы конференции'
-        BOOK = 'book', 'Книга'
-        CHAPTER = 'chapter', 'Глава в книге'
-        OTHER = 'other', 'Другое'
+        ARTICLE = 'article', _('Статья')
+        CONFERENCE = 'conference', _('Материалы конференции')
+        BOOK = 'book', _('Книга')
+        CHAPTER = 'chapter', _('Глава в книге')
+        OTHER = 'other', _('Другое')
 
     title = models.CharField(verbose_name='Название', max_length=500)
     year = models.PositiveSmallIntegerField(verbose_name='Год')
@@ -60,6 +63,17 @@ class Publication(models.Model):
     )
     created_at = models.DateTimeField('Запись создана', auto_now_add=True)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
+
+    note_en = models.TextField('Примечание лаборатории — EN', blank=True)
+    authors_text_en = models.TextField('Авторы — EN', blank=True)
+
+    @property
+    def localized_note(self):
+        return localized_value(self, "note")
+
+    @property
+    def localized_authors_text(self):
+        return localized_value(self, "authors_text")
 
     class Meta:
         verbose_name = 'Публикация'

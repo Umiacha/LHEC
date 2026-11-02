@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from pathlib import Path
 from django.core.exceptions import PermissionDenied
 from django.http import FileResponse, Http404
@@ -50,11 +51,11 @@ def projects(request: HttpRequest) -> HttpResponse:
         else:
             current.append(project)
     groups = [
-        {'title': 'Текущие', 'projects': current, 'empty_message': 'Текущих проектов пока нет.'},
-        {'title': 'Завершенные', 'projects': completed, 'empty_message': 'Завершенных проектов пока нет.'},
+        {'title': _('Текущие'), 'projects': current, 'empty_message': _('Текущих проектов пока нет.')},
+        {'title': _('Завершенные'), 'projects': completed, 'empty_message': _('Завершенных проектов пока нет.')},
     ]
     if upcoming:
-        groups.append({'title': 'Предстоящие', 'projects': upcoming})
+        groups.append({'title': _('Предстоящие'), 'projects': upcoming})
     return render(request, 'research/projects_list.html', {'project_groups': groups})
 
 

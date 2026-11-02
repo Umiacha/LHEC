@@ -1,19 +1,20 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Публикации — ЛХВЭ{% endblock %}
-{% block description %}Научные публикации сотрудников Лаборатории химии высоких энергий.{% endblock %}
+{% block title %}{% translate "Публикации — ЛХВЭ" %}{% endblock %}
+{% block description %}{% translate "Научные публикации сотрудников Лаборатории химии высоких энергий." %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         <header class="max-w-3xl">
             {% url 'core:science' as back_url %}
-        {% include "core/components/back_link.html" with back_label="Наука" %}
-            <h1 class="mt-4 page-title">Публикации</h1>
-            <p class="mt-6 page-intro">Научные публикации сотрудников лаборатории.</p>
+        {% include "core/components/back_link.html" with back_label=_("Наука") %}
+            <h1 class="mt-4 page-title">{% translate "Публикации" %}</h1>
+            <p class="mt-6 page-intro">{% translate "Научные публикации сотрудников лаборатории." %}</p>
         </header>
 
-        <form method="get" action="{% url 'publications:publications' %}" class="mt-10 content-card" role="search" aria-label="Поиск публикаций">
+        <form method="get" action="{% url 'publications:publications' %}" class="mt-10 content-card" role="search" aria-label="{% translate "Поиск публикаций" %}">
             <div>
                 <label for="{{ form.q.id_for_label }}" class="text-sm font-semibold text-lab-950">{{ form.q.label }}</label>
                 {{ form.q }}
@@ -31,23 +32,23 @@
                 {% endfor %}
             </div>
             <div class="mt-6 flex flex-wrap items-center gap-4">
-                <button type="submit" class="button button-primary">Найти</button>
-                <a href="{% url 'publications:publications' %}" class="text-link text-sm">Сбросить</a>
+                <button type="submit" class="button button-primary">{% translate "Найти" %}</button>
+                <a href="{% url 'publications:publications' %}" class="text-link text-sm">{% translate "Сбросить" %}</a>
             </div>
         </form>
 
-        <p class="mt-8 metadata">Найдено публикаций: {{ page_obj.paginator.count }}</p>
+        <p class="mt-8 metadata">{% translate "Найдено публикаций:" %} {{ page_obj.paginator.count }}</p>
         <ul class="mt-6 grid gap-6">
             {% for publication in publications %}
                 <li class="content-card">
                     <article>
                         <p class="metadata">
-                            {{ publication.year }} · {{ publication.get_kind_display }}{% if publication.is_featured %} · Избранная{% endif %}
+                            {{ publication.year }} · {{ publication.get_kind_display }}{% if publication.is_featured %} {% translate "· Избранная" %}{% endif %}
                         </p>
                         <h2 class="mt-3 card-title">
                             <a href="{% url 'publications:publication' publication.pk %}?return_to={{ request.get_full_path|urlencode }}" class="text-link">{{ publication.title }}</a>
                         </h2>
-                        <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.authors_text }}</p>
+                        <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.localized_authors_text }}</p>
                         {% if publication.venue %}
                             <p class="mt-2 break-words text-sm leading-6 text-slate-500">{{ publication.venue }}</p>
                         {% endif %}
@@ -55,13 +56,13 @@
                 </li>
             {% empty %}
                 <li class="empty-state">
-                    {% if form.errors %}Проверьте параметры поиска в форме выше.
-                    {% elif has_filters %}Публикации не найдены. Измените условия поиска или <a href="{% url 'publications:publications' %}" class="text-link">сбросьте фильтры</a>.
-                    {% else %}Публикаций пока нет.{% endif %}
+                    {% if form.errors %}{% translate "Проверьте параметры поиска в форме выше." %}
+                    {% elif has_filters %}{% translate "Публикации не найдены. Измените условия поиска или" %} <a href="{% url 'publications:publications' %}" class="text-link">{% translate "сбросьте фильтры" %}</a>.
+                    {% else %}{% translate "Публикаций пока нет." %}{% endif %}
                 </li>
             {% endfor %}
         </ul>
-        {% include "core/components/pagination.html" with pagination_label="Страницы публикаций" %}
+        {% include "core/components/pagination.html" with pagination_label=_("Страницы публикаций") %}
     </div>
 </section>
 {% endblock %}

@@ -6,6 +6,12 @@ from django.utils.html import format_html
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Русский текст', {'fields': ('title', 'text')}),
+        ('English', {'fields': ('title_en', 'text_en')}),
+        ('Публикация', {'fields': ('is_published', 'published_at')}),
+        ('Даты', {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
+    )
     list_display = (
         'title',
         'published_at',
@@ -19,6 +25,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = (
         'title',
         'text',
+        'title_en',
+        'text_en',
     )
     ordering = (
         '-published_at',
@@ -43,9 +51,9 @@ class GalleryPhotoAdmin(admin.ModelAdmin):
     list_display_links = ('preview', 'caption')
     list_editable = ('order', 'is_published')
     list_filter = ('is_published', 'year')
-    search_fields = ('caption',)
+    search_fields = ('caption', 'caption_en')
     readonly_fields = ('preview', 'created_at', 'updated_at')
-    fields = ('image', 'preview', 'caption', 'year', 'order', 'is_published',
+    fields = ('image', 'preview', 'caption', 'caption_en', 'year', 'order', 'is_published',
               'created_at', 'updated_at')
 
     @admin.display(description='Превью')

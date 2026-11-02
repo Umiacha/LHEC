@@ -1,49 +1,50 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Контакты — ЛХВЭ{% endblock %}
-{% block description %}Адрес и контакты Лаборатории химии высоких энергий химического факультета МГУ. Схема проезда.{% endblock %}
+{% block title %}{% translate "Контакты — ЛХВЭ" %}{% endblock %}
+{% block description %}{% translate "Адрес и контакты Лаборатории химии высоких энергий химического факультета МГУ. Схема проезда." %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section" aria-labelledby="contacts-heading">
     <div class="page-container">
-        <p class="page-label">ЛХВЭ · МГУ</p>
-        <h1 id="contacts-heading" class="mt-4 page-title">Контакты</h1>
+        <p class="page-label">{% translate "ЛХВЭ · МГУ" %}</p>
+        <h1 id="contacts-heading" class="mt-4 page-title">{% translate "Контакты" %}</h1>
         <p class="mt-6 max-w-2xl page-intro">
-            Лаборатория химии высоких энергий<br>
-            Химический факультет МГУ имени М. В. Ломоносова
+            {% translate "Лаборатория химии высоких энергий" %}<br>
+            {% translate "Химический факультет МГУ имени М. В. Ломоносова" %}
         </p>
         <div class="mt-12 grid gap-6 lg:grid-cols-2">
             <section class="content-card" aria-labelledby="address-heading">
-                <h2 id="address-heading" class="section-title">Адрес</h2>
+                <h2 id="address-heading" class="section-title">{% translate "Адрес" %}</h2>
                 <address class="mt-5 text-lg not-italic leading-8 text-slate-600">
-                    119991, Россия, г. Москва,<br>
-                    Ленинские Горы, дом 1, строение 11
+                    {% translate "119991, Россия, г. Москва," %}<br>
+                    {% translate "Ленинские Горы, дом 1, строение 11" %}
                 </address>
                 <a href="https://yandex.ru/maps/?text=Москва%2C%20Ленинские%20Горы%2C%201с11"
                    class="mt-6 button button-primary">
-                    Открыть в Яндекс Картах ↗
+                    {% translate "Открыть в Яндекс Картах ↗" %}
                 </a>
             </section>
             <section class="content-card" aria-labelledby="head-heading">
-                <h2 id="head-heading" class="section-title">Заведующий лабораторией</h2>
-                <p class="mt-5 text-lg font-semibold text-lab-950">Фельдман Владимир Исаевич</p>
-                <p class="mt-1 text-slate-500">Профессор</p>
+                <h2 id="head-heading" class="section-title">{% translate "Заведующий лабораторией" %}</h2>
+                <p class="mt-5 text-lg font-semibold text-lab-950">{% translate "Фельдман Владимир Исаевич" %}</p>
+                <p class="mt-1 text-slate-500">{% translate "Профессор" %}</p>
                 <address class="mt-6 space-y-3 not-italic text-slate-600">
-                    <p><span class="block metadata">Телефон</span>
+                    <p><span class="block metadata">{% translate "Телефон" %}</span>
                         <a href="tel:+74959394870" class="text-link">+7 (495) 939-48-70</a>
                     </p>
-                    <p><span class="block metadata">Электронная почта</span>
+                    <p><span class="block metadata">{% translate "Электронная почта" %}</span>
                         <a href="mailto:feldman@rad.chem.msu.ru" class="break-all text-link">feldman@rad.chem.msu.ru</a>
                     </p>
                 </address>
             </section>
         </div>
         <section class="mt-12" aria-labelledby="map-heading">
-            <h2 id="map-heading" class="section-title">Как нас найти</h2>
+            <h2 id="map-heading" class="section-title">{% translate "Как нас найти" %}</h2>
             <div class="mt-6 overflow-hidden card-frame">
                 <iframe
                     src="https://yandex.ru/map-widget/v1/?text=Москва%2C%20Ленинские%20Горы%2C%201с11&amp;z=16"
-                    title="Яндекс Карты: Москва, Ленинские Горы, дом 1, строение 11"
+                    title="{% translate "Яндекс Карты: Москва, Ленинские Горы, дом 1, строение 11" %}"
                     width="100%" height="450" class="block w-full border-0"
                     loading="lazy" allowfullscreen
                 ></iframe>

@@ -7,6 +7,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from PIL import Image, ImageOps
 
+from .i18n import localized_value
 from .gallery import gallery_image_path, gallery_thumbnail_path, validate_gallery_image
 
 from django.db import models
@@ -38,6 +39,17 @@ class Announcement(models.Model):  # TODO: добавляем ли эту инф
         auto_now=True,
     )
 
+    title_en = models.CharField('Заголовок — EN', max_length=200, blank=True)
+    text_en = models.TextField('Текст — EN', blank=True)
+
+    @property
+    def localized_title(self):
+        return localized_value(self, "title")
+
+    @property
+    def localized_text(self):
+        return localized_value(self, "text")
+
     class Meta:
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
@@ -66,6 +78,12 @@ class GalleryPhoto(models.Model):
     is_published = models.BooleanField('Показывать на сайте', default=False)
     created_at = models.DateTimeField('Добавлено', auto_now_add=True)
     updated_at = models.DateTimeField('Изменено', auto_now=True)
+
+    caption_en = models.CharField('Подпись — EN', max_length=500, blank=True)
+
+    @property
+    def localized_caption(self):
+        return localized_value(self, "caption")
 
     class Meta:
         verbose_name = 'Фотография галереи'

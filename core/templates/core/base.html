@@ -1,20 +1,22 @@
+{% load i18n %}
 {% load static %}
 
 <!doctype html>
-<html lang="ru">
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
         {% block title %}
-            Лаборатория химии высоких энергий
+            {% translate "Лаборатория химии высоких энергий" %}
         {% endblock %}
     </title>
 
     <meta
         name="description"
-        content="{% block description %}Лаборатория химии высоких энергий химического факультета МГУ{% endblock %}"
+        content="{% block description %}{% translate "Лаборатория химии высоких энергий химического факультета МГУ" %}{% endblock %}"
     >
 
     <link rel="icon" type="image/jpeg" href="{% static 'core/img/LHEC_emblem.jpg' %}">
@@ -36,13 +38,15 @@
                     height="60"
                 >
                 <span class="text-2xl font-black tracking-[-0.05em] text-lab-950">
-                    ЛХВЭ
+                    {% translate "ЛХВЭ" %}
                 </span>
             </a>
     
+            {% include "core/components/language_switcher.html" %}
+
             <nav
                 class="hidden items-center gap-6 lg:flex"
-                aria-label="Основная навигация"
+                aria-label="{% translate "Основная навигация" %}"
             >
     
                 <a
@@ -50,7 +54,7 @@
                     href="{% url 'core:science' %}"
                     {% if request.resolver_match.url_name == 'science' or request.resolver_match.namespace == 'research' or request.resolver_match.namespace == 'publications' %}aria-current="location"{% endif %}
                 >
-                    Наука
+                    {% translate "Наука" %}
                 </a>
     
                 <a
@@ -58,19 +62,19 @@
                     href="{% url 'education:students' %}"
                     {% if request.resolver_match.namespace == 'education' %}aria-current="location"{% endif %}
                 >
-                    Студентам
+                    {% translate "Студентам" %}
                 </a>
     
                 <a class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
                    href="{% url 'core:gallery' %}"
-                    {% if request.resolver_match.url_name == 'gallery' %}aria-current="location"{% endif %}>Галерея</a>
+                    {% if request.resolver_match.url_name == 'gallery' %}aria-current="location"{% endif %}>{% translate "Галерея" %}</a>
 
                 <a
                     class="rounded-full bg-lab-950 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-lab-800"
                     href="{% url 'core:contacts' %}"
                     {% if request.resolver_match.url_name == 'contacts' %}aria-current="location"{% endif %}
                 >
-                    Контакты
+                    {% translate "Контакты" %}
                 </a>
                 {% if user.is_authenticated %}
                     <div
@@ -78,7 +82,7 @@
                     >
                         <div class="text-right">
                             <p class="text-xs text-slate-400">
-                                Вы вошли как
+                                {% translate "Вы вошли как" %}
                             </p>
                 
                             <p class="text-sm font-semibold text-lab-950">
@@ -97,7 +101,7 @@
                                 href="{% url 'admin:index' %}"
                                 class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-lab-950 hover:text-lab-950"
                             >
-                                Админ
+                                {% translate "Админ" %}
                             </a>
                         {% endif %}
                 
@@ -111,7 +115,7 @@
                                 type="submit"
                                 class="text-sm font-medium text-slate-500 transition-colors hover:text-lab-950"
                             >
-                                Выйти
+                                {% translate "Выйти" %}
                             </button>
                         </form>
                     </div>
@@ -120,7 +124,7 @@
                     href="{% url 'users:login' %}"
                     class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-lab-950 hover:text-lab-950"
                 >
-                    Войти
+                    {% translate "Войти" %}
                 </a>
             {% endif %}
             </nav>
@@ -129,12 +133,12 @@
                 <summary
                     class="cursor-pointer list-none rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 [&::-webkit-details-marker]:hidden"
                 >
-                    Меню
+                    {% translate "Меню" %}
                 </summary>
     
                 <nav
                     class="absolute right-0 top-full mt-3 flex w-64 flex-col rounded-2xl border border-slate-200 bg-white p-2 shadow-lg"
-                    aria-label="Мобильная навигация"
+                    aria-label="{% translate "Мобильная навигация" %}"
                 >
     
                     <a
@@ -142,7 +146,7 @@
                         href="{% url 'core:science' %}"
                     {% if request.resolver_match.url_name == 'science' or request.resolver_match.namespace == 'research' or request.resolver_match.namespace == 'publications' %}aria-current="location"{% endif %}
                     >
-                        Наука
+                        {% translate "Наука" %}
                     </a>
     
                     <a
@@ -150,7 +154,7 @@
                         href="{% url 'education:students' %}"
                     {% if request.resolver_match.namespace == 'education' %}aria-current="location"{% endif %}
                     >
-                        Студентам
+                        {% translate "Студентам" %}
                     </a>
     
                     <a
@@ -158,17 +162,17 @@
                         href="{% url 'core:contacts' %}"
                     {% if request.resolver_match.url_name == 'contacts' %}aria-current="location"{% endif %}
                     >
-                        Контакты
+                        {% translate "Контакты" %}
                     </a>
                     <a class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
                        href="{% url 'core:gallery' %}"
-                    {% if request.resolver_match.url_name == 'gallery' %}aria-current="location"{% endif %}>Галерея</a>
+                    {% if request.resolver_match.url_name == 'gallery' %}aria-current="location"{% endif %}>{% translate "Галерея" %}</a>
                     <div class="my-1 border-t border-slate-100"></div>
                     
                     {% if user.is_authenticated %}
                         <div class="px-4 py-3">
                             <p class="text-xs text-slate-400">
-                                Вы вошли как
+                                {% translate "Вы вошли как" %}
                             </p>
                     
                             <p class="mt-1 text-sm font-semibold text-lab-950">
@@ -187,7 +191,7 @@
                                 class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
                                 href="{% url 'admin:index' %}"
                             >
-                                Админ-панель
+                                {% translate "Админ-панель" %}
                             </a>
                         {% endif %}
                     
@@ -201,7 +205,7 @@
                                 type="submit"
                                 class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 hover:bg-slate-50"
                             >
-                                Выйти
+                                {% translate "Выйти" %}
                             </button>
                         </form>
                     {% else %}
@@ -209,7 +213,7 @@
                             class="rounded-xl px-4 py-3 text-sm font-semibold text-lab-950 hover:bg-slate-50"
                             href="{% url 'users:login' %}"
                         >
-                            Войти
+                            {% translate "Войти" %}
                         </a>
                     {% endif %}
                 </nav>
@@ -228,11 +232,11 @@
         >
             <div>
                 <p class="text-lg font-semibold text-lab-950">
-                    Лаборатория химии высоких энергий
+                    {% translate "Лаборатория химии высоких энергий" %}
                 </p>
     
                 <p class="mt-3 max-w-md text-sm leading-6 text-slate-500">
-                    Химический факультет МГУ имени М. В. Ломоносова
+                    {% translate "Химический факультет МГУ имени М. В. Ломоносова" %}
                 </p>
             </div>
     
@@ -242,11 +246,11 @@
                     {% if request.resolver_match.url_name == 'contacts' %}aria-current="location"{% endif %}
                     class="text-sm text-link"
                 >
-                    Контакты
+                    {% translate "Контакты" %}
                 </a>
     
                 <p class="mt-4 text-sm text-slate-400">
-                    © {% now "Y" %} ЛХВЭ
+                    © {% now "Y" %} {% translate "ЛХВЭ" %}
                 </p>
             </div>
         </div>

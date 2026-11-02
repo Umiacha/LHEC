@@ -55,3 +55,11 @@ check-admin-exist:
 # Создать тестового админа
 create-test-admin:
 	$(MANAGE) createsuperuser --noinput
+
+# GNU gettext must be installed (e.g. apt install gettext).
+.PHONY: messages compilemessages
+messages:
+	$(MANAGE) makemessages -l en --ignore=.venv --ignore=node_modules
+
+compilemessages:
+	$(MANAGE) compilemessages --ignore=.venv --ignore=node_modules

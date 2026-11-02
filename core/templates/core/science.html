@@ -1,53 +1,54 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Наука — ЛХВЭ{% endblock %}
-{% block description %}Научные направления Лаборатории химии высоких энергий.{% endblock %}
+{% block title %}{% translate "Наука — ЛХВЭ" %}{% endblock %}
+{% block description %}{% translate "Научные направления Лаборатории химии высоких энергий." %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
-        <p class="page-label mb-4">Исследования</p>
-        <h1 class="page-title">Наука</h1>
-        <p class="mt-6 page-intro">Исследования, научные проекты и публикации Лаборатории химии высоких энергий.</p>
-        <nav class="mt-10 flex flex-wrap gap-6" aria-label="Разделы науки">
-            <a href="{% url 'research:projects' %}" class="text-link">Научные проекты →</a>
-            <a href="{% url 'publications:publications' %}" class="text-link">Публикации →</a>
-            <a href="#dissertations" class="text-link">Диссертации</a>
-            <a href="#diplomas" class="text-link">ВКР</a>
+        <p class="page-label mb-4">{% translate "Исследования" %}</p>
+        <h1 class="page-title">{% translate "Наука" %}</h1>
+        <p class="mt-6 page-intro">{% translate "Исследования, научные проекты и публикации Лаборатории химии высоких энергий." %}</p>
+        <nav class="mt-10 flex flex-wrap gap-6" aria-label="{% translate "Разделы науки" %}">
+            <a href="{% url 'research:projects' %}" class="text-link">{% translate "Научные проекты →" %}</a>
+            <a href="{% url 'publications:publications' %}" class="text-link">{% translate "Публикации →" %}</a>
+            <a href="#dissertations" class="text-link">{% translate "Диссертации" %}</a>
+            <a href="#diplomas" class="text-link">{% translate "ВКР" %}</a>
         </nav>
         <section id="directions" class="mt-12">
-            <h2 class="section-title">Научные направления</h2>
+            <h2 class="section-title">{% translate "Научные направления" %}</h2>
             <ul class="mt-6 grid gap-6">
                 {% for direction in directions %}
                     <li class="content-card">
-                        <a href="{% url 'research:direction_detail' direction.slug %}" class="card-title hover:underline">{{ direction.name }}</a>
+                        <a href="{% url 'research:direction_detail' direction.slug %}" class="card-title hover:underline">{{ direction.localized_name }}</a>
                     </li>
                 {% empty %}
-                    <li class="empty-state">Информация о направлениях скоро появится.</li>
+                    <li class="empty-state">{% translate "Информация о направлениях скоро появится." %}</li>
                 {% endfor %}
             </ul>
         </section>
         <section id="projects" class="mt-12">
             <h2 class="section-title">
-                <a href="{% url 'research:projects' %}" class="text-link">Научные проекты →</a>
+                <a href="{% url 'research:projects' %}" class="text-link">{% translate "Научные проекты →" %}</a>
             </h2>
             <ul class="mt-6 grid gap-6">
                 {% for project in projects %}
                     <li class="content-card">
                         <h3 class="card-title">
-                            <a href="{% url 'research:project_detail' project.slug %}" class="text-link">{{ project.name }}</a>
+                            <a href="{% url 'research:project_detail' project.slug %}" class="text-link">{{ project.localized_name }}</a>
                         </h3>
                         <p class="mt-3 text-slate-600">{{ project.start_year }}–{{ project.end_year }}</p>
-                        {% if project.funding_source %}<p class="mt-2 text-slate-600">{{ project.funding_source }}</p>{% endif %}
+                        {% if project.localized_funding_source %}<p class="mt-2 text-slate-600">{{ project.localized_funding_source }}</p>{% endif %}
                     </li>
                 {% empty %}
-                    <li class="empty-state">Текущих проектов пока нет.</li>
+                    <li class="empty-state">{% translate "Текущих проектов пока нет." %}</li>
                 {% endfor %}
             </ul>
         </section>
         <section id="publications" class="mt-12">
             <h2 class="section-title">
-                <a href="{% url 'publications:publications' %}" class="text-link">Публикации →</a>
+                <a href="{% url 'publications:publications' %}" class="text-link">{% translate "Публикации →" %}</a>
             </h2>
             <ul class="mt-6 grid gap-6">
                 {% for publication in publications %}
@@ -56,71 +57,71 @@
                         <h3 class="mt-3 break-words card-title">
                             <a href="{% url 'publications:publication' publication.pk %}" class="text-link">{{ publication.title }}</a>
                         </h3>
-                        <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.authors_text }}</p>
+                        <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.localized_authors_text }}</p>
                         {% if publication.venue %}<p class="mt-2 break-words text-sm leading-6 text-slate-600">{{ publication.venue }}</p>{% endif %}
                     </li>
                 {% empty %}
-                    <li class="empty-state">Избранных публикаций пока нет.</li>
+                    <li class="empty-state">{% translate "Избранных публикаций пока нет." %}</li>
                 {% endfor %}
             </ul>
         </section>
         <section id="dissertations" class="mt-12">
-            <h2 class="section-title">Защищённые диссертации</h2>
+            <h2 class="section-title">{% translate "Защищённые диссертации" %}</h2>
             <ul class="mt-6 grid gap-6">
                 {% for dissertation in dissertations %}
                     <li class="content-card">
                         <p class="metadata">{{ dissertation.year }} · {{ dissertation.get_degree_display }}</p>
                         <h3 class="mt-2 card-title">
-                            <a href="{{ dissertation.external_url }}" target="_blank" rel="noopener noreferrer" class="text-link">{{ dissertation.title }}</a>
+                            <a href="{{ dissertation.external_url }}" target="_blank" rel="noopener noreferrer" class="text-link">{{ dissertation.localized_title }}</a>
                         </h3>
-                        <p class="mt-4 text-slate-600">Автор: {{ dissertation.author }}</p>
-                        {% if dissertation.specialty %}<p class="mt-2 text-slate-600">Специальность: {{ dissertation.specialty }}</p>{% endif %}
-                        {% if dissertation.supervisors %}<p class="mt-2 text-slate-600">Научные руководители / консультанты: {{ dissertation.supervisors }}</p>{% endif %}
+                        <p class="mt-4 text-slate-600">{% translate "Автор:" %} {{ dissertation.localized_author }}</p>
+                        {% if dissertation.localized_specialty %}<p class="mt-2 text-slate-600">{% translate "Специальность:" %} {{ dissertation.localized_specialty }}</p>{% endif %}
+                        {% if dissertation.localized_supervisors %}<p class="mt-2 text-slate-600">{% translate "Научные руководители / консультанты:" %} {{ dissertation.localized_supervisors }}</p>{% endif %}
                         {% if can_download_dissertations and dissertation.file %}
-                            <a href="{{ dissertation.file.url }}" class="mt-4 inline-block text-link">Скачать диссертацию ↓</a>
+                            <a href="{{ dissertation.file.url }}" class="mt-4 inline-block text-link">{% translate "Скачать диссертацию ↓" %}</a>
                         {% endif %}
                     </li>
                 {% empty %}
-                    <li class="empty-state">Информация о защищённых диссертациях скоро появится.</li>
+                    <li class="empty-state">{% translate "Информация о защищённых диссертациях скоро появится." %}</li>
                 {% endfor %}
             </ul>
         </section>
         <section id="diplomas" class="mt-12">
-            <h2 class="section-title">Выпускные квалификационные работы</h2>
+            <h2 class="section-title">{% translate "Выпускные квалификационные работы" %}</h2>
             <ul class="mt-6 grid gap-6">
                 {% for diploma in diplomas %}
                     <li class="content-card">
                         <p class="metadata">{{ diploma.year }} · {{ diploma.get_level_display }}</p>
                         <h3 class="mt-2 card-title">
-                            <a href="{{ diploma.external_url }}" target="_blank" rel="noopener noreferrer" class="text-link">{{ diploma.title }}</a>
+                            <a href="{{ diploma.external_url }}" target="_blank" rel="noopener noreferrer" class="text-link">{{ diploma.localized_title }}</a>
                         </h3>
-                        <p class="mt-4 text-slate-600">Автор:
+                        <p class="mt-4 text-slate-600">{% translate "Автор:" %}
                             {% if diploma.author.is_published %}
-                                <a href="{% url 'users:employe_card' diploma.author.pk %}" class="text-link">{{ diploma.author }}</a>
+                                <a href="{% url 'users:employe_card' diploma.author.pk %}" class="text-link">{{ diploma.author.localized_full_name }}</a>
                             {% else %}
-                                {{ diploma.author }}
+                                {{ diploma.author.localized_full_name }}
                             {% endif %}
                         </p>
                         {% with supervisors=diploma.supervisors.all %}
-                            {% if supervisors or diploma.external_supervisors %}
-                                <p class="mt-2 text-slate-600">Научные руководители:
+                            {% if supervisors or diploma.localized_external_supervisors %}
+                                <p class="mt-2 text-slate-600">{% translate "Научные руководители:" %}
                                     {% for supervisor in supervisors %}
                                         {% if supervisor.is_published %}
-                                            <a href="{% url 'users:employe_card' supervisor.pk %}" class="text-link">{{ supervisor }}</a>{% if not forloop.last or diploma.external_supervisors %}; {% endif %}
+                                            <a href="{% url 'users:employe_card' supervisor.pk %}" class="text-link">{{ supervisor.localized_full_name }}</a>{% if not forloop.last or diploma.localized_external_supervisors %}; {% endif %}
                                         {% else %}
-                                            {{ supervisor }}{% if not forloop.last or diploma.external_supervisors %}; {% endif %}
+                                            {{ supervisor.localized_full_name }}{% if not forloop.last or diploma.localized_external_supervisors %}; {% endif %}
                                         {% endif %}
                                     {% endfor %}
-                                    {{ diploma.external_supervisors }}
+                                    {{ diploma.localized_external_supervisors }}
                                 </p>
                             {% endif %}
                         {% endwith %}
                         {% if can_download_diplomas and diploma.file %}
-                            <a href="{{ diploma.file.url }}" class="mt-4 inline-block text-link">Скачать ВКР ↓</a>
+                            <a href="{{ diploma.file.url }}" class="mt-4 inline-block text-link">{% translate "Скачать ВКР ↓" %}</a>
                         {% endif %}
                     </li>
                 {% empty %}
-                    <li class="empty-state">Информация о защищённых ВКР скоро появится.</li>
+                    <li class="empty-state">{% translate "Информация о защищённых ВКР скоро появится." %}</li>
                 {% endfor %}
             </ul>
         </section>

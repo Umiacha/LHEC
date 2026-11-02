@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 {% load static %}
 
 {% block content %}
@@ -9,7 +10,7 @@
             <p
                 class="page-label"
             >
-                {% block page_label %}ЛХВЭ{% endblock %}
+                {% block page_label %}{% translate "ЛХВЭ" %}{% endblock %}
             </p>
 
             <h1
@@ -20,7 +21,7 @@
 
             <p class="mt-6 max-w-2xl page-intro">
                 {% block page_intro %}
-                    Раздел находится в разработке.
+                    {% translate "Раздел находится в разработке." %}
                 {% endblock %}
             </p>
 
@@ -32,7 +33,7 @@
                     href="{% url 'core:home' %}"
                     class="button button-secondary"
                 >
-                    На главную
+                    {% translate "На главную" %}
                 </a>
                 {% endblock %}
             </div>
@@ -43,11 +44,11 @@
                 class="w-full max-w-xl overflow-hidden card-frame"
             >
                 <p class="mb-6 text-center text-sm font-medium text-slate-400">
-                    Раздел находится в разработке
+                    {% translate "Раздел находится в разработке" %}
                 </p>
                 <img
                     src="{% static 'core/img/in_development.JPG' %}"
-                    alt="Раздел находится в разработке"
+                    alt="{% translate "Раздел находится в разработке" %}"
                     class="block h-auto w-full"
                 >
             </div>

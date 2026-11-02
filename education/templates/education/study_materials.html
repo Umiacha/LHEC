@@ -1,11 +1,12 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
 {% block title %}
-Учебные материалы — ЛХВЭ
+{% translate "Учебные материалы — ЛХВЭ" %}
 {% endblock %}
 
 {% block description %}
-Лабораторные работы и учебные материалы Лаборатории химии высоких энергий.
+{% translate "Лабораторные работы и учебные материалы Лаборатории химии высоких энергий." %}
 {% endblock %}
 
 {% block content %}
@@ -13,18 +14,17 @@
     <div class="page-container page-section">
         <div class="page-header">
             {% url 'education:students' as back_url %}
-            {% include "core/components/back_link.html" with back_label="Студентам" %}
+            {% include "core/components/back_link.html" with back_label=_("Студентам") %}
             <p class="mt-8 page-label">
-                Студентам
+                {% translate "Студентам" %}
             </p>
 
             <h1 class="mt-4 page-title">
-                Учебные материалы
+                {% translate "Учебные материалы" %}
             </h1>
 
             <p class="mt-6 page-intro">
-                Описания лабораторных работ, используемое оборудование
-                и методические материалы для подготовки и выполнения работ.
+                {% translate "Описания лабораторных работ, используемое оборудование и методические материалы для подготовки и выполнения работ." %}
             </p>
         </div>
     </div>
@@ -34,12 +34,11 @@
     <div class="page-container page-section">
         <div class="mb-10">
             <h2 class="section-title">
-                Лабораторные работы
+                {% translate "Лабораторные работы" %}
             </h2>
 
             <p class="mt-3 max-w-2xl text-slate-600">
-                Здесь собраны материалы к лабораторным работам,
-                выполняемым в лаборатории.
+                {% translate "Здесь собраны материалы к лабораторным работам, выполняемым в лаборатории." %}
             </p>
         </div>
 
@@ -53,35 +52,35 @@
                             <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                                 <div class="max-w-3xl">
                                     <h3 class="card-title">
-                                        {{ lab_work.title }}
+                                        {{ lab_work.localized_title }}
                                     </h3>
 
                                     <p class="mt-4 leading-7 text-slate-600">
-                                        {{ lab_work.short_description }}
+                                        {{ lab_work.localized_short_description }}
                                     </p>
                                 </div>
                             </div>
 
-                            {% if lab_work.equipment %}
+                            {% if lab_work.localized_equipment %}
                                 <div class="mt-8 info-panel">
                                     <p class="metadata">
-                                        Используемое оборудование
+                                        {% translate "Используемое оборудование" %}
                                     </p>
 
                                     <p class="mt-2 leading-7 text-slate-700">
-                                        {{ lab_work.equipment }}
+                                        {{ lab_work.localized_equipment }}
                                     </p>
                                 </div>
                             {% endif %}
 
-                            {% if lab_work.description %}
+                            {% if lab_work.localized_description %}
                                 <div class="mt-8">
                                     <h4 class="font-semibold text-lab-950">
-                                        О работе
+                                        {% translate "О работе" %}
                                     </h4>
 
                                     <div class="mt-3 whitespace-pre-line leading-7 text-slate-600">
-                                        {{ lab_work.description }}
+                                        {{ lab_work.localized_description }}
                                     </div>
                                 </div>
                             {% endif %}
@@ -89,7 +88,7 @@
                             {% if lab_work.visible_materials %}
                                 <div class="mt-8 border-t border-slate-200 pt-6">
                                     <h4 class="metadata">
-                                        Материалы
+                                        {% translate "Материалы" %}
                                     </h4>
 
                                     <div class="mt-4 divide-y divide-slate-100">
@@ -106,7 +105,7 @@
         {% else %}
             <div class="empty-state">
                 <p class="text-slate-600">
-                    Информация о лабораторных работах пока не опубликована.
+                    {% translate "Информация о лабораторных работах пока не опубликована." %}
                 </p>
             </div>
         {% endif %}
@@ -118,11 +117,11 @@
         <div class="page-container page-section">
             <div class="mb-8">
                 <h2 class="section-title">
-                    Дополнительные материалы
+                    {% translate "Дополнительные материалы" %}
                 </h2>
 
                 <p class="mt-3 text-slate-600">
-                    Учебные материалы, не относящиеся к конкретной лабораторной работе.
+                    {% translate "Учебные материалы, не относящиеся к конкретной лабораторной работе." %}
                 </p>
             </div>
 
@@ -139,19 +138,19 @@
 {% if can_view_internal %}
 <section class="border-t border-slate-200 bg-slate-50" aria-labelledby="lecture-courses-title">
     <div class="page-container page-section">
-        <p class="metadata">Для сотрудников</p>
-        <h2 id="lecture-courses-title" class="mt-3 section-title">Курсы лекций</h2>
-        <p class="mt-3 text-slate-600">Презентации, дополнительные файлы и примечания лекторов.</p>
+        <p class="metadata">{% translate "Для сотрудников" %}</p>
+        <h2 id="lecture-courses-title" class="mt-3 section-title">{% translate "Курсы лекций" %}</h2>
+        <p class="mt-3 text-slate-600">{% translate "Презентации, дополнительные файлы и примечания лекторов." %}</p>
         <ul class="mt-8 space-y-4">
             {% for course in lecture_courses %}
                 <li class="content-card">
                     <h3 class="card-title">
-                        <a href="{% url 'education:lecture_course_detail' course.slug %}" class="text-link">{{ course.title }} →</a>
+                        <a href="{% url 'education:lecture_course_detail' course.slug %}" class="text-link">{{ course.localized_title }} →</a>
                     </h3>
-                    {% if course.lecturer %}<p class="mt-2 metadata">Лектор: {{ course.lecturer }}</p>{% endif %}
+                    {% if course.lecturer %}<p class="mt-2 metadata">{% translate "Лектор:" %} {{ course.lecturer.localized_full_name }}</p>{% endif %}
                 </li>
             {% empty %}
-                <li class="empty-state">Курсы лекций пока не опубликованы.</li>
+                <li class="empty-state">{% translate "Курсы лекций пока не опубликованы." %}</li>
             {% endfor %}
         </ul>
     </div>

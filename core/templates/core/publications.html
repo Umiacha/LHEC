@@ -1,8 +1,9 @@
 {% extends "core/_placeholder.html" %}
+{% load i18n %}
 
-{% block title %}Публикации — ЛХВЭ{% endblock %}
-{% block page_label %}Наука{% endblock %}
-{% block page_heading %}Публикации{% endblock %}
+{% block title %}{% translate "Публикации — ЛХВЭ" %}{% endblock %}
+{% block page_label %}{% translate "Наука" %}{% endblock %}
+{% block page_heading %}{% translate "Публикации" %}{% endblock %}
 {% block page_intro %}
-Научные публикации сотрудников лаборатории.
+{% translate "Научные публикации сотрудников лаборатории." %}
 {% endblock %}

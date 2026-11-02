@@ -1,0 +1,892 @@
+# English translations for LHEC.
+msgid ""
+msgstr "Project-Id-Version: LHEC\nLanguage: en\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "ЛХВЭ"
+msgstr "LHEC"
+
+msgid "Лаборатория химии высоких энергий"
+msgstr "Laboratory of High Energy Chemistry"
+
+msgid "Лаборатория химии высоких энергий химического факультета МГУ"
+msgstr "Laboratory of High Energy Chemistry, Faculty of Chemistry, MSU"
+
+msgid "Химический факультет МГУ имени М. В. Ломоносова"
+msgstr "Faculty of Chemistry, Lomonosov Moscow State University"
+
+msgid "Химический факультет МГУ"
+msgstr "Faculty of Chemistry, MSU"
+
+msgid "Основная навигация"
+msgstr "Main navigation"
+
+msgid "Мобильная навигация"
+msgstr "Mobile navigation"
+
+msgid "Наука"
+msgstr "Research"
+
+msgid "Студентам"
+msgstr "For students"
+
+msgid "Галерея"
+msgstr "Gallery"
+
+msgid "Контакты"
+msgstr "Contacts"
+
+msgid "Вы вошли как"
+msgstr "Signed in as"
+
+msgid "Админ"
+msgstr "Admin"
+
+msgid "Админ-панель"
+msgstr "Administration"
+
+msgid "Выйти"
+msgstr "Sign out"
+
+msgid "Войти"
+msgstr "Sign in"
+
+msgid "Меню"
+msgstr "Menu"
+
+msgid "Сотрудники"
+msgstr "People"
+
+msgid "История"
+msgstr "History"
+
+msgid "Научные направления"
+msgstr "Research areas"
+
+msgid "Вся научная работа →"
+msgstr "All research →"
+
+msgid "Научные направления пока не добавлены."
+msgstr "No research areas have been added yet."
+
+msgid "Избранные публикации"
+msgstr "Selected publications"
+
+msgid "Все публикации →"
+msgstr "All publications →"
+
+msgid "Страница публикации ↗"
+msgstr "Publication page ↗"
+
+msgid "ИСТИНА ↗"
+msgstr "ISTINA ↗"
+
+msgid "Начните заниматься наукой вместе с нами"
+msgstr "Start your research journey with us"
+
+msgid "Курсовые работы"
+msgstr "Course projects"
+
+msgid "Выпускные работы"
+msgstr "Graduation theses"
+
+msgid "Научные проекты"
+msgstr "Research projects"
+
+msgid "Подробнее"
+msgstr "Learn more"
+
+msgid "Лаборатория"
+msgstr "Laboratory"
+
+msgid "Объявления"
+msgstr "Announcements"
+
+msgid "Все объявления →"
+msgstr "All announcements →"
+
+msgid "Сейчас новых объявлений нет."
+msgstr "There are no new announcements at the moment."
+
+msgid "Сотрудники Лаборатории химии высоких энергий"
+msgstr "Members of the Laboratory of High Energy Chemistry"
+
+msgid "Исследуем химические процессы, протекающие под воздействием ионизирующего излучения, плазмы и других высокоэнергетических воздействий."
+msgstr "We study chemical processes induced by ionizing radiation, plasma and other high-energy sources."
+
+msgid "В лаборатории можно выполнять курсовые и выпускные работы, участвовать в научных проектах и осваивать современные экспериментальные методы."
+msgstr "At our laboratory, you can work on course projects and graduation theses, take part in research projects and learn modern experimental techniques."
+
+msgid "Вход для сотрудников"
+msgstr "Staff sign-in"
+
+msgid "Используйте логин и пароль, выданные администратором."
+msgstr "Use the username and password provided by the administrator."
+
+msgid "Неверный логин или пароль."
+msgstr "Invalid username or password."
+
+msgid "Вход — ЛХВЭ"
+msgstr "Sign in — LHEC"
+
+msgid "ЛХВЭ — Лаборатория химии высоких энергий"
+msgstr "LHEC — Laboratory of High Energy Chemistry"
+
+msgid "Логин"
+msgstr "Username"
+
+msgid "Пароль"
+msgstr "Password"
+
+msgid "Администратор"
+msgstr "Administrator"
+
+msgid "Сотрудник"
+msgstr "Staff member"
+
+msgid "Страницы"
+msgstr "Pages"
+
+msgid "← Назад"
+msgstr "← Previous"
+
+msgid "Далее →"
+msgstr "Next →"
+
+msgid "Исследования"
+msgstr "Research"
+
+msgid "Разделы науки"
+msgstr "Research sections"
+
+msgid "Публикации"
+msgstr "Publications"
+
+msgid "Научные проекты →"
+msgstr "Research projects →"
+
+msgid "Публикации →"
+msgstr "Publications →"
+
+msgid "Диссертации"
+msgstr "Dissertations"
+
+msgid "ВКР"
+msgstr "Graduation theses"
+
+msgid "Защищённые диссертации"
+msgstr "Defended dissertations"
+
+msgid "Выпускные квалификационные работы"
+msgstr "Graduation theses"
+
+msgid "Руководитель"
+msgstr "Group leader"
+
+msgid "Участники"
+msgstr "Members"
+
+msgid "Другие участники пока не указаны."
+msgstr "No other members have been listed yet."
+
+msgid "Публикаций пока нет."
+msgstr "No publications yet."
+
+msgid "Реквизиты проекта"
+msgstr "Project details"
+
+msgid "Тип основания"
+msgstr "Funding type"
+
+msgid "Номер гранта, договора или задания"
+msgstr "Grant, contract or assignment number"
+
+msgid "Заказчик"
+msgstr "Commissioning organization"
+
+msgid "Программа или конкурс"
+msgstr "Programme or competition"
+
+msgid "Внешняя страница"
+msgstr "External page"
+
+msgid "Страница проекта ↗"
+msgstr "Project page ↗"
+
+msgid "Основные исполнители"
+msgstr "Principal researchers"
+
+msgid "Аннотация"
+msgstr "Abstract"
+
+msgid "Найти"
+msgstr "Search"
+
+msgid "Сбросить"
+msgstr "Reset"
+
+msgid "Избранная"
+msgstr "Featured"
+
+msgid "Скачать ↓"
+msgstr "Download ↓"
+
+msgid "Для сотрудников"
+msgstr "For staff"
+
+msgid "Адрес"
+msgstr "Address"
+
+msgid "Заведующий лабораторией"
+msgstr "Head of the laboratory"
+
+msgid "Профессор"
+msgstr "Professor"
+
+msgid "Телефон"
+msgstr "Phone"
+
+msgid "Электронная почта"
+msgstr "Email"
+
+msgid "Как нас найти"
+msgstr "Getting here"
+
+msgid "Открыть в Яндекс Картах ↗"
+msgstr "Open in Yandex Maps ↗"
+
+msgid "119991, Россия, г. Москва,"
+msgstr "119991, Moscow, Russia,"
+
+msgid "Ленинские Горы, дом 1, строение 11"
+msgstr "1 Leninskie Gory, Building 11"
+
+msgid "Фельдман Владимир Исаевич"
+msgstr "Vladimir I. Feldman"
+
+msgid "Фотографии"
+msgstr "Photos"
+
+msgid "Фотографии скоро появятся."
+msgstr "Photos will be added soon."
+
+msgid "Фотографии лаборатории, сотрудников и мероприятий."
+msgstr "Photos of the laboratory, its members and events."
+
+msgid "Сотрудники, научная работа и события из жизни лаборатории."
+msgstr "People, research and events at our laboratory."
+
+msgid "О лаборатории"
+msgstr "About the laboratory"
+
+msgid "Становление лаборатории"
+msgstr "The early years"
+
+msgid "Наши дни"
+msgstr "Today"
+
+msgid "Сохранить"
+msgstr "Save"
+
+msgid "Отмена"
+msgstr "Cancel"
+
+msgid "Редактировать"
+msgstr "Edit"
+
+msgid "Наука — ЛХВЭ"
+msgstr "Research — LHEC"
+
+msgid "Галерея — ЛХВЭ"
+msgstr "Gallery — LHEC"
+
+msgid "Контакты — ЛХВЭ"
+msgstr "Contacts — LHEC"
+
+msgid "История — ЛХВЭ"
+msgstr "History — LHEC"
+
+msgid "Публикации — ЛХВЭ"
+msgstr "Publications — LHEC"
+
+msgid "Научные проекты — ЛХВЭ"
+msgstr "Research projects — LHEC"
+
+msgid "Объявления — ЛХВЭ"
+msgstr "Announcements — LHEC"
+
+msgid "Страница %(number)s из %(total)s"
+msgstr "Page %(number)s of %(total)s"
+
+msgid "· Избранная"
+msgstr "· Featured"
+
+msgid "Автор:"
+msgstr "Author:"
+
+msgid "Адрес и контакты Лаборатории химии высоких энергий химического факультета МГУ. Схема проезда."
+msgstr "Address, contact details and directions for the Laboratory of High Energy Chemistry, Faculty of Chemistry, MSU."
+
+msgid "Внешний источник ↗"
+msgstr "External source ↗"
+
+msgid "Дополнительные материалы"
+msgstr "Additional materials"
+
+msgid "Журнал, сборник или конференция"
+msgstr "Journal, proceedings or conference"
+
+msgid "Запись изменена:"
+msgstr "Last updated:"
+
+msgid "Здесь собраны материалы к лабораторным работам, выполняемым в лаборатории."
+msgstr "Materials for practical laboratory classes are collected here."
+
+msgid "Избранных публикаций пока нет."
+msgstr "No featured publications yet."
+
+msgid "Изменения появятся в вашей карточке после сохранения."
+msgstr "Your profile will be updated after you save your changes."
+
+msgid "Информация о защищённых ВКР скоро появится."
+msgstr "Information about defended graduation theses will be added soon."
+
+msgid "Информация о защищённых диссертациях скоро появится."
+msgstr "Information about defended dissertations will be added soon."
+
+msgid "Информация о лабораторных работах пока не опубликована."
+msgstr "Information about laboratory classes has not been published yet."
+
+msgid "Информация о направлениях скоро появится."
+msgstr "Information about research areas will be added soon."
+
+msgid "Используемое оборудование"
+msgstr "Equipment"
+
+msgid "Исследования, научные проекты и публикации Лаборатории химии высоких энергий."
+msgstr "Research, projects and publications of the Laboratory of High Energy Chemistry."
+
+msgid "Источник финансирования:"
+msgstr "Funding source:"
+
+msgid "Курс лекций · Для сотрудников"
+msgstr "Lecture course · For staff"
+
+msgid "Курсовые и дипломные →"
+msgstr "Course projects and graduation theses →"
+
+msgid "Курсы лекций"
+msgstr "Lecture courses"
+
+msgid "Курсы лекций пока не опубликованы."
+msgstr "No lecture courses have been published yet."
+
+msgid "ЛХВЭ · МГУ"
+msgstr "LHEC · MSU"
+
+msgid "Лабораторные работы"
+msgstr "Laboratory classes"
+
+msgid "Лабораторные работы и учебные материалы Лаборатории химии высоких энергий."
+msgstr "Laboratory classes and teaching materials of the Laboratory of High Energy Chemistry."
+
+msgid "Лектор:"
+msgstr "Lecturer:"
+
+msgid "Лекции"
+msgstr "Lectures"
+
+msgid "Лекции этого курса пока не опубликованы."
+msgstr "No lectures have been published for this course yet."
+
+msgid "Материалы"
+msgstr "Materials"
+
+msgid "Материалы курса лекций для сотрудников ЛХВЭ."
+msgstr "Lecture course materials for LHEC staff."
+
+msgid "На главную"
+msgstr "Home"
+
+msgid "Найдено публикаций:"
+msgstr "Publications found:"
+
+msgid "Научные направления Лаборатории химии высоких энергий."
+msgstr "Research areas of the Laboratory of High Energy Chemistry."
+
+msgid "Научные проекты и направления работы лаборатории."
+msgstr "Research projects and areas of the laboratory."
+
+msgid "Научные публикации сотрудников Лаборатории химии высоких энергий."
+msgstr "Research publications by members of the Laboratory of High Energy Chemistry."
+
+msgid "Научные публикации сотрудников лаборатории."
+msgstr "Research publications by laboratory members."
+
+msgid "Научные руководители / консультанты:"
+msgstr "Supervisors / advisers:"
+
+msgid "Научные руководители:"
+msgstr "Supervisors:"
+
+msgid "Новости и объявления Лаборатории химии высоких энергий."
+msgstr "News and announcements from the Laboratory of High Energy Chemistry."
+
+msgid "Новости, события и объявления лаборатории."
+msgstr "Laboratory news, events and announcements."
+
+msgid "Номер"
+msgstr "Issue"
+
+msgid "О работе"
+msgstr "About this class"
+
+msgid "Образование"
+msgstr "Education"
+
+msgid "Описания лабораторных работ, используемое оборудование и методические материалы для подготовки и выполнения работ."
+msgstr "Laboratory class descriptions, equipment and teaching materials to prepare for and carry out experiments."
+
+msgid "Открыть PDF ↗"
+msgstr "Open PDF ↗"
+
+msgid "Презентации, дополнительные файлы и примечания лекторов."
+msgstr "Presentations, additional files and lecturers’ notes."
+
+msgid "Примечание лаборатории"
+msgstr "Laboratory note"
+
+msgid "Примечание лектора"
+msgstr "Lecturer’s note"
+
+msgid "Проверьте параметры поиска в форме выше."
+msgstr "Check the search parameters in the form above."
+
+msgid "Профиль участника лаборатории"
+msgstr "Laboratory member profile"
+
+msgid "Публикации не найдены. Измените условия поиска или"
+msgstr "No publications found. Change your search criteria or"
+
+msgid "Публикация в ИСТИНЕ ↗"
+msgstr "Publication on ISTINA ↗"
+
+msgid "Раздел находится в разработке"
+msgstr "This section is under development"
+
+msgid "Раздел находится в разработке."
+msgstr "This section is under development."
+
+msgid "Редактировать карточку"
+msgstr "Edit profile"
+
+msgid "Редактировать карточку — ЛХВЭ"
+msgstr "Edit profile — LHEC"
+
+msgid "Скачать ВКР ↓"
+msgstr "Download thesis ↓"
+
+msgid "Скачать диссертацию ↓"
+msgstr "Download dissertation ↓"
+
+msgid "Скачать:"
+msgstr "Download:"
+
+msgid "Сотрудники — ЛХВЭ"
+msgstr "People — LHEC"
+
+msgid "Сотрудники, аспиранты и студенты Лаборатории химии высоких энергий."
+msgstr "Staff, postgraduate and undergraduate students of the Laboratory of High Energy Chemistry."
+
+msgid "Сохранить изменения"
+msgstr "Save changes"
+
+msgid "Специальность:"
+msgstr "Speciality:"
+
+msgid "Список сотрудников пока пуст."
+msgstr "No members have been listed yet."
+
+msgid "Ссылки"
+msgstr "Links"
+
+msgid "Страница"
+msgstr "Page"
+
+msgid "Страницы или номер статьи"
+msgstr "Pages or article number"
+
+msgid "Студентам в Лаборатории химии высоких энергий."
+msgstr "Student opportunities at the Laboratory of High Energy Chemistry."
+
+msgid "Студентам — ЛХВЭ"
+msgstr "For students — LHEC"
+
+msgid "Текущих проектов пока нет."
+msgstr "No current projects yet."
+
+msgid "Том"
+msgstr "Volume"
+
+msgid "Участник лаборатории"
+msgstr "Laboratory member"
+
+msgid "Учебные материалы"
+msgstr "Teaching materials"
+
+msgid "Учебные материалы — ЛХВЭ"
+msgstr "Teaching materials — LHEC"
+
+msgid "Учебные материалы →"
+msgstr "Teaching materials →"
+
+msgid "Учебные материалы, не относящиеся к конкретной лабораторной работе."
+msgstr "Teaching materials that are not tied to a specific laboratory class."
+
+msgid "Файлы лекции"
+msgstr "Lecture files"
+
+msgid "Файлы пока не добавлены."
+msgstr "No files have been added yet."
+
+msgid "Файлы статьи"
+msgstr "Article files"
+
+msgid "г."
+msgstr "year"
+
+msgid "из"
+msgstr "of"
+
+msgid "сбросьте фильтры"
+msgstr "reset the filters"
+
+msgid "— ЛХВЭ"
+msgstr "— LHEC"
+
+msgid "— научное направление ЛХВЭ."
+msgstr "— LHEC research area."
+
+msgid "Дипломные и курсовые работы"
+msgstr "Graduation theses and course projects"
+
+msgid "Дипломные и курсовые работы в Лаборатории химии высоких энергий."
+msgstr "Graduation theses and course projects at the Laboratory of High Energy Chemistry."
+
+msgid "Дипломные и курсовые работы — ЛХВЭ"
+msgstr "Graduation theses and course projects — LHEC"
+
+msgid "Поиск"
+msgstr "Search"
+
+msgid "Название, авторы, журнал или DOI"
+msgstr "Title, authors, journal or DOI"
+
+msgid "Сотрудник лаборатории"
+msgstr "Laboratory member"
+
+msgid "Все сотрудники"
+msgstr "All members"
+
+msgid "Год"
+msgstr "Year"
+
+msgid "Научное направление"
+msgstr "Research area"
+
+msgid "Все направления"
+msgstr "All research areas"
+
+msgid "Все годы"
+msgstr "All years"
+
+msgid "Аспиранты"
+msgstr "Postgraduate students"
+
+msgid "Студенты"
+msgstr "Undergraduate students"
+
+msgid "Сотрудники и студенты лаборатории в прошлом"
+msgstr "Former laboratory staff and students"
+
+msgid "Фамилия"
+msgstr "Last name"
+
+msgid "Имя"
+msgstr "First name"
+
+msgid "Отчество"
+msgstr "Patronymic"
+
+msgid "Фото"
+msgstr "Photo"
+
+msgid "Описание"
+msgstr "Biography"
+
+msgid "Страницы галереи"
+msgstr "Gallery pages"
+
+msgid "Страницы публикаций"
+msgstr "Publication pages"
+
+msgid "Яндекс Карты: Москва, Ленинские Горы, дом 1, строение 11"
+msgstr "Yandex Maps: Moscow, 1 Leninskie Gory, Building 11"
+
+msgid "Открыть фотографию: %(caption)s (в новой вкладке)"
+msgstr "Open photo: %(caption)s (in a new tab)"
+
+msgid "зав. лаб."
+msgstr "Head of the Laboratory"
+
+msgid "зам. зав. лаб."
+msgstr "Deputy Head of the Laboratory"
+
+msgid "в.н.с."
+msgstr "Leading Researcher"
+
+msgid "с.н.с."
+msgstr "Senior Researcher"
+
+msgid "н.с."
+msgstr "Researcher"
+
+msgid "м.н.с."
+msgstr "Junior Researcher"
+
+msgid "вед.инж."
+msgstr "Leading Engineer"
+
+msgid "ст.инж."
+msgstr "Senior Engineer"
+
+msgid "техн."
+msgstr "Technician"
+
+msgid "к.х.н."
+msgstr "PhD in Chemistry"
+
+msgid "к.ф.-м.н."
+msgstr "PhD in Physics and Mathematics"
+
+msgid "к.б.н."
+msgstr "PhD in Biology"
+
+msgid "д.х.н."
+msgstr "D.Sc. in Chemistry"
+
+msgid "д.ф.-м.н."
+msgstr "D.Sc. in Physics and Mathematics"
+
+msgid "доц."
+msgstr "Associate Professor"
+
+msgid "проф."
+msgstr "Professor"
+
+msgid "Студент"
+msgstr "Student"
+
+msgid "Аспирант"
+msgstr "PhD student"
+
+msgid "%(status)s, %(year)s курс"
+msgstr "%(status)s, year %(year)s"
+
+msgid "Грант"
+msgstr "Grant"
+
+msgid "Договор"
+msgstr "Contract"
+
+msgid "Государственное задание"
+msgstr "State assignment"
+
+msgid "Другое"
+msgstr "Other"
+
+msgid "Основной исполнитель"
+msgstr "Principal researcher"
+
+msgid "Кандидатская диссертация"
+msgstr "Candidate of Sciences dissertation"
+
+msgid "Докторская диссертация"
+msgstr "Doctor of Sciences dissertation"
+
+msgid "Бакалаврская работа"
+msgstr "Bachelor’s thesis"
+
+msgid "Магистерская диссертация"
+msgstr "Master’s thesis"
+
+msgid "Дипломная работа специалиста"
+msgstr "Specialist degree thesis"
+
+msgid "Статья"
+msgstr "Article"
+
+msgid "Материалы конференции"
+msgstr "Conference proceedings"
+
+msgid "Книга"
+msgstr "Book"
+
+msgid "Глава в книге"
+msgstr "Book chapter"
+
+msgid "Для всех"
+msgstr "Public"
+
+msgid "Только для сотрудников"
+msgstr "For staff only"
+
+msgid "Текущие"
+msgstr "Current"
+
+msgid "Завершенные"
+msgstr "Completed"
+
+msgid "Предстоящие"
+msgstr "Upcoming"
+
+msgid "Завершенных проектов пока нет."
+msgstr "No completed projects yet."
+
+msgid "К карточке"
+msgstr "Back to profile"
+
+msgid "обязательное поле"
+msgstr "required field"
+
+msgid "Текущее фото сотрудника"
+msgstr "Current profile photo"
+
+msgid "Поиск публикаций"
+msgstr "Search publications"
+
+msgid "Темы дипломных работ, выполненных в лаборатории химии высоких энергий за последние 5 лет."
+msgstr "Graduation thesis topics completed at the Laboratory of High Energy Chemistry over the past five years."
+
+msgid "Избранные темы курсовых работ, выполненные в последние годы."
+msgstr "Selected course project topics completed in recent years."
+
+msgid "Физическая химия"
+msgstr "Physical chemistry"
+
+msgid "Аналитическая химия"
+msgstr "Analytical chemistry"
+
+msgid "Органическая химия"
+msgstr "Organic chemistry"
+
+msgid "Неорганическая химия"
+msgstr "Inorganic chemistry"
+
+msgid "Строение молекул"
+msgstr "Molecular structure"
+
+msgid "Первый в мире курс радиационной химии был прочитан профессором Натальей Алексеевной Бах в 1949 г. При кафедре электрохимии химического факультета МГУ в связи с возникновением атомной технологии была организована специализация «радиационная химия». Официально в феврале 1954 г. решением Минвуза СССР в составе кафедры электрохимии (зав. кафедрой академик А. Н. Фрумкин) была создана лаборатория радиационной химии, которую возглавила проф. Н. А. Бах."
+msgstr "The world’s first course in radiation chemistry was delivered by Professor Natalia A. Bakh in 1949. With the emergence of nuclear technology, a specialization in radiation chemistry was established at the Department of Electrochemistry of the Faculty of Chemistry, Moscow State University. In February 1954, the USSR Ministry of Higher Education formally established the Laboratory of Radiation Chemistry within the department, headed by Academician A. N. Frumkin. Professor N. A. Bakh became the laboratory’s first head."
+
+msgid "Одновременно она руководила отделом радиационной химии Института физической химии АН СССР, который выделил одно помещение для проведения студенческих учебных работ по радиационной химии. В декабре 1956 г. было сдано помещение лаборатории (240 кв. м, включая рентгеновский зал, помещение студенческого практикума, пять научно-исследовательских лабораторий и кабинет заведующего лабораторией), завезена мебель, поставлены замки, перевезено со складов научное оборудование."
+msgstr "At the same time, she headed the Department of Radiation Chemistry at the Institute of Physical Chemistry of the USSR Academy of Sciences, which provided a room for student practical classes in radiation chemistry. In December 1956, the laboratory moved into its own premises: 240 square metres comprising an X-ray room, a student teaching laboratory, five research laboratories and the head’s office. Furniture and locks were installed, and scientific equipment was brought in from storage."
+
+msgid "Лаборатория располагала двумя мощными рентгеновскими установками для проведения облучения. Коллектив лаборатории составлял 10 штатных сотрудников, студентов, аспирантов и стажёров."
+msgstr "The laboratory had two powerful X-ray units for irradiation experiments. Its team included ten staff members, as well as undergraduate and postgraduate students and trainees."
+
+msgid "Первоначально в качестве основных научных направлений были выбраны два базовых — радиолиз и радиационное окисление органических соединений и радиолиз концентрированных водных растворов сильных кислот. В последующем тематика существенно изменилась."
+msgstr "Two initial research areas were selected: radiolysis and radiation-induced oxidation of organic compounds, and radiolysis of concentrated aqueous solutions of strong acids. The research programme subsequently changed considerably."
+
+msgid "За 72 года своего существования лаборатория подготовила более 180 молодых специалистов, более 60 кандидатов химических наук через аспирантуру и без неё. Среди её выпускников 14 докторов химических наук. Коллектив лаборатории выпустил 10 книг и брошюр, 12 учебных пособий, одно из которых — первый в мире учебный практикум по радиационной химии — было тайком вывезено в Великобританию и там переведено на английский язык."
+msgstr "Over its 72 years, the laboratory has trained more than 180 young specialists and more than 60 Candidates of Chemical Sciences, both through postgraduate programmes and through other routes. Fourteen of its graduates have earned the Doctor of Chemical Sciences degree. The laboratory’s team has produced ten books and brochures and twelve teaching manuals. One of these, the world’s first practical course manual in radiation chemistry, was secretly taken to the United Kingdom and translated into English."
+
+msgid "Опубликовано более 1000 научных статей и обзоров, получено 55 авторских свидетельств и патентов, сделано более 500 докладов на международных, всесоюзных, всероссийских, региональных конференциях и совещаниях."
+msgstr "The laboratory has published over 1,000 research articles and reviews, obtained 55 inventor’s certificates and patents, and delivered more than 500 presentations at international, Soviet, Russian and regional conferences and meetings."
+
+msgid "Лабораторию радиационной химии возглавляли:"
+msgstr "The Laboratory of Radiation Chemistry has been headed by:"
+
+msgid "В настоящее время основные направления научных исследований связаны с радиационной химией твёрдых органических и полимерных систем, изучением структуры и реакционной способности первичных ион-радикальных интермедиатов радиационно-химических превращений, а также радиационно-химическими методами получения наноструктур и нанокомпозитов."
+msgstr "Current research focuses on the radiation chemistry of solid organic and polymer systems, the structure and reactivity of primary radical-ion intermediates in radiation-induced transformations, and radiation-based methods for producing nanostructures and nanocomposites."
+
+msgid "Особое место в современной тематике лаборатории занимают исследования радиационно-химических превращений изолированных молекул в матрицах твёрдых благородных газов при температурах гелиевого диапазона, а также строения и свойств новых молекул и радикалов с необычными химическими связями — гидридов благородных газов типа HNgY. Лаборатория обладает оригинальными методиками и уникальным комплексом гелиевых криостатов для таких исследований с использованием методов ИК и ЭПР-спектроскопии."
+msgstr "A particular focus is the study of radiation-induced transformations of isolated molecules in solid noble-gas matrices at liquid-helium temperatures, as well as the structure and properties of new molecules and radicals with unusual chemical bonds, including noble-gas hydrides of the HNgY type. The laboratory has developed original techniques and a unique suite of helium cryostats for these studies using infrared and electron paramagnetic resonance spectroscopy."
+
+msgid "История Лаборатории химии высоких энергий химического факультета МГУ: становление, руководители и научные исследования."
+msgstr "History of the Laboratory of High Energy Chemistry, Faculty of Chemistry, MSU: its foundation, heads and research."
+
+msgid "Ранним этапам развития радиационной химии в СССР и становления лаборатории посвящена статья В. В. Сараевой "
+msgstr "The early development of radiation chemistry in the USSR and the establishment of the laboratory are described in an article by V. V. Saraeva: "
+
+msgid "Наталия Алексеевна Бах"
+msgstr "Natalia A. Bakh"
+
+msgid "Ленар Тимофеевич Бугаенко"
+msgstr "Lenar T. Bugaenko"
+
+msgid "Владимир Исаевич Фельдман"
+msgstr "Vladimir I. Feldman"
+
+msgid " — д.х.н., профессор (1954–1973)."
+msgstr " — Doctor of Chemical Sciences, Professor (1954–1973)."
+
+msgid " — д.х.н., профессор (1974–2000)."
+msgstr " — Doctor of Chemical Sciences, Professor (1974–2000)."
+
+msgid " — д.х.н., профессор (с 2001 года по настоящее время)."
+msgstr " — Doctor of Chemical Sciences, Professor (2001–present)."
+
+msgid "Сегодня коллектив лаборатории — %(total)s сотрудников, в том числе — %(scientific)s научных сотрудников, среди которых %(doctors)s доктора и %(candidates)s кандидатов наук."
+msgstr "Today, the laboratory has %(total)s staff members, including %(scientific)s researchers; researchers with a Doctor of Sciences degree: %(doctors)s, with a Candidate of Sciences degree: %(candidates)s."
+
+msgid "Сегодня коллектив лаборатории — %(total)s сотрудников, в том числе — %(scientific)s научных сотрудников, среди которых %(doctors)s доктора наук."
+msgstr "Today, the laboratory has %(total)s staff members, including %(scientific)s researchers; researchers with a Doctor of Sciences degree: %(doctors)s."
+
+msgid "Сегодня коллектив лаборатории — %(total)s сотрудников, в том числе — %(scientific)s научных сотрудников, среди которых %(candidates)s кандидатов наук."
+msgstr "Today, the laboratory has %(total)s staff members, including %(scientific)s researchers; researchers with a Candidate of Sciences degree: %(candidates)s."
+
+msgid "Сегодня коллектив лаборатории — %(total)s сотрудников, в том числе — %(scientific)s научных сотрудников."
+msgstr "Today, the laboratory has %(total)s staff members, including %(scientific)s researchers."
+
+msgid "Приглашаем студентов 4 и 3 курса, интересующихся физической химией (как экспериментальной, так и теоретической), для научно-исследовательской работы"
+msgstr "We welcome third- and fourth-year students interested in experimental or theoretical physical chemistry to join our research"
+
+msgid ". Наши исследования посвящены изучению структуры и свойств различных высокореакционных интермедиатов и необычных молекул в условиях сверхнизких температур."
+msgstr ". Our research explores the structure and properties of highly reactive intermediates and unusual molecules at extremely low temperatures."
+
+msgid "В ходе выполнения работы планируется получить уникальную информацию, представляющую интерес для различных отраслей химии и химической физики, таких как:"
+msgstr "Our work aims to provide unique insights relevant to several areas of chemistry and chemical physics, including:"
+
+msgid "Химия межзвёздного пространства и планетарных атмосфер"
+msgstr "Chemistry of interstellar space and planetary atmospheres"
+
+msgid "Радиационная химия и фотохимия"
+msgstr "Radiation chemistry and photochemistry"
+
+msgid "Динамика атомов и молекул в конденсированных средах"
+msgstr "Dynamics of atoms and molecules in condensed matter"
+
+msgid "Развитие новых принципов манипулирования химическими реакциями при низких температурах"
+msgstr "Developing new approaches to controlling chemical reactions at low temperatures"
+
+msgid "Участие в проекте открывает возможность активно заниматься перспективными научными исследованиями с использованием современных методик эксперимента при криогенных температурах, основанных на использовании спектроскопии ИК-, видимого и УФ-диапазона, а также электронного парамагнитного резонанса. Одновременно можно выполнить дипломную или курсовую работу, связанную с указанной проблематикой."
+msgstr "The project offers opportunities to take part in research using modern experimental techniques at cryogenic temperatures, including infrared, visible and ultraviolet spectroscopy and electron paramagnetic resonance. Students can also complete a graduation thesis or course project in these areas."
+
+msgid "Аспиранты и студенты старших курсов, работающие в ЛХВЭ, регулярно представляют результаты своих исследований на различных международных научных конференциях."
+msgstr "Postgraduate and senior undergraduate students at LHEC regularly present their research at international scientific conferences."
+
+msgid "Статьи, отражающие содержание работ, выполненных в лаборатории публикуются в ведущих международных научных журналах:"
+msgstr "Research carried out at the laboratory is published in leading international scientific journals:"
+
+msgid "Открыть %(title)s в новой вкладке"
+msgstr "Open %(title)s in a new tab"
+
+msgid "Скачать %(title)s"
+msgstr "Download %(title)s"
+
+msgid "Дипломная работа"
+msgstr "Graduation thesis"
+
+msgid "Курсовая работа"
+msgstr "Course project"
+

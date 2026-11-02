@@ -72,6 +72,6 @@ class PublicationAdmin(admin.ModelAdmin):
     )
     list_editable = ('is_on_homepage', 'homepage_order')
     list_filter = ('is_published', 'is_featured', 'is_on_homepage', 'kind', 'year', 'research_directions')
-    search_fields = ('title', 'authors_text', 'venue', 'doi')
+    search_fields = ('title', 'authors_text', 'authors_text_en', 'note', 'note_en', 'venue', 'doi')
     filter_horizontal = ('employees', 'research_directions')
     readonly_fields = ('created_at', 'updated_at')

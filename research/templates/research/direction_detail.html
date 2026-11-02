@@ -1,45 +1,46 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}{{ direction.name }} — ЛХВЭ{% endblock %}
-{% block description %}{{ direction.name }} — научное направление ЛХВЭ.{% endblock %}
+{% block title %}{{ direction.localized_name }} {% translate "— ЛХВЭ" %}{% endblock %}
+{% block description %}{{ direction.localized_name }} {% translate "— научное направление ЛХВЭ." %}{% endblock %}
 
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
         {% url 'core:science' as back_url %}
-        {% include "core/components/back_link.html" with back_label="Научные направления" back_anchor="#directions" %}
-        <h1 class="mt-4 break-words page-title">{{ direction.name }}</h1>
-        {% if direction.description %}
-            <div class="mt-6 page-intro">{{ direction.description|linebreaks }}</div>
+        {% include "core/components/back_link.html" with back_label=_("Научные направления") back_anchor="#directions" %}
+        <h1 class="mt-4 break-words page-title">{{ direction.localized_name }}</h1>
+        {% if direction.localized_description %}
+            <div class="mt-6 page-intro">{{ direction.localized_description|linebreaks }}</div>
         {% endif %}
         {% if leader %}
             <section class="mt-12">
-                <h2 class="section-title">Руководитель</h2>
-                <p class="mt-6"><a href="{% url 'users:employe_card' leader.pk %}" class="text-xl text-link">{{ leader.last_name }} {{ leader.first_name }} {{ leader.mid_name }}</a></p>
+                <h2 class="section-title">{% translate "Руководитель" %}</h2>
+                <p class="mt-6"><a href="{% url 'users:employe_card' leader.pk %}" class="text-xl text-link">{{ leader.localized_full_name }}</a></p>
             </section>
         {% endif %}
         <section class="mt-12">
-            <h2 class="section-title">Участники</h2>
+            <h2 class="section-title">{% translate "Участники" %}</h2>
             <ul class="mt-6 grid gap-6">
                 {% for employee in employees %}
-                    <li><a href="{% url 'users:employe_card' employee.pk %}" class="text-xl text-link">{{ employee.last_name }} {{ employee.first_name }} {{ employee.mid_name }}</a></li>
+                    <li><a href="{% url 'users:employe_card' employee.pk %}" class="text-xl text-link">{{ employee.localized_full_name }}</a></li>
                 {% empty %}
-                    <li class="empty-state">Другие участники пока не указаны.</li>
+                    <li class="empty-state">{% translate "Другие участники пока не указаны." %}</li>
                 {% endfor %}
             </ul>
         </section>
         <section class="mt-12">
-            <h2 class="section-title">Публикации</h2>
+            <h2 class="section-title">{% translate "Публикации" %}</h2>
             <ul class="mt-6 grid gap-6">
                 {% for publication in publications %}
                     <li class="content-card">
                         <p class="metadata">{{ publication.year }} · {{ publication.get_kind_display }}</p>
                         <h3 class="mt-3 text-xl card-title"><a href="{% url 'publications:publication' publication.pk %}" class="text-link">{{ publication.title }}</a></h3>
-                        <p class="mt-3 text-slate-600">{{ publication.authors_text }}</p>
+                        <p class="mt-3 text-slate-600">{{ publication.localized_authors_text }}</p>
                         {% if publication.venue %}<p class="mt-2 text-slate-500">{{ publication.venue }}</p>{% endif %}
                     </li>
                 {% empty %}
-                    <li class="empty-state">Публикаций пока нет.</li>
+                    <li class="empty-state">{% translate "Публикаций пока нет." %}</li>
                 {% endfor %}
             </ul>
             {% include "core/components/pagination.html" %}
