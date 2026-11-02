@@ -4,6 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.decorators.cache import never_cache
+from django.urls import reverse
 from users.roles import INTERNAL_MATERIALS_PERMISSION
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, FileResponse, Http404
@@ -48,11 +49,18 @@ def publications(request: HttpRequest) -> HttpResponse:
 def publication(request: HttpRequest, pk: int) -> HttpResponse:
     """Страница публикации."""
     publ = get_object_or_404(Publication, pk=pk, is_published=True)
+    publications_url = reverse('publications:publications')
+    # Only accept a local catalog URL; never turn this link into an open redirect.
+    return_to = request.GET.get('return_to', '')
+    if return_to.partition('?')[0] != publications_url:
+        return_to = ''
     return render(
         request,
         'publications/publication_card.html',
         {
             'publication': publ,
+            'publications_url': publications_url,
+            'return_to': return_to,
             'can_download_files': request.user.has_perm(INTERNAL_MATERIALS_PERMISSION),
         }
     )

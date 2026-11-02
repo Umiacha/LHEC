@@ -4,30 +4,30 @@
 {% block description %}Студентам в Лаборатории химии высоких энергий.{% endblock %}
 
 {% block content %}
-<section class="bg-paper py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section class="bg-paper page-section">
+    <div class="page-container">
         <div class="max-w-3xl">
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Образование</p>
-            <h1 class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Студентам</h1>
+            <p class="page-label">Образование</p>
+            <h1 class="mt-4 page-title">Студентам</h1>
 <div class="mt-10 flex flex-wrap gap-3">
 <a
     href="{% url 'education:study_materials' %}"
-    class="inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800"
+    class="button button-primary"
 >
     Учебные материалы →
 </a>
 
 <a
     href="{% url 'education:theses' %}"
-    class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 text-sm font-semibold text-lab-950 transition-colors hover:border-lab-950 hover:bg-white"
+    class="button button-secondary"
 >
     Курсовые и дипломные →
 </a>
 </div>
-<div class="mt-10 space-y-6 text-lg leading-8 text-slate-600">
+<div class="mt-10 space-y-6 page-intro">
 <p><strong class="font-bold">Приглашаем студентов 4 и 3 курса, интересующихся физической химией (как экспериментальной, так и теоретической), для научно-исследовательской работы</strong>. Наши исследования посвящены изучению структуры и свойств различных высокореакционных интермедиатов и необычных молекул в условиях сверхнизких температур.</p>
 <p>В ходе выполнения работы планируется получить уникальную информацию, представляющую интерес для различных отраслей химии и химической физики, таких как:</p>
-<ul class="student-topics list-disc space-y-3 pl-6">
+<ul class="list-disc space-y-3 pl-6">
     <li>Химия межзвёздного пространства и планетарных атмосфер</li>
     <li>Радиационная химия и фотохимия</li>
     <li>Динамика атомов и молекул в конденсированных средах</li>

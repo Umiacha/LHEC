@@ -9,12 +9,7 @@ from .roles import UserRole, get_user_role
 from .models import Employee
 
 
-INPUT_CLASSES = (
-    "mt-2 block w-full rounded-xl border border-slate-300 "
-    "bg-white px-4 py-3 text-sm text-slate-900 outline-none "
-    "transition focus:border-energy-500 focus:ring-2 "
-    "focus:ring-energy-500/20"
-)
+INPUT_CLASSES = 'form-control'
 
 
 class LoginForm(AuthenticationForm):
@@ -79,7 +74,7 @@ class EmployeeEditForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),
             'mid_name': forms.TextInput(attrs={'class': INPUT_CLASSES}),
             'photo': forms.ClearableFileInput(attrs={
-                'class': 'block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 file:bg-lab-950 file:px-4 file:py-2.5 file:font-semibold file:text-white hover:file:bg-lab-800',
+                'class': 'file-control',
                 'accept': 'image/*',
             }),
             'bio': forms.Textarea(attrs={'class': INPUT_CLASSES, 'rows': 8}),

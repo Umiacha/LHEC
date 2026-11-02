@@ -14,13 +14,13 @@
             class="flex flex-col justify-center px-6 py-20 sm:py-24 lg:px-8 lg:py-28"
         >
             <p
-                class="mb-6 text-sm font-semibold uppercase tracking-[0.18em] text-energy-400"
+                class="mb-6 page-label text-energy-400"
             >
                 Химический факультет МГУ
             </p>
 
             <h1
-                class="max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-6xl lg:text-7xl"
+                class="max-w-3xl hero-title"
             >
                 Лаборатория химии высоких энергий
             </h1>
@@ -36,14 +36,14 @@
             <div class="mt-10 flex flex-wrap gap-3">
                 <a
                     href="{% url 'users:people' %}"
-                    class="inline-flex min-h-12 items-center justify-center rounded-full bg-energy-400 px-6 text-sm font-semibold text-lab-950 transition-colors hover:bg-energy-500"
+                    class="button button-accent"
                 >
                     Сотрудники
                 </a>
 
                 <a
                     href="{% url 'core:history' %}"
-                    class="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-6 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                    class="button button-inverse"
                 >
                     История
                 </a>
@@ -52,7 +52,7 @@
 
         {# Вот здесь находится фотография сотрудников #}
         <div class="px-6 pb-10 lg:flex lg:items-center lg:px-8 lg:py-16">
-            <div class="w-full overflow-hidden rounded-3xl">
+            <div class="w-full overflow-hidden rounded-[1.25rem]">
                 <img
                     src="{% static 'core/img/LHEC-main.jpg' %}"
                     alt="Сотрудники Лаборатории химии высоких энергий"
@@ -65,20 +65,20 @@
 
 
 {# ===================== SCIENCE ===================== #}
-<section id="science" class="bg-paper py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section id="science" class="bg-paper feature-section">
+    <div class="page-container">
         <div
             class="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between"
         >
             <div>
                 <p
-                    class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500"
+                    class="page-label"
                 >
                     Наука
                 </p>
 
                 <h2
-                    class="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.04em] text-lab-950 sm:text-5xl"
+                    class="mt-4 max-w-3xl feature-title"
                 >
                     Научные направления
                 </h2>
@@ -86,7 +86,7 @@
 
             <a
                 href="{% url 'core:science' %}"
-                class="shrink-0 text-sm font-semibold text-lab-950 transition-colors hover:text-energy-500"
+                class="shrink-0 text-sm text-link"
             >
                 Вся научная работа →
             </a>
@@ -95,17 +95,17 @@
         <div class="mt-12 grid gap-5 lg:grid-cols-3">
             {% for direction in directions %}
                 <article
-                    class="flex min-h-80 flex-col rounded-3xl border border-slate-200 bg-white p-8"
+                    class="flex min-h-80 flex-col content-card"
                 >
-                    <div class="text-sm font-semibold text-energy-500">
+                    <div class="page-label">
                         {{ forloop.counter|stringformat:"02d" }}
                     </div>
 
                     <div class="mt-auto pt-16">
                         <h3
-                            class="text-2xl font-semibold tracking-[-0.025em] text-lab-950"
+                            class="card-title"
                         >
-                            <a href="{% url 'research:direction_detail' direction.slug %}" class="hover:underline">{{ direction.name }}</a>
+                            <a href="{% url 'research:direction_detail' direction.slug %}" class="text-link">{{ direction.name }}</a>
                         </h3>
 
                         {% if direction.description %}
@@ -116,7 +116,7 @@
                     </div>
                 </article>
             {% empty %}
-                <p class="leading-7 text-slate-600">Научные направления пока не добавлены.</p>
+                <p class="empty-state lg:col-span-3">Научные направления пока не добавлены.</p>
             {% endfor %}
         </div>
     </div>
@@ -125,22 +125,22 @@
 
 {# ===================== PUBLICATIONS ===================== #}
 {% if homepage_publications %}
-<section id="publications" class="bg-white py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section id="publications" class="bg-white feature-section">
+    <div class="page-container">
         <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <h2 class="text-4xl font-semibold tracking-[-0.04em] text-lab-950 sm:text-5xl">
+            <h2 class="feature-title">
                 Избранные публикации
             </h2>
-            <a href="{% url 'publications:publications' %}" class="shrink-0 text-sm font-semibold text-lab-950 hover:underline">
+            <a href="{% url 'publications:publications' %}" class="shrink-0 text-sm text-link">
                 Все публикации →
             </a>
         </div>
 
         <ul class="mt-12 grid gap-5">
             {% for publication in homepage_publications %}
-                <li class="min-w-0 rounded-3xl border border-slate-200 p-6 sm:p-8">
+                <li class="content-card">
                     <article>
-                        <h3 class="break-words text-xl font-semibold leading-snug text-lab-950">
+                        <h3 class="break-words text-xl card-title">
                             <a href="{% url 'publications:publication' publication.pk %}" class="hover:underline focus-visible:underline">{{ publication.title }}</a>
                         </h3>
                         {% if publication.note %}
@@ -151,11 +151,11 @@
                             {% if publication.venue %}{{ publication.venue }} · {% endif %}{{ publication.year }}
                         </p>
                         {% if publication.doi %}
-                            <a href="https://doi.org/{{ publication.doi|urlencode }}" class="mt-3 inline-block text-sm font-semibold text-lab-950 hover:underline focus-visible:underline">DOI ↗</a>
+                            <a href="https://doi.org/{{ publication.doi|urlencode }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">DOI ↗</a>
                         {% elif publication.external_url %}
-                            <a href="{{ publication.external_url }}" class="mt-3 inline-block text-sm font-semibold text-lab-950 hover:underline focus-visible:underline">Страница публикации ↗</a>
+                            <a href="{{ publication.external_url }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">Страница публикации ↗</a>
                         {% elif publication.istina_url %}
-                            <a href="{{ publication.istina_url }}" class="mt-3 inline-block text-sm font-semibold text-lab-950 hover:underline focus-visible:underline">ИСТИНА ↗</a>
+                            <a href="{{ publication.istina_url }}" class="mt-3 inline-block text-sm text-link focus-visible:underline">ИСТИНА ↗</a>
                         {% endif %}
                     </article>
                 </li>
@@ -167,21 +167,21 @@
 
 
 {# ===================== STUDENTS ===================== #}
-<section id="students" class="bg-white py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section id="students" class="bg-white feature-section">
+    <div class="page-container">
         <div
             class="overflow-hidden rounded-[2rem] bg-lab-950 px-6 py-12 text-white sm:px-10 sm:py-16 lg:px-16 lg:py-20"
         >
             <div class="grid gap-12 lg:grid-cols-2 lg:gap-20">
                 <div>
                     <p
-                        class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-400"
+                        class="page-label text-energy-400"
                     >
                         Студентам
                     </p>
 
                     <h2
-                        class="mt-4 max-w-xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl"
+                        class="mt-4 max-w-xl feature-title"
                     >
                         Начните заниматься наукой вместе с нами
                     </h2>
@@ -216,7 +216,7 @@
 
                     <a
                         href="{% url 'education:students' %}"
-                        class="mt-10 inline-flex min-h-12 items-center justify-center rounded-full bg-energy-400 px-6 text-sm font-semibold text-lab-950 transition-colors hover:bg-energy-500"
+                        class="mt-10 button button-accent"
                     >
                         Подробнее
                     </a>
@@ -228,20 +228,20 @@
 
 
 {# ===================== ANNOUNCEMENTS ===================== #}
-<section id="announcements" class="bg-paper py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section id="announcements" class="bg-paper feature-section">
+    <div class="page-container">
         <div
             class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
         >
             <div>
                 <p
-                    class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500"
+                    class="page-label"
                 >
                     Лаборатория
                 </p>
 
                 <h2
-                    class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-lab-950 sm:text-5xl"
+                    class="mt-4 feature-title"
                 >
                     Объявления
                 </h2>
@@ -249,7 +249,7 @@
 
             <a
                 href="{% url 'core:news' %}"
-                class="text-sm font-semibold text-lab-950 transition-colors hover:text-energy-500"
+                class="text-sm text-link"
             >
                 Все объявления →
             </a>
@@ -259,17 +259,17 @@
             <div class="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {% for announcement in announcements %}
                     <article
-                        class="flex flex-col rounded-3xl border border-slate-200 bg-white p-8"
+                        class="flex flex-col content-card"
                     >
                         <time
                             datetime="{{ announcement.published_at|date:'c' }}"
-                            class="text-sm font-medium text-energy-500"
+                            class="metadata"
                         >
                             {{ announcement.published_at|date:"j E Y" }}
                         </time>
         
                         <h3
-                            class="mt-4 text-2xl font-semibold tracking-[-0.025em] text-lab-950"
+                            class="mt-4 card-title"
                         >
                             {{ announcement.title }}
                         </h3>
@@ -282,9 +282,9 @@
             </div>
         {% else %}
             <div
-                class="mt-12 rounded-3xl border border-slate-200 bg-white p-8 sm:p-10"
+                class="mt-12 empty-state"
             >
-                <p class="max-w-2xl text-lg leading-8 text-slate-600">
+                <p class="max-w-2xl page-intro">
                     Сейчас новых объявлений нет.
                 </p>
             </div>

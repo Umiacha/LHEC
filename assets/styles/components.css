@@ -1,0 +1,240 @@
+/* Shared visual roles. Layout-specific grids and spacing stay in templates. */
+@layer components {
+    header nav a[aria-current="location"] {
+        text-decoration: underline;
+        text-underline-offset: .35em;
+        text-decoration-thickness: 2px;
+    }
+    .hero-title {
+        font-size: 2.5rem;
+        line-height: 1.05;
+        font-weight: 600;
+        letter-spacing: -.045em;
+        overflow-wrap: anywhere;
+    }
+    .feature-title {
+        font-size: 1.875rem;
+        line-height: 1.15;
+        font-weight: 600;
+        letter-spacing: -.035em;
+        overflow-wrap: anywhere;
+    }
+    .feature-section {
+        padding-block: 4rem;
+    }
+    .card-frame {
+        min-width: 0;
+        border: 1px solid var(--color-slate-200);
+        border-radius: 1.25rem;
+        background: white;
+        overflow-wrap: anywhere;
+    }
+    .button-accent {
+        color: var(--color-lab-950);
+        background: var(--color-energy-400);
+    }
+    .button-accent:hover {
+        background: var(--color-energy-500);
+    }
+    .button.button-inverse {
+        color: white;
+        border-color: #ffffff40;
+    }
+    .button.button-inverse:hover {
+        background: #ffffff1a;
+    }
+    .button:focus-visible {
+        outline-color: var(--color-energy-500);
+    }
+    .file-control {
+        display: block;
+        width: 100%;
+        font-size: .875rem;
+        color: var(--color-slate-700);
+    }
+    .file-control::file-selector-button {
+        margin-right: 1rem;
+        padding: .75rem 1rem;
+        border: 0;
+        border-radius: 9999px;
+        background: var(--color-lab-950);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .file-control::file-selector-button:hover {
+        background: var(--color-lab-800);
+    }
+    .page-section {
+        padding-block: 4rem;
+    }
+    .page-container {
+        width: 100%;
+        max-width: 80rem;
+        margin-inline: auto;
+        padding-inline: 1.5rem;
+    }
+    .reading-width {
+        max-width: 48rem;
+    }
+    .page-header {
+        max-width: 64rem;
+    }
+    .page-label {
+        color: var(--color-energy-500);
+        font-size: .875rem;
+        font-weight: 600;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+    .page-title {
+        overflow-wrap: anywhere;
+        color: var(--color-lab-950);
+        font-size: 2.25rem;
+        line-height: 1.12;
+        font-weight: 600;
+        letter-spacing: -.04em;
+    }
+    .section-title {
+        color: var(--color-lab-950);
+        font-size: 1.5rem;
+        line-height: 1.25;
+        font-weight: 600;
+        letter-spacing: -.025em;
+    }
+    .card-title {
+        overflow-wrap: anywhere;
+        color: var(--color-lab-950);
+        font-size: 1.25rem;
+        line-height: 1.4;
+        font-weight: 600;
+    }
+    .page-intro {
+        max-width: 48rem;
+        color: var(--color-slate-600);
+        font-size: 1.125rem;
+        line-height: 2rem;
+    }
+    .metadata {
+        color: var(--color-slate-500);
+        font-size: .875rem;
+        line-height: 1.5rem;
+    }
+    .content-card {
+        min-width: 0;
+        padding: 1.5rem;
+        border: 1px solid var(--color-slate-200);
+        border-radius: 1.25rem;
+        background: white;
+        overflow-wrap: anywhere;
+    }
+    .info-panel {
+        padding: 1.25rem;
+        border-radius: 1rem;
+        background: var(--color-slate-50);
+    }
+    .empty-state {
+        padding: 1.5rem;
+        border: 1px dashed var(--color-slate-300);
+        border-radius: 1.25rem;
+        color: var(--color-slate-600);
+        background: white;
+    }
+    .text-link, .back-link {
+        color: var(--color-lab-950);
+        font-weight: 600;
+        text-underline-offset: .25em;
+    }
+    .text-link:hover, .back-link:hover {
+        text-decoration: underline;
+    }
+    .back-link {
+        display: inline-block;
+        font-size: .875rem;
+    }
+    .button {
+        display: inline-flex;
+        min-height: 3rem;
+        align-items: center;
+        justify-content: center;
+        padding: .75rem 1.5rem;
+        border: 1px solid transparent;
+        border-radius: 9999px;
+        font-size: .875rem;
+        line-height: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 150ms, border-color 150ms;
+    }
+    .button-primary {
+        color: white;
+        background: var(--color-lab-950);
+    }
+    .button-primary:hover {
+        background: var(--color-lab-800);
+    }
+    .button-secondary {
+        color: var(--color-lab-950);
+        border-color: var(--color-slate-300);
+        background: white;
+    }
+    .button-secondary:hover {
+        border-color: var(--color-lab-950);
+        background: var(--color-slate-50);
+    }
+    .form-control {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        margin-top: .5rem;
+        padding: .75rem 1rem;
+        border: 1px solid var(--color-slate-300);
+        border-radius: .75rem;
+        background: white;
+        color: var(--color-slate-700);
+        font-size: 1rem;
+    }
+    .form-control:focus {
+        border-color: var(--color-lab-800);
+    }
+    .pagination {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        font-size: .875rem;
+    }
+    @media (min-width: 40rem) {
+        .hero-title {
+            font-size: 3.25rem;
+        }
+        .feature-title {
+            font-size: 2.5rem;
+        }
+        .feature-section {
+            padding-block: 5rem;
+        }
+        .page-title {
+            font-size: 3rem;
+        }
+        .section-title {
+            font-size: 1.875rem;
+        }
+    }
+    @media (min-width: 64rem) {
+        .hero-title {
+            font-size: 4rem;
+        }
+        .feature-section {
+            padding-block: 7rem;
+        }
+        .page-section {
+            padding-block: 5rem;
+        }
+        .page-container {
+            padding-inline: 2rem;
+        }
+    }
+}

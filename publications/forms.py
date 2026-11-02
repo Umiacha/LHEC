@@ -40,11 +40,7 @@ class PublicationSearchForm(forms.Form):
         ).values_list('year', flat=True).distinct()
         self.fields['year'].choices = [('', 'Все годы'), *((year, year) for year in years)]
         for field in self.fields.values():
-            field.widget.attrs['class'] = (
-                'mt-2 block w-full min-w-0 rounded-xl border border-slate-300 '
-                'bg-white px-4 py-3 text-base text-slate-700 '
-                'focus:border-lab-800 focus:outline-none focus:ring-2 focus:ring-lab-800'
-            )
+            field.widget.attrs['class'] = 'form-control'
 
 
 class PublicationImportForm(forms.Form):

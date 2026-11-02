@@ -4,13 +4,15 @@
 {% block description %}Дипломные и курсовые работы в Лаборатории химии высоких энергий.{% endblock %}
 
 {% block content %}
-<section class="bg-paper py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section class="bg-paper page-section">
+    <div class="page-container">
         <div class="max-w-3xl">
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Студентам</p>
-            <h1 class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Дипломные и курсовые работы</h1>
-<div class="mt-10 space-y-10 text-lg leading-8 text-slate-600">
-<section class="space-y-6"><h2 class="text-2xl font-bold text-lab-950">Темы дипломных работ, выполненных в лаборатории химии высоких энергий за последние 5 лет.</h2>
+            {% url 'education:students' as back_url %}
+            {% include "core/components/back_link.html" with back_label="Студентам" %}
+            <p class="mt-8 page-label">Студентам</p>
+            <h1 class="mt-4 page-title">Дипломные и курсовые работы</h1>
+<div class="mt-10 space-y-10 page-intro">
+<section class="space-y-6"><h2 class="section-title">Темы дипломных работ, выполненных в лаборатории химии высоких энергий за последние 5 лет.</h2>
 <ul class="list-disc space-y-3 pl-6">
     <li>Радиационно-индуцированное формирование наночастиц золота, серебра и меди в системах на основе поливинилтриазола</li>
     <li>Спектроскопия и радиационная химия комплексов цианистого водорода с углеводородами С2 в низкотемпературных матрицах</li>
@@ -32,8 +34,8 @@
     <li>Структура и реакции катион-радикалов некоторых терминальных алкинов</li>
 </ul>
 </section>
-<section class="space-y-6"><h2 class="text-2xl font-bold text-lab-950">Избранные темы курсовых работ, выполненные в последние годы.</h2>
-<div class="space-y-6"><h3 class="text-xl font-semibold text-lab-950">Неорганическая химия</h3>
+<section class="space-y-6"><h2 class="section-title">Избранные темы курсовых работ, выполненные в последние годы.</h2>
+<div class="space-y-6"><h3 class="text-xl card-title">Неорганическая химия</h3>
 <ul class="list-disc space-y-3 pl-6">
     <li>Радиационно-химический синтез HKrCN в низкотемпературной матрице криптона</li>
     <li>Гидрофториды благородных газов: попытка радиационно–химического синтеза</li>
@@ -45,7 +47,7 @@
     <li>Синтез наночастиц при радиационно-химическом восстановлении ионов серебра в интерполиэлектролитных комплексах</li>
 </ul>
 </div>
-<div class="space-y-6"><h3 class="text-xl font-semibold text-lab-950">Аналитическая химия</h3>
+<div class="space-y-6"><h3 class="text-xl card-title">Аналитическая химия</h3>
 <ul class="list-disc space-y-3 pl-6">
     <li>Использование маннита и глюкозы в качестве маркеров рентгеновского излучения</li>
     <li>Определение радикалов в системе н-бутанол—вода—пероксид водорода методом спиновых ловушек</li>
@@ -55,7 +57,7 @@
     <li>Определение количества краун-эфира, вымываемого из краунсодержащего сорбента при контакте с водной средой, экстракционно-спектрофотометрическим методом</li>
 </ul>
 </div>
-<div class="space-y-6"><h3 class="text-xl font-semibold text-lab-950">Органическая химия</h3>
+<div class="space-y-6"><h3 class="text-xl card-title">Органическая химия</h3>
 <ul class="list-disc space-y-3 pl-6">
     <li>Получение 2,2′-(1,3-пропандиил)бис[2-метил-1,3-дитиана]</li>
     <li>Синтез дейтерированного диацетилена</li>
@@ -63,14 +65,14 @@
     <li>Синтез частично дейтерированного ацетоуксусного эфира</li>
 </ul>
 </div>
-<div class="space-y-6"><h3 class="text-xl font-semibold text-lab-950">Физическая химия</h3>
+<div class="space-y-6"><h3 class="text-xl card-title">Физическая химия</h3>
 <ul class="list-disc space-y-3 pl-6">
     <li>Термодинамические характеристики газообразных смесей криптона и ксенона из численного эксперимента</li>
     <li>Исследование кинетики радиационно-химического восстановления ионов меди в комплексах на основе звездообразных молекул акриловой кислоты</li>
     <li>Реакции избыточных электронов с метилэтилкетоном в низкотемпературной матрице диэтилового эфира</li>
 </ul>
 </div>
-<div class="space-y-6"><h3 class="text-xl font-semibold text-lab-950">Строение молекул</h3>
+<div class="space-y-6"><h3 class="text-xl card-title">Строение молекул</h3>
 <ul class="list-disc space-y-3 pl-6">
     <li>Расчет колебательного спектра CHF…HF и сопоставление результатов с экспериментом</li>
 </ul>

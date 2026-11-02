@@ -48,6 +48,7 @@
                 <a
                     class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
                     href="{% url 'core:science' %}"
+                    {% if request.resolver_match.url_name == 'science' or request.resolver_match.namespace == 'research' or request.resolver_match.namespace == 'publications' %}aria-current="location"{% endif %}
                 >
                     Наука
                 </a>
@@ -55,16 +56,19 @@
                 <a
                     class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
                     href="{% url 'education:students' %}"
+                    {% if request.resolver_match.namespace == 'education' %}aria-current="location"{% endif %}
                 >
                     Студентам
                 </a>
     
                 <a class="text-sm font-medium text-slate-700 transition-colors hover:text-lab-950"
-                   href="{% url 'core:gallery' %}">Галерея</a>
+                   href="{% url 'core:gallery' %}"
+                    {% if request.resolver_match.url_name == 'gallery' %}aria-current="location"{% endif %}>Галерея</a>
 
                 <a
                     class="rounded-full bg-lab-950 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-lab-800"
                     href="{% url 'core:contacts' %}"
+                    {% if request.resolver_match.url_name == 'contacts' %}aria-current="location"{% endif %}
                 >
                     Контакты
                 </a>
@@ -136,6 +140,7 @@
                     <a
                         class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
                         href="{% url 'core:science' %}"
+                    {% if request.resolver_match.url_name == 'science' or request.resolver_match.namespace == 'research' or request.resolver_match.namespace == 'publications' %}aria-current="location"{% endif %}
                     >
                         Наука
                     </a>
@@ -143,6 +148,7 @@
                     <a
                         class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
                         href="{% url 'education:students' %}"
+                    {% if request.resolver_match.namespace == 'education' %}aria-current="location"{% endif %}
                     >
                         Студентам
                     </a>
@@ -150,11 +156,13 @@
                     <a
                         class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
                         href="{% url 'core:contacts' %}"
+                    {% if request.resolver_match.url_name == 'contacts' %}aria-current="location"{% endif %}
                     >
                         Контакты
                     </a>
                     <a class="rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-50"
-                       href="{% url 'core:gallery' %}">Галерея</a>
+                       href="{% url 'core:gallery' %}"
+                    {% if request.resolver_match.url_name == 'gallery' %}aria-current="location"{% endif %}>Галерея</a>
                     <div class="my-1 border-t border-slate-100"></div>
                     
                     {% if user.is_authenticated %}
@@ -231,7 +239,8 @@
             <div class="sm:text-right">
                 <a
                     href="{% url 'core:contacts' %}"
-                    class="text-sm font-semibold text-lab-950 hover:text-energy-500"
+                    {% if request.resolver_match.url_name == 'contacts' %}aria-current="location"{% endif %}
+                    class="text-sm text-link"
                 >
                     Контакты
                 </a>

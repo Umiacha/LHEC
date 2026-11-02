@@ -4,43 +4,43 @@
 {% block description %}Адрес и контакты Лаборатории химии высоких энергий химического факультета МГУ. Схема проезда.{% endblock %}
 
 {% block content %}
-<section class="bg-paper py-16 sm:py-24" aria-labelledby="contacts-heading">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">ЛХВЭ · МГУ</p>
-        <h1 id="contacts-heading" class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Контакты</h1>
-        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+<section class="bg-paper page-section" aria-labelledby="contacts-heading">
+    <div class="page-container">
+        <p class="page-label">ЛХВЭ · МГУ</p>
+        <h1 id="contacts-heading" class="mt-4 page-title">Контакты</h1>
+        <p class="mt-6 max-w-2xl page-intro">
             Лаборатория химии высоких энергий<br>
             Химический факультет МГУ имени М. В. Ломоносова
         </p>
         <div class="mt-12 grid gap-6 lg:grid-cols-2">
-            <section class="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="address-heading">
-                <h2 id="address-heading" class="text-2xl font-semibold text-lab-950">Адрес</h2>
+            <section class="content-card" aria-labelledby="address-heading">
+                <h2 id="address-heading" class="section-title">Адрес</h2>
                 <address class="mt-5 text-lg not-italic leading-8 text-slate-600">
                     119991, Россия, г. Москва,<br>
                     Ленинские Горы, дом 1, строение 11
                 </address>
                 <a href="https://yandex.ru/maps/?text=Москва%2C%20Ленинские%20Горы%2C%201с11"
-                   class="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-lab-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-lab-800">
-                    Открыть в Яндекс Картах →
+                   class="mt-6 button button-primary">
+                    Открыть в Яндекс Картах ↗
                 </a>
             </section>
-            <section class="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="head-heading">
-                <h2 id="head-heading" class="text-2xl font-semibold text-lab-950">Заведующий лабораторией</h2>
+            <section class="content-card" aria-labelledby="head-heading">
+                <h2 id="head-heading" class="section-title">Заведующий лабораторией</h2>
                 <p class="mt-5 text-lg font-semibold text-lab-950">Фельдман Владимир Исаевич</p>
                 <p class="mt-1 text-slate-500">Профессор</p>
                 <address class="mt-6 space-y-3 not-italic text-slate-600">
-                    <p><span class="block text-sm text-slate-500">Телефон</span>
-                        <a href="tel:+74959394870" class="font-medium text-lab-950 hover:underline">+7 (495) 939-48-70</a>
+                    <p><span class="block metadata">Телефон</span>
+                        <a href="tel:+74959394870" class="text-link">+7 (495) 939-48-70</a>
                     </p>
-                    <p><span class="block text-sm text-slate-500">Электронная почта</span>
-                        <a href="mailto:feldman@rad.chem.msu.ru" class="break-all font-medium text-lab-950 hover:underline">feldman@rad.chem.msu.ru</a>
+                    <p><span class="block metadata">Электронная почта</span>
+                        <a href="mailto:feldman@rad.chem.msu.ru" class="break-all text-link">feldman@rad.chem.msu.ru</a>
                     </p>
                 </address>
             </section>
         </div>
         <section class="mt-12" aria-labelledby="map-heading">
-            <h2 id="map-heading" class="text-2xl font-semibold text-lab-950">Как нас найти</h2>
-            <div class="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-white">
+            <h2 id="map-heading" class="section-title">Как нас найти</h2>
+            <div class="mt-6 overflow-hidden card-frame">
                 <iframe
                     src="https://yandex.ru/map-widget/v1/?text=Москва%2C%20Ленинские%20Горы%2C%201с11&amp;z=16"
                     title="Яндекс Карты: Москва, Ленинские Горы, дом 1, строение 11"

@@ -1,4 +1,4 @@
-.PHONY: check-migrations show-migrations makemigrations migrate run tailwind dev
+.PHONY: check-migrations show-migrations makemigrations migrate run tailwind dev styles
 
 MANAGE = uv run python manage.py
 
@@ -28,6 +28,12 @@ migrate:
 # Запустить Django development server.
 run:
 	$(MANAGE) runserver
+
+
+# Собрать CSS и обновить файлы, раздаваемые WhiteNoise / веб-сервером.
+styles:
+	npm run css:build
+	$(MANAGE) collectstatic --noinput
 
 
 # Запустить Tailwind в watch-режиме.

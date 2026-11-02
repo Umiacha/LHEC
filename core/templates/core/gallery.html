@@ -4,17 +4,17 @@
 {% block description %}Фотографии лаборатории, сотрудников и мероприятий.{% endblock %}
 
 {% block content %}
-<section class="bg-paper py-16 sm:py-20">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <p class="text-sm font-semibold uppercase tracking-widest text-slate-500">Лаборатория</p>
-        <h1 class="mt-4 text-4xl font-bold text-lab-950 sm:text-5xl">Галерея</h1>
-        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Сотрудники, научная работа и события из жизни лаборатории.</p>
+<section class="bg-paper page-section">
+    <div class="page-container">
+        <p class="page-label">Лаборатория</p>
+        <h1 class="mt-4 page-title">Галерея</h1>
+        <p class="mt-6 max-w-2xl page-intro">Сотрудники, научная работа и события из жизни лаборатории.</p>
     </div>
 </section>
-<section class="mx-auto max-w-7xl px-6 py-12 lg:px-8" aria-label="Фотографии">
+<section class="page-container page-section" aria-label="Фотографии">
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {% for photo in page_obj %}
-            <figure class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <figure class="overflow-hidden card-frame">
                 <a href="{{ photo.image.url }}" target="_blank" rel="noopener"
                    aria-label="Открыть фотографию: {{ photo.caption }} (в новой вкладке)">
                     <img src="{{ photo.thumbnail.url }}" alt="{{ photo.caption }}"
@@ -22,24 +22,14 @@
                          class="aspect-[4/3] w-full object-cover">
                 </a>
                 <figcaption class="p-5">
-                    <p class="text-sm text-slate-500">{{ photo.year }} г.</p>
+                    <p class="metadata">{{ photo.year }} г.</p>
                     <p class="mt-2 leading-7 text-slate-700">{{ photo.caption }}</p>
                 </figcaption>
             </figure>
         {% empty %}
-            <p class="text-slate-500 sm:col-span-2 lg:col-span-3">Фотографии скоро появятся.</p>
+            <p class="empty-state sm:col-span-2 lg:col-span-3">Фотографии скоро появятся.</p>
         {% endfor %}
     </div>
-    {% if page_obj.has_other_pages %}
-        <nav class="mt-10 flex items-center justify-center gap-6" aria-label="Страницы галереи">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}" class="font-medium text-lab-950 underline">Назад</a>
-            {% endif %}
-            <span class="text-sm text-slate-500">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="font-medium text-lab-950 underline">Далее</a>
-            {% endif %}
-        </nav>
-    {% endif %}
+    {% include "core/components/pagination.html" with pagination_label="Страницы галереи" %}
 </section>
 {% endblock %}

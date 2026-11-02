@@ -2,23 +2,23 @@
 {% load static %}
 
 {% block content %}
-<section class="bg-paper py-20 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<section class="bg-paper page-section">
+    <div class="page-container">
 
         <div class="max-w-3xl">
             <p
-                class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500"
+                class="page-label"
             >
                 {% block page_label %}ЛХВЭ{% endblock %}
             </p>
 
             <h1
-                class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl"
+                class="mt-4 page-title"
             >
                 {% block page_heading %}{% endblock %}
             </h1>
 
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+            <p class="mt-6 max-w-2xl page-intro">
                 {% block page_intro %}
                     Раздел находится в разработке.
                 {% endblock %}
@@ -30,7 +30,7 @@
                 {% block home_link %}
                 <a
                     href="{% url 'core:home' %}"
-                    class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 text-sm font-semibold text-lab-950 transition-colors hover:border-lab-950 hover:bg-white"
+                    class="button button-secondary"
                 >
                     На главную
                 </a>
@@ -40,7 +40,7 @@
 
         <div class="mt-16 flex justify-center sm:mt-20">
             <div
-                class="w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200 bg-white"
+                class="w-full max-w-xl overflow-hidden card-frame"
             >
                 <p class="mb-6 text-center text-sm font-medium text-slate-400">
                     Раздел находится в разработке

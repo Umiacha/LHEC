@@ -210,3 +210,34 @@ class PublicationSearchTests(TestCase):
         self.assertFalse(set(response.context['publications']) & set(second.context['publications']))
         for page, expected in [('bad', 1), ('999', 2)]:
             self.assertEqual(self.client.get(self.url, {**params, 'page': page}).context['page_obj'].number, expected)
+
+
+class PublicationReturnLinkTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.publication = Publication.objects.create(
+            title='Контекст каталога', year=2026, authors_text='Автор',
+            is_published=True,
+        )
+
+    def test_catalog_link_preserves_filters_and_page(self):
+        catalog = reverse('publications:publications')
+        return_to = catalog + '?q=Контекст&page=1'
+        response = self.client.get(return_to)
+        detail = reverse('publications:publication', args=[self.publication.pk])
+        from html import unescape
+        self.assertIn(detail + '?return_to=', unescape(response.content.decode()))
+        response = self.client.get(detail, {'return_to': return_to})
+        self.assertEqual(response.context['return_to'], return_to)
+        self.assertIn('href="' + return_to + '"', unescape(response.content.decode()))
+
+    def test_unrelated_or_malformed_return_urls_fall_back_to_catalog(self):
+        detail = reverse('publications:publication', args=[self.publication.pk])
+        catalog = reverse('publications:publications')
+        for value in ('https://example.com' + catalog, '//example.com' + catalog,
+                      '/admin/', 'http://[invalid', ''):
+            with self.subTest(value=value):
+                response = self.client.get(detail, {'return_to': value})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.context['return_to'], '')
+                self.assertContains(response, f'href="{catalog}"')

@@ -3,16 +3,17 @@
 {% block title %}{{ employee.last_name }} {{ employee.first_name }} — ЛХВЭ{% endblock %}
 
 {% block content %}
-<section class="bg-paper py-16 sm:py-20 lg:py-24">
-    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+<section class="bg-paper page-section">
+    <div class="page-container">
         <div class="flex flex-wrap items-center justify-between gap-4">
-            <a href="{% url 'users:people' %}" class="text-sm font-semibold text-lab-950 hover:underline">← Все сотрудники</a>
+            {% url 'users:people' as back_url %}
+        {% include "core/components/back_link.html" with back_label="Все сотрудники" back_anchor="" %}
             {% if user.is_authenticated and employee.user_id == user.id %}
-                <a href="{% url 'users:edit_employe_card' employee.pk %}" class="rounded-full border border-lab-950 px-5 py-2.5 text-sm font-semibold text-lab-950 transition-colors hover:bg-lab-950 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lab-950">Редактировать</a>
+                <a href="{% url 'users:edit_employe_card' employee.pk %}" class="button button-secondary">Редактировать</a>
             {% endif %}
         </div>
         <div class="mt-10 grid gap-10 sm:grid-cols-[minmax(0,18rem)_1fr]">
-            <div class="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl bg-slate-100 sm:aspect-[3/4]">
+            <div class="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[1.25rem] bg-slate-100 sm:aspect-[3/4]">
                 {% if employee.photo %}
                     <img src="{{ employee.photo.url }}" alt="Портрет: {{ employee.last_name }} {{ employee.first_name }} {{ employee.mid_name }}" class="h-full w-full object-cover">
                 {% else %}
@@ -20,14 +21,14 @@
                 {% endif %}
             </div>
             <div class="min-w-0">
-                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-energy-500">Участник лаборатории</p>
-                <h1 class="mt-4 break-words text-4xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-5xl">{{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}</h1>
+                <p class="page-label">Участник лаборатории</p>
+                <h1 class="mt-4 break-words page-title">{{ employee.last_name }} {{ employee.first_name }}{% if employee.mid_name %} {{ employee.mid_name }}{% endif %}</h1>
                 {% if employee.science_position %}<p class="mt-6 text-lg text-slate-600">{{ employee.get_science_position_display }}</p>{% endif %}
                 {% if employee.engineer_position %}<p class="mt-2 text-lg text-slate-600">{{ employee.get_engineer_position_display }}</p>{% endif %}
                 {% if employee.education_status %}<p class="mt-3 text-lg text-slate-600">{{ employee.education_label }}</p>{% endif %}
                 {% if research_directions %}
                     <div class="mt-8">
-                        <h2 class="text-lg font-semibold text-lab-950">Научные направления</h2>
+                        <h2 class="text-lg section-title">Научные направления</h2>
                         <ul class="mt-2 space-y-2">
                             {% for direction in research_directions %}
                                 <li><a href="{% url 'research:direction_detail' direction.slug %}" class="text-base text-lab-950 hover:underline">{{ direction.name }}</a></li>

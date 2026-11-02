@@ -4,15 +4,16 @@
 {% block description %}Научные публикации сотрудников Лаборатории химии высоких энергий.{% endblock %}
 
 {% block content %}
-<section class="bg-paper py-16 sm:py-20 lg:py-24">
-    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+<section class="bg-paper page-section">
+    <div class="page-container">
         <header class="max-w-3xl">
-            <a href="{% url 'core:science' %}" class="text-sm font-semibold text-lab-950 hover:underline">← Наука</a>
-            <h1 class="mt-4 text-5xl font-semibold tracking-[-0.05em] text-lab-950 sm:text-6xl">Публикации</h1>
-            <p class="mt-6 text-lg leading-8 text-slate-600">Научные публикации сотрудников лаборатории.</p>
+            {% url 'core:science' as back_url %}
+        {% include "core/components/back_link.html" with back_label="Наука" %}
+            <h1 class="mt-4 page-title">Публикации</h1>
+            <p class="mt-6 page-intro">Научные публикации сотрудников лаборатории.</p>
         </header>
 
-        <form method="get" action="{% url 'publications:publications' %}" class="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" role="search" aria-label="Поиск публикаций">
+        <form method="get" action="{% url 'publications:publications' %}" class="mt-10 content-card" role="search" aria-label="Поиск публикаций">
             <div>
                 <label for="{{ form.q.id_for_label }}" class="text-sm font-semibold text-lab-950">{{ form.q.label }}</label>
                 {{ form.q }}
@@ -30,21 +31,21 @@
                 {% endfor %}
             </div>
             <div class="mt-6 flex flex-wrap items-center gap-4">
-                <button type="submit" class="rounded-xl bg-lab-950 px-6 py-3 text-sm font-semibold text-white hover:bg-lab-800">Найти</button>
-                <a href="{% url 'publications:publications' %}" class="text-sm font-semibold text-lab-950 hover:underline">Сбросить</a>
+                <button type="submit" class="button button-primary">Найти</button>
+                <a href="{% url 'publications:publications' %}" class="text-link text-sm">Сбросить</a>
             </div>
         </form>
 
-        <p class="mt-8 text-sm text-slate-600">Найдено публикаций: {{ page_obj.paginator.count }}</p>
+        <p class="mt-8 metadata">Найдено публикаций: {{ page_obj.paginator.count }}</p>
         <ul class="mt-6 grid gap-6">
             {% for publication in publications %}
-                <li class="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <li class="content-card">
                     <article>
-                        <p class="text-sm font-semibold text-slate-500">
+                        <p class="metadata">
                             {{ publication.year }} · {{ publication.get_kind_display }}{% if publication.is_featured %} · Избранная{% endif %}
                         </p>
-                        <h2 class="mt-3 break-words text-xl font-semibold leading-snug text-lab-950">
-                            <a href="{% url 'publications:publication' publication.pk %}" class="hover:text-lab-800 hover:underline focus-visible:underline">{{ publication.title }}</a>
+                        <h2 class="mt-3 card-title">
+                            <a href="{% url 'publications:publication' publication.pk %}?return_to={{ request.get_full_path|urlencode }}" class="text-link">{{ publication.title }}</a>
                         </h2>
                         <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.authors_text }}</p>
                         {% if publication.venue %}
@@ -53,24 +54,14 @@
                     </article>
                 </li>
             {% empty %}
-                <li class="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">
+                <li class="empty-state">
                     {% if form.errors %}Проверьте параметры поиска в форме выше.
-                    {% elif has_filters %}Публикации не найдены. Измените условия поиска или <a href="{% url 'publications:publications' %}" class="font-semibold text-lab-950 hover:underline">сбросьте фильтры</a>.
+                    {% elif has_filters %}Публикации не найдены. Измените условия поиска или <a href="{% url 'publications:publications' %}" class="text-link">сбросьте фильтры</a>.
                     {% else %}Публикаций пока нет.{% endif %}
                 </li>
             {% endfor %}
         </ul>
-        {% if page_obj.has_other_pages %}
-            <nav class="mt-8 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Страницы публикаций">
-                {% if page_obj.has_previous %}
-                    <a href="{% querystring page=page_obj.previous_page_number %}" class="font-semibold text-lab-950 hover:underline">← Назад</a>
-                {% endif %}
-                <span class="text-slate-600">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-                {% if page_obj.has_next %}
-                    <a href="{% querystring page=page_obj.next_page_number %}" class="font-semibold text-lab-950 hover:underline">Далее →</a>
-                {% endif %}
-            </nav>
-        {% endif %}
+        {% include "core/components/pagination.html" with pagination_label="Страницы публикаций" %}
     </div>
 </section>
 {% endblock %}

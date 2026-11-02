@@ -1,0 +1,27 @@
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 7rem;
+    }
+    body {
+        font-family: var(--font-sans);
+        color: var(--color-lab-950);
+        background: white;
+        line-height: 1.6;
+    }
+    [id] {
+        scroll-margin-top: 1rem;
+    }
+    a, button, summary {
+        -webkit-tap-highlight-color: transparent;
+    }
+    :where(a, button, input, select, textarea, summary):focus-visible {
+        outline: 2px solid var(--color-lab-800);
+        outline-offset: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
