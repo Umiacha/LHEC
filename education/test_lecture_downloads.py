@@ -46,7 +46,6 @@ class LectureDownloadTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(b''.join(response.streaming_content), b'lecture contents')
         self.assertIn('attachment;', response['Content-Disposition'])
-        response.close()
 
     def test_superuser_can_download(self):
         self.user.is_superuser = True
@@ -54,7 +53,7 @@ class LectureDownloadTests(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        response.close()
+        self.assertTrue(b''.join(response.streaming_content))
 
     def test_unpublished_lecture_or_course_is_not_available(self):
         self.login_employee()
@@ -81,7 +80,7 @@ class LectureDownloadTests(TestCase):
         self.assertEqual(response['Content-Type'], 'application/pdf')
         self.assertIn('inline;', response['Content-Disposition'])
         self.assertIn('no-store', response['Cache-Control'])
-        response.close()
+        self.assertTrue(b''.join(response.streaming_content))
         self.course.is_published = False
         self.course.save()
         self.assertEqual(self.client.get(url).status_code, 404)
@@ -95,4 +94,4 @@ class LectureDownloadTests(TestCase):
         ))
         self.assertEqual(response['Content-Type'], 'application/octet-stream')
         self.assertIn('attachment;', response['Content-Disposition'])
-        response.close()
+        self.assertTrue(b''.join(response.streaming_content))

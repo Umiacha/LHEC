@@ -61,14 +61,12 @@ class PublicationFileTests(TestCase):
             self.assertIn('attachment;', response['Content-Disposition'])
             self.assertIn('private', response['Cache-Control'])
             self.assertTrue(b''.join(response.streaming_content))
-            response.close()
 
     def test_administrator_can_download(self):
         admin = get_user_model().objects.create_superuser(username='admin', password='password')
         self.client.force_login(admin)
         response = self.client.get(self.url)
         self.assertEqual(b''.join(response.streaming_content), b'%PDF-test')
-        response.close()
 
     def test_unpublished_article_and_missing_file_return_404(self):
         self.client.force_login(self.employee)
@@ -102,7 +100,6 @@ class PublicationFileTests(TestCase):
         self.assertEqual(attachment.file.name, 'publications/2020/new.pdf')
         response = self.client.get(attachment.file.url)
         self.assertEqual(b''.join(response.streaming_content), b'%PDF-new')
-        response.close()
 
 
 class PublicationSearchTests(TestCase):

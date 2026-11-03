@@ -63,7 +63,6 @@ class DissertationTests(TestCase):
             self.assertIn('attachment;', response['Content-Disposition'])
             self.assertIn('private', response['Cache-Control'])
             self.assertEqual(b''.join(response.streaming_content), b'%PDF-thesis')
-            response.close()
 
     def test_unpublished_and_missing_files(self):
         self.client.force_login(self.employee)

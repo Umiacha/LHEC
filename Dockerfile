@@ -15,15 +15,16 @@ COPY . .
 
 RUN DJANGO_SECRET_KEY=build-only-secret \
     DJANGO_DEBUG=False \
+    DATABASE_URL=postgresql://build:build@localhost/build \
     uv run python manage.py compilemessages --ignore=.venv \
     && DJANGO_SECRET_KEY=build-only-secret DJANGO_DEBUG=False \
+    DATABASE_URL=postgresql://build:build@localhost/build \
     uv run python manage.py collectstatic --noinput
 
 RUN useradd --create-home appuser
 
 COPY entrypoint.sh /app/entrypoint.sh
 
-ENV DJANGO_IN_DOCKER=1
 ENV DJANGO_DEBUG=False
 
 USER appuser

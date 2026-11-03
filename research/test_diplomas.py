@@ -46,7 +46,6 @@ class DiplomaTests(TestCase):
         self.assertIn('private', response['Cache-Control'])
         self.assertIn('attachment;', response['Content-Disposition'])
         self.assertEqual(b''.join(response.streaming_content), b'%PDF-diploma')
-        response.close()
 
     def test_missing_and_unpublished_file(self):
         user = get_user_model().objects.create_superuser(username='admin', password='password')

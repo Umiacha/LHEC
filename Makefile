@@ -26,7 +26,7 @@ migrate:
 
 
 # Запустить Django development server.
-run:
+run: db-start
 	$(MANAGE) runserver
 
 
@@ -63,3 +63,17 @@ messages:
 
 compilemessages:
 	$(MANAGE) compilemessages --ignore=.venv --ignore=node_modules
+
+# Только изолированный локальный кластер; DATABASE_URL здесь не используется.
+.PHONY: db-start db-stop db-status db-reset
+db-start:
+	uv run python scripts/dev_db.py start
+
+db-stop:
+	uv run python scripts/dev_db.py stop
+
+db-status:
+	uv run python scripts/dev_db.py status
+
+db-reset:
+	uv run python scripts/dev_db.py reset

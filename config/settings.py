@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -146,13 +147,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if os.environ.get('DJANGO_IN_DOCKER') == '1':
-    database_url = os.environ['DATABASE_URL']
-else:
-    database_url = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+database_url = os.environ.get('DATABASE_URL', '').strip()
+if not database_url:
+    raise ImproperlyConfigured('Задайте DATABASE_URL для PostgreSQL в .env или окружении.')
+
+try:
+    database_config = dj_database_url.parse(
+        database_url, conn_max_age=0 if DEBUG else 600, conn_health_checks=True,
+    )
+except ValueError:
+    raise ImproperlyConfigured('Некорректный DATABASE_URL для PostgreSQL.') from None
+if database_config['ENGINE'] != 'django.db.backends.postgresql' or not database_config.get('NAME'):
+    raise ImproperlyConfigured('DATABASE_URL должен указывать на именованную БД PostgreSQL.')
 
 DATABASES = {
-    'default': dj_database_url.parse(database_url, conn_max_age=600),
+    'default': database_config,
 }
 
 
