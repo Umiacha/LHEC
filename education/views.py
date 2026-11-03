@@ -100,6 +100,7 @@ def theses(request: HttpRequest) -> HttpResponse:
     })
 
 
+@never_cache
 def download_material(request, pk):
     material = get_object_or_404(
         TeachingMaterial,
@@ -109,8 +110,12 @@ def download_material(request, pk):
     if (material.access_level == TeachingMaterial.AccessLevel.INTERNAL
         and not request.user.has_perm('education.view_internal_materials')):
         raise PermissionDenied
+    try:
+        stream = material.file.open('rb')
+    except FileNotFoundError:
+        raise Http404('Файл не найден')
     return FileResponse(
-        material.file.open('rb'),
+        stream,
         as_attachment=True,
         filename=Path(material.file.name).name,
     )

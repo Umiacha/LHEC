@@ -15,3 +15,16 @@ class LectureFileStorage(PublicationFileStorage):
 
 
 lecture_file_storage = LectureFileStorage()
+
+
+@deconstructible
+class TeachingMaterialFileStorage(PublicationFileStorage):
+    """Все учебные материалы хранятся вне публичного media."""
+
+    def url(self, name):
+        from .models import TeachingMaterial
+        material = TeachingMaterial.objects.get(file=name)
+        return material.get_download_url()
+
+
+teaching_material_file_storage = TeachingMaterialFileStorage()

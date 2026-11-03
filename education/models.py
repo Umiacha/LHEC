@@ -4,7 +4,7 @@ from django.db import models
 from core.i18n import localized_value
 
 from research.models import diploma_file_path  # Совместимость с миграцией 0002.
-from .storage import lecture_file_storage
+from .storage import lecture_file_storage, teaching_material_file_storage
 
 
 class LabWork(models.Model):
@@ -58,7 +58,7 @@ class TeachingMaterial(models.Model):
     )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to='education/materials/')
+    file = models.FileField(upload_to='education/materials/', storage=teaching_material_file_storage)
     access_level = models.CharField(
         max_length=16,
         choices=AccessLevel.choices,
@@ -78,6 +78,10 @@ class TeachingMaterial(models.Model):
     @property
     def localized_title(self):
         return localized_value(self, "title")
+
+    def get_download_url(self):
+        from django.urls import reverse
+        return reverse('education:download_material', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Учебный материал'
