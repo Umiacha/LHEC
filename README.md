@@ -103,6 +103,42 @@ Production-роль Django не должна быть суперпользова
 используйте `python manage.py check --deploy --fail-level WARNING`, когда
 настроите все нужные параметры безопасности.
 
+### Команды для production
+
+Для серверных операций используйте отдельный `Makefile.prod` из корня проекта:
+
+```sh
+make -f Makefile.prod                  # справка, без изменений
+make -f Makefile.prod check            # проверки настроек для деплоя
+make -f Makefile.prod check-migrations # модели соответствуют миграциям
+make -f Makefile.prod show-migrations  # состояние миграций
+make -f Makefile.prod migrate          # применение миграций
+make -f Makefile.prod compilemessages  # компиляция переводов
+make -f Makefile.prod collectstatic    # сборка статики
+make -f Makefile.prod create-superuser # интерактивное создание администратора
+```
+
+Команды используют `.venv/bin/python`, без автоматической установки зависимостей
+через uv. Другой интерпретатор можно указать как
+`make -f Makefile.prod check PYTHON=/path/to/venv/bin/python`.
+Все операции, кроме справки, отказываются выполняться при итоговом `DEBUG=True`.
+Окружение и серверный `.env` должны быть подготовлены заранее. Команда `check`
+считает предупреждения безопасности ошибками; исправьте настройки до деплоя.
+Проверка `DEBUG=False` не определяет, к какой именно БД вы подключаетесь:
+перед миграциями проверьте серверный `DATABASE_URL` и подготовьте резервную копию.
+
+В этом файле нет запуска dev-сервера, управления dev-БД, сброса данных,
+создания миграций или тестового администратора. PostgreSQL и Gunicorn запускаются
+системными службами. `create-superuser` запрашивает пароль интерактивно.
+Для `compilemessages` нужен gettext. CSS при необходимости соберите до
+`collectstatic` (`npm ci`, затем `npm run css:build`); Node.js нужен в окружении
+сборки CSS, а не для работы Django.
+
+При подготовке архива для сервера включайте `Makefile.prod`, исключая локальный
+`Makefile`, `scripts/dev_db.py`, `.local/` и локальный `.env`. Сам по себе новый
+Makefile не меняет состав поставки: при Git checkout dev-файлы останутся
+в репозитории. Отсутствие команд в Makefile не заменяет права пользователей ОС и БД.
+
 ## Логирование на сервере
 
 Django выводит сообщения уровней `WARNING`, `ERROR` и `CRITICAL` в `stderr`

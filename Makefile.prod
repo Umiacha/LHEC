@@ -1,0 +1,43 @@
+# Запускать из корня проекта: make -f Makefile.prod <команда>
+# Совместимо с make FreeBSD; uv для выполнения команд не требуется.
+PYTHON ?= .venv/bin/python
+MANAGE = $(PYTHON) manage.py
+
+.PHONY: help check-production check check-migrations show-migrations migrate collectstatic compilemessages create-superuser
+
+# По умолчанию только справка, без изменения БД или файлов.
+help:
+	@echo "make -f Makefile.prod <команда> [PYTHON=/path/to/python]"
+	@echo "  check             Проверки Django для деплоя (предупреждения = ошибка)"
+	@echo "  check-migrations  Проверить соответствие моделей миграциям"
+	@echo "  show-migrations   Показать состояние миграций"
+	@echo "  migrate           Применить миграции к серверной БД"
+	@echo "  collectstatic     Собрать статику в STATIC_ROOT"
+	@echo "  compilemessages   Скомпилировать переводы (требуется gettext)"
+	@echo "  create-superuser  Интерактивно создать администратора"
+
+# Проверяется итоговая настройка Django, включая серверный .env.
+# DEBUG не переопределяется: ошибочная конфигурация должна быть исправлена явно.
+check-production:
+	@$(PYTHON) -c 'import os; os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings"); from django.conf import settings; import sys; sys.exit("Отказ: для серверных команд задайте DJANGO_DEBUG=False." if settings.DEBUG else 0)'
+
+check: check-production
+	$(MANAGE) check --deploy --fail-level WARNING
+
+check-migrations: check-production
+	$(MANAGE) makemigrations --check --dry-run
+
+show-migrations: check-production
+	$(MANAGE) showmigrations
+
+migrate: check-production
+	$(MANAGE) migrate --noinput
+
+collectstatic: check-production
+	$(MANAGE) collectstatic --noinput
+
+compilemessages: check-production
+	$(MANAGE) compilemessages --ignore=.venv --ignore=node_modules --ignore=.local
+
+create-superuser: check-production
+	$(MANAGE) createsuperuser
