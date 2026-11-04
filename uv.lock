@@ -1,6 +1,10 @@
 version = 1
 revision = 3
 requires-python = ">=3.12"
+resolution-markers = [
+    "sys_platform != 'freebsd'",
+    "sys_platform == 'freebsd'",
+]
 
 [[package]]
 name = "asgiref"
@@ -65,7 +69,9 @@ dependencies = [
     { name = "django" },
     { name = "gunicorn" },
     { name = "pillow" },
-    { name = "psycopg", extra = ["binary"] },
+    { name = "psycopg" },
+    { name = "psycopg-binary", marker = "implementation_name != 'pypy' and sys_platform != 'freebsd'" },
+    { name = "psycopg-c", marker = "implementation_name != 'pypy' and sys_platform == 'freebsd'" },
     { name = "pylatexenc" },
     { name = "python-dotenv" },
     { name = "rispy" },
@@ -79,7 +85,9 @@ requires-dist = [
     { name = "django", specifier = ">=5.2,<5.3" },
     { name = "gunicorn", specifier = ">=26.1.0" },
     { name = "pillow", specifier = ">=12.3,<13" },
-    { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
+    { name = "psycopg", specifier = "==3.3.4" },
+    { name = "psycopg-binary", marker = "implementation_name != 'pypy' and sys_platform != 'freebsd'", specifier = "==3.3.4" },
+    { name = "psycopg-c", marker = "implementation_name != 'pypy' and sys_platform == 'freebsd'", specifier = "==3.3.4" },
     { name = "pylatexenc", specifier = ">=2.10,<3" },
     { name = "python-dotenv", specifier = ">=1.2.3" },
     { name = "rispy", specifier = ">=0.9,<1" },
@@ -170,11 +178,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5c/e0/7b3dee031daae7743609ce3c746565d4a3ed7c2c186479eb48e34e838c64/psycopg-3.3.4-py3-none-any.whl", hash = "sha256:b6bbc25ccf05c8fad3b061d9db2ef0909a555171b84b07f29458a447253d679a", size = 213001, upload-time = "2026-05-01T23:20:50.816Z" },
 ]
 
-[package.optional-dependencies]
-binary = [
-    { name = "psycopg-binary", marker = "implementation_name != 'pypy'" },
-]
-
 [[package]]
 name = "psycopg-binary"
 version = "3.3.4"
@@ -214,6 +217,12 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/c4/b1/f6670f00fa7ea601584623f6c11602ab92117d83eaff885e0210f6de7418/psycopg_binary-3.3.4-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:47c656a8a7ba6eb0cff1801a4caaa9c8bdc12d03080e273aff1c8ac39971a77e", size = 4255811, upload-time = "2026-05-01T23:31:44.986Z" },
     { url = "https://files.pythonhosted.org/packages/eb/e6/5fff07a70d1f945ed90ae131c3bd76cab32beff7c58c6db15ad5820b6d1f/psycopg_binary-3.3.4-cp314-cp314-win_amd64.whl", hash = "sha256:c37e024c07308cd06cf3ec51bfd0e7f6157585a4d84d1bce4a7f5f7913719bf8", size = 3666849, upload-time = "2026-05-01T23:31:51.165Z" },
 ]
+
+[[package]]
+name = "psycopg-c"
+version = "3.3.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/21/7c/c08364f2eab2913e4068b3b955d963e7a3491986a85429990969525def30/psycopg_c-3.3.4.tar.gz", hash = "sha256:ed8106128b2d04359c185fc9641b4409abfce4d0b6fb1d1ff6800646e27f1a22", size = 647111, upload-time = "2026-05-01T23:31:58.032Z" }
 
 [[package]]
 name = "pylatexenc"

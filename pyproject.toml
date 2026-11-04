@@ -10,7 +10,10 @@ dependencies = [
     "django>=5.2,<5.3",
     "gunicorn>=26.1.0",
     "pillow>=12.3,<13",
-    "psycopg[binary]>=3.3.4",
+    # Держать версии трёх пакетов одинаковыми.
+    "psycopg==3.3.4",
+    "psycopg-binary==3.3.4; sys_platform != 'freebsd' and implementation_name != 'pypy'",
+    "psycopg-c==3.3.4; sys_platform == 'freebsd' and implementation_name != 'pypy'",
     "pylatexenc>=2.10,<3",
     "python-dotenv>=1.2.3",
     "rispy>=0.9,<1",

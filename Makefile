@@ -2,6 +2,12 @@
 
 MANAGE = uv run python manage.py
 
+.PHONY: release-requirements
+# Вызывать при подготовке каждого релиза локально или в CI.
+# Устаревший uv.lock приводит к ошибке, а не обновляется при экспорте.
+release-requirements:
+	uv export --locked --no-dev --no-emit-project --output-file requirements.txt > /dev/null
+
 
 # Проверить, не требуются ли новые миграции.
 # Команда завершится с ошибкой, если модели изменены,
