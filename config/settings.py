@@ -83,7 +83,38 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+def env_bool(name, default=False):
+    value = os.environ.get(name, str(default)).strip().lower()
+    if value not in {'true', 'false', '1', '0'}:
+        raise ImproperlyConfigured(f'{name}: ожидается True/False или 1/0.')
+    return value in {'true', '1'}
+
+
+SESSION_COOKIE_SECURE = env_bool('DJANGO_SESSION_COOKIE_SECURE')
+CSRF_COOKIE_SECURE = env_bool('DJANGO_CSRF_COOKIE_SECURE')
+SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT')
+try:
+    SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_SECURE_HSTS_SECONDS', '0'))
+except ValueError:
+    raise ImproperlyConfigured('DJANGO_SECURE_HSTS_SECONDS: ожидается целое число >= 0.') from None
+if SECURE_HSTS_SECONDS < 0:
+    raise ImproperlyConfigured('DJANGO_SECURE_HSTS_SECONDS: ожидается целое число >= 0.')
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS')
+SECURE_HSTS_PRELOAD = env_bool('DJANGO_SECURE_HSTS_PRELOAD')
+# Включать только за прокси, который перезаписывает заголовок клиента.
+SECURE_PROXY_SSL_HEADER = (
+    ('HTTP_X_FORWARDED_PROTO', 'https')
+    if env_bool('DJANGO_TRUST_PROXY_SSL_HEADER') else None
+)
+# Только проверки политик, которые могут обеспечиваться на уровне прокси
+# или намеренно не включаться (поддомены/preload).
+SILENCED_SYSTEM_CHECKS = [
+    value.strip()
+    for value in os.environ.get('DJANGO_SILENCED_SECURITY_CHECKS', '').split(',')
+    if value.strip()
+]
+if set(SILENCED_SYSTEM_CHECKS) - {'security.W004', 'security.W005', 'security.W008', 'security.W021'}:
+    raise ImproperlyConfigured('DJANGO_SILENCED_SECURITY_CHECKS: допустимы только security.W004,W005,W008,W021.')
 
 
 # Application definition
