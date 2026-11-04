@@ -44,7 +44,7 @@ def direction_detail(request: HttpRequest, slug: str) -> HttpResponse:
     employees = direction.employees.published().exclude(
         pk=direction.leader_id,
     ).by_position()
-    publications = direction.publications.filter(is_published=True).order_by('-year', '-pk')
+    publications = direction.publications.filter(is_published=True)
     page_obj = Paginator(publications, 20).get_page(request.GET.get('page'))
     return render(request, 'research/direction_detail.html', {
         'direction': direction,

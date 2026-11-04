@@ -40,9 +40,37 @@
                 {% if employee.academic_degree or employee.academic_title %}
                     <p class="mt-3 text-lg text-slate-600">{% if employee.academic_degree %}{{ employee.get_academic_degree_display }}{% endif %}{% if employee.academic_degree and employee.academic_title %}, {% endif %}{% if employee.academic_title %}{{ employee.get_academic_title_display }}{% endif %}</p>
                 {% endif %}
+                {% if employee.scientific_profiles.all %}
+                    <div class="mt-8">
+                        <h2 class="text-lg section-title">{% translate "Научные профили" %}</h2>
+                        <ul class="mt-2 space-y-2">
+                            {% for profile in employee.scientific_profiles.all %}
+                                <li class="break-words"><a href="{{ profile.url }}" class="text-link">{{ profile.url }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
                 {% if employee.localized_bio %}<div class="mt-8 whitespace-pre-line text-base leading-7 text-slate-700">{{ employee.localized_bio }}</div>{% endif %}
             </div>
         </div>
+        {% if latest_publications %}
+            <div class="mt-10">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h2 class="section-title">{% translate "Последние публикации" %}</h2>
+                    <a href="{% url 'publications:publications' %}?employee={{ employee.pk }}" class="button button-secondary">{% translate "Все публикации" %}</a>
+                </div>
+                <ul class="mt-6 grid gap-6">
+                    {% for publication in latest_publications %}
+                        <li class="content-card">
+                            {% if publication.year %}<p class="metadata">{{ publication.year }}</p>{% endif %}
+                            <h3 class="mt-3 card-title"><a href="{% url 'publications:publication' publication.pk %}" class="text-link">{{ publication.title }}</a></h3>
+                            <p class="mt-3 break-words text-sm leading-6 text-slate-700">{{ publication.localized_authors_text }}</p>
+                            {% if publication.venue %}<p class="mt-2 break-words text-sm leading-6 text-slate-500">{{ publication.venue }}</p>{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

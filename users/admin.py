@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, User
 
 from .forms import RoleUserChangeForm, RoleUserCreationForm
 from .roles import get_user_role, set_user_role
-from .models import Employee
+from .models import Employee, ScientificProfile
 
 
 admin.site.unregister(User)
@@ -132,6 +132,12 @@ class UserAdmin(DjangoUserAdmin):
         return request.user.is_superuser
 
 
+class ScientificProfileInline(admin.TabularInline):
+    model = ScientificProfile
+    extra = 1
+    fields = ('url', 'sort_order')
+
+
 @admin.register(Employee)
 class EmployeeProfileAdmin(admin.ModelAdmin):
     """
@@ -139,6 +145,7 @@ class EmployeeProfileAdmin(admin.ModelAdmin):
     
     Без обязательной привязки к аккаунту.
     """
+    inlines = (ScientificProfileInline,)
     fieldsets = (
         ('Основное', {
             'fields': ('photo',),

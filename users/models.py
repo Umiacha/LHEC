@@ -104,7 +104,7 @@ class EmployeeQuerySet(models.QuerySet):
         )
 
 
-class Employee(models.Model):  # TODO: сделать ссылки на istina.msu и пр., а также связь с научной группой и публикациями.
+class Employee(models.Model):
     """Публичная карточка участника лаборатории с необязательным аккаунтом."""
     last_name = models.CharField(verbose_name='Фамилия', max_length=200)
     first_name = models.CharField(verbose_name='Имя', max_length=200)
@@ -198,3 +198,23 @@ class Employee(models.Model):  # TODO: сделать ссылки на istina.m
 
     def __str__(self):
         return f'{self.last_name} {self.first_name}'.strip()
+
+
+class ScientificProfile(models.Model):
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name='scientific_profiles',
+        verbose_name='Сотрудник',
+    )
+    url = models.URLField('URL', max_length=2000)
+    sort_order = models.PositiveIntegerField('Порядок', default=0)
+
+    class Meta:
+        verbose_name = 'Научный профиль'
+        verbose_name_plural = 'Научные профили'
+        ordering = ('sort_order', 'pk')
+        constraints = [models.UniqueConstraint(
+            fields=('employee', 'url'), name='unique_employee_scientific_profile',
+        )]
+
+    def __str__(self):
+        return self.url

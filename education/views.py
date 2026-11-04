@@ -23,7 +23,7 @@ def view_lecture_file(request: HttpRequest, file_name: str) -> FileResponse:
     return _lecture_file_response(request, file_name, preview=True)
 
 
-def _lecture_file_response(request, file_name, preview=False):  # TODO: а разве браузер сам не дает предпросмотр при попытке скачать PDF?.. Интересно.
+def _lecture_file_response(request, file_name, preview=False):
     if not request.user.has_perm(INTERNAL_MATERIALS_PERMISSION):
         raise PermissionDenied
     attachment = get_object_or_404(

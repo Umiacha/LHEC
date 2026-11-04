@@ -38,7 +38,7 @@ class PublicationSearchForm(forms.Form):
         self.fields['direction'].queryset = ResearchDirection.objects.filter(
             is_published=True, publications__is_published=True,
         ).distinct()
-        years = Publication.objects.filter(is_published=True).order_by(
+        years = Publication.objects.filter(is_published=True, year__isnull=False).order_by(
             '-year',
         ).values_list('year', flat=True).distinct()
         self.fields['year'].choices = [('', _('Все годы')), *((year, year) for year in years)]

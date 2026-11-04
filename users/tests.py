@@ -293,3 +293,63 @@ class EducationProfileTests(TestCase):
         self.assertNotContains(response, reverse('users:employe_card', args=[hidden.pk]))
         content = response.content.decode()
         self.assertGreater(content.index(title), content.index('>Студенты</h2>'))
+
+
+class EmployeeScientificContentTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='profiles-owner')
+        self.employee = Employee.objects.create(last_name='Иванов', first_name='Иван', user=self.user)
+        self.card_url = reverse('users:employe_card', args=[self.employee.pk])
+        self.edit_url = reverse('users:edit_employe_card', args=[self.employee.pk])
+
+    def test_profile_urls_can_be_saved_reordered_and_removed(self):
+        from .models import ScientificProfile
+        ScientificProfile.objects.create(employee=self.employee, url='https://example.org/old')
+        self.client.force_login(self.user)
+        data = {'last_name': 'Иванов', 'first_name': 'Иван',
+                'scientific_profiles': 'https://orcid.org/123\nhttps://istina.msu.ru/profile/1/\nhttps://orcid.org/123'}
+        self.assertRedirects(self.client.post(self.edit_url, data), self.card_url)
+        self.assertEqual(list(self.employee.scientific_profiles.values_list('url', flat=True)),
+                         ['https://orcid.org/123', 'https://istina.msu.ru/profile/1/'])
+        response = self.client.get(self.card_url)
+        self.assertContains(response, 'href="https://orcid.org/123"')
+        self.assertNotContains(response, 'https://example.org/old')
+        data['scientific_profiles'] = ''
+        self.client.post(self.edit_url, data)
+        self.assertFalse(self.employee.scientific_profiles.exists())
+        self.assertNotContains(self.client.get(self.card_url), 'Научные профили')
+
+    def test_invalid_url_does_not_save_employee_or_profiles(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.edit_url, {
+            'last_name': 'Изменено', 'first_name': 'Иван',
+            'scientific_profiles': 'javascript:alert(1)',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['form'].errors)
+        self.employee.refresh_from_db()
+        self.assertEqual(self.employee.last_name, 'Иванов')
+        self.assertFalse(self.employee.scientific_profiles.exists())
+
+    def test_five_latest_public_works_and_catalog_filter(self):
+        from publications.models import Publication
+        works = []
+        for index, year in enumerate([None, None, 2024, 2025, 2026, 2026, 2023]):
+            work = Publication.objects.create(title=f'Работа {index}', authors_text='Автор', year=year, is_published=True)
+            work.employees.add(self.employee)
+            works.append(work)
+        hidden = Publication.objects.create(title='Черновик', year=2027, is_published=False)
+        hidden.employees.add(self.employee)
+        unrelated = Publication.objects.create(title='Чужая', year=2027, is_published=True)
+        response = self.client.get(self.card_url)
+        self.assertEqual(list(response.context['latest_publications']),
+                         [works[5], works[4], works[3], works[2], works[6]])
+        catalog_url = reverse('publications:publications') + f'?employee={self.employee.pk}'
+        self.assertContains(response, catalog_url)
+        catalog = self.client.get(catalog_url)
+        self.assertFalse(catalog.context['form'].errors)
+        self.assertEqual(list(catalog.context['publications']),
+                         [works[5], works[4], works[3], works[2], works[6], works[1], works[0]])
+        self.assertNotContains(catalog, hidden.title)
+        self.assertNotContains(catalog, unrelated.title)
+        self.assertNotContains(catalog, 'None')

@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Count, Q
+from django.db.models import Count, F, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -21,7 +21,7 @@ def home(request: HttpRequest) -> HttpResponse:
         'directions': ResearchDirection.objects.filter(is_published=True),
         'homepage_publications': Publication.objects.filter(
             is_published=True, is_on_homepage=True,
-        ).order_by('homepage_order', '-year', '-pk'),
+        ).order_by('homepage_order', F('year').desc(nulls_last=True), '-pk'),
     })
 
 

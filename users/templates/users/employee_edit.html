@@ -22,7 +22,7 @@
 
             <div class="grid gap-6 sm:grid-cols-2">
                 {% for field in form %}
-                    <div class="{% if field.name == 'bio' or field.name == 'photo' %}sm:col-span-2{% endif %}">
+                    <div class="{% if field.name == 'bio' or field.name == 'photo' or field.name == 'scientific_profiles' %}sm:col-span-2{% endif %}">
                         <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-lab-950">{{ field.label }}{% if field.field.required %} <span class="text-slate-500" aria-label="{% translate "обязательное поле" %}">*</span>{% endif %}</label>
                         {% if field.name == 'photo' and employee.photo %}
                             <img src="{{ employee.photo.url }}" alt="{% translate "Текущее фото сотрудника" %}" class="mt-3 h-32 w-32 rounded-2xl object-cover">

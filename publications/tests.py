@@ -369,7 +369,8 @@ class ParserTests(SimpleTestCase):
 
     def test_incomplete_record_can_be_corrected_in_form(self):
         result = parse_publication('@article{k,title={Title}}')
-        self.assertEqual(set(result.errors), {'year', 'authors_text'})
+        self.assertEqual(set(result.errors), {'authors_text'})
+        self.assertIsNone(result.data['year'])
 
     def test_reject_invalid_and_multiple_records(self):
         valid_bib = '@article{k,title={Title}}'

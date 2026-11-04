@@ -53,7 +53,7 @@
             <ul class="mt-6 grid gap-6">
                 {% for publication in publications %}
                     <li class="min-w-0 content-card">
-                        <p class="metadata">{{ publication.year }} · {{ publication.get_kind_display }}</p>
+                        <p class="metadata">{% if publication.year %}{{ publication.year }} · {% endif %}{{ publication.get_kind_display }}</p>
                         <h3 class="mt-3 break-words card-title">
                             <a href="{% url 'publications:publication' publication.pk %}" class="text-link">{{ publication.title }}</a>
                         </h3>

@@ -18,7 +18,7 @@ class Publication(models.Model):
         OTHER = 'other', _('Другое')
 
     title = models.CharField(verbose_name='Название', max_length=500)
-    year = models.PositiveSmallIntegerField(verbose_name='Год')
+    year = models.PositiveSmallIntegerField(verbose_name='Год', null=True, blank=True)
     authors_text = models.TextField(verbose_name='Авторы')
     employees = models.ManyToManyField(
         'users.Employee',
@@ -78,15 +78,15 @@ class Publication(models.Model):
     class Meta:
         verbose_name = 'Публикация'
         verbose_name_plural = 'Публикации'
-        ordering = ('-year', '-id')
+        ordering = (models.F('year').desc(nulls_last=True), '-id')
 
     def __str__(self):
-        return f'{self.authors_text}: {self.title} ({self.year})'
+        return f'{self.authors_text}: {self.title}' + (f' ({self.year})' if self.year else '')
 
 
 def publication_file_path(instance, filename):
     """Размещать новые файлы по году публикации."""
-    return f'publications/{instance.publication.year}/{filename}'
+    return f"publications/{instance.publication.year or 'undated'}/{filename}"
 
 
 class PublicationFile(models.Model):

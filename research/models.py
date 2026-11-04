@@ -7,7 +7,7 @@ from core.i18n import localized_value
 from .storage import dissertation_file_storage, diploma_file_storage
 
 
-class ResearchDirection(models.Model):  # TODO: сделать отображения карточек сотрудников, а не просто ФИО
+class ResearchDirection(models.Model):
     """Научное направление и работающая в нём научная группа."""
 
     name = models.CharField('Название', max_length=255)

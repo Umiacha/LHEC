@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_http_methods
+from django.db import transaction
 from django.db.models import Q
 
 from research.models import ResearchDirection
@@ -57,6 +58,7 @@ def employe_card(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, "users/employee_card.html", {
         'employee': employee,
         'research_directions': research_directions,
+        'latest_publications': employee.publications.filter(is_published=True)[:5],
     })
 
 
@@ -72,7 +74,9 @@ def edit_employe_card(request: HttpRequest, pk: int) -> HttpResponse:  # TODO: Ð
             instance=employee,
         )
         if form.is_valid():
-            form.save()
+            with transaction.atomic():
+                form.save()
+                form.save_profiles(employee)
             return redirect('users:employe_card', pk=pk)
     else:
         form = EmployeeEditForm(instance=employee)

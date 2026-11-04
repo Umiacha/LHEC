@@ -7,7 +7,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.models import User
 from .roles import UserRole, get_user_role
-from .models import Employee
+from .models import Employee, ScientificProfile
 
 
 INPUT_CLASSES = 'form-control'
@@ -66,6 +66,37 @@ class RoleUserChangeForm(UserChangeForm):
 
 class EmployeeEditForm(forms.ModelForm):
     """Форма для изменения своей карточки сотрудником на сайте."""
+
+    scientific_profiles = forms.CharField(
+        label=_('Научные профили'), required=False,
+        help_text=_('Каждая ссылка — с новой строки. Чтобы удалить ссылку, удалите её строку.'),
+        widget=forms.Textarea(attrs={'class': INPUT_CLASSES, 'rows': 4}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.initial['scientific_profiles'] = '\n'.join(
+                self.instance.scientific_profiles.values_list('url', flat=True)
+            )
+
+    def clean_scientific_profiles(self):
+        field = forms.URLField(max_length=2000, assume_scheme='https')
+        urls = []
+        for line in self.cleaned_data['scientific_profiles'].splitlines():
+            if line.strip():
+                url = field.clean(line.strip())
+                if url not in urls:
+                    urls.append(url)
+        return urls
+
+    def save_profiles(self, employee):
+        urls = self.cleaned_data['scientific_profiles']
+        employee.scientific_profiles.exclude(url__in=urls).delete()
+        for index, url in enumerate(urls):
+            ScientificProfile.objects.update_or_create(
+                employee=employee, url=url, defaults={'sort_order': index},
+            )
 
     class Meta:
         model = Employee
