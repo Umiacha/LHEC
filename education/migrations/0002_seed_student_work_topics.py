@@ -196,7 +196,7 @@ def seed_topics(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('education', '0007_studentworktopic_labwork_title_en_lecture_title_en_and_more'),
+        ('education', '0001_initial'),
     ]
     # Keep manually edited topics when rolling back the seed step alone.
     operations = [migrations.RunPython(seed_topics, migrations.RunPython.noop)]

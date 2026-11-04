@@ -4,10 +4,9 @@ from tempfile import TemporaryDirectory
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db import IntegrityError, connection, transaction
-from django.db.migrations.executor import MigrationExecutor
+from django.db import IntegrityError, transaction
 from django.db.models.deletion import ProtectedError
-from django.test import TestCase, TransactionTestCase, override_settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from publications.models import Publication
@@ -283,37 +282,6 @@ class ProjectAdminTests(TestCase):
         self.assertSetEqual({p.name for p in groups[0]['projects']}, {'Заканчивается сейчас', 'Начинается сейчас'})
         self.assertEqual([p.name for p in groups[1]['projects']], ['Завершен'])
         self.assertEqual([p.name for p in groups[2]['projects']], ['Будущий'])
-
-
-class DiplomaMigrationTests(TransactionTestCase):
-    def test_existing_work_and_supervisors_survive_move(self):
-        executor = MigrationExecutor(connection)
-        before = [('education', '0002_diploma'), ('research', '0007_alter_dissertation_file'),
-                  ('users', '0006_employee_role_without_admin_access')]
-        after = [('research', '0008_diploma')]
-        executor.migrate(before)
-        try:
-            apps = executor.loader.project_state(before).apps
-            person = apps.get_model('users', 'Employee').objects.create(
-                first_name='Иван', last_name='Иванов',
-            )
-            work = apps.get_model('education', 'Diploma').objects.create(
-                title='Существующая ВКР', author_id=person.pk, year=2020,
-                level='master', external_url='https://example.org/work',
-                file='diplomas/2020/work.pdf', is_published=True,
-            )
-            work.supervisors.add(person)
-            executor = MigrationExecutor(connection)
-            executor.migrate(after)
-            apps = executor.loader.project_state(after).apps
-            moved = apps.get_model('research', 'Diploma').objects.get(pk=work.pk)
-            self.assertEqual(moved.title, 'Существующая ВКР')
-            self.assertEqual(moved.author_id, person.pk)
-            self.assertEqual(moved.file.name, 'diplomas/2020/work.pdf')
-            self.assertEqual(list(moved.supervisors.values_list('pk', flat=True)), [person.pk])
-        finally:
-            executor = MigrationExecutor(connection)
-            executor.migrate(executor.loader.graph.leaf_nodes())
 
 
 class DiplomaTests(TestCase):

@@ -8,13 +8,14 @@ def create_employee_role(apps, schema_editor):
     Group = apps.get_model("auth", "Group")
     Permission = apps.get_model("auth", "Permission")
     ContentType = apps.get_model("contenttypes", "ContentType")
+    database = schema_editor.connection.alias
 
-    content_type, _ = ContentType.objects.get_or_create(
+    content_type, _ = ContentType.objects.using(database).get_or_create(
         app_label="education",
         model="teachingmaterial",
     )
 
-    permission, _ = Permission.objects.get_or_create(
+    permission, _ = Permission.objects.using(database).get_or_create(
         content_type=content_type,
         codename="view_internal_materials",
         defaults={
@@ -22,7 +23,7 @@ def create_employee_role(apps, schema_editor):
         },
     )
 
-    employee_group, _ = Group.objects.get_or_create(
+    employee_group, _ = Group.objects.using(database).get_or_create(
         name=EMPLOYEE_GROUP_NAME,
     )
 
@@ -32,13 +33,14 @@ def create_employee_role(apps, schema_editor):
 def delete_employee_role(apps, schema_editor):
     Group = apps.get_model("auth", "Group")
 
-    Group.objects.filter(
+    Group.objects.using(schema_editor.connection.alias).filter(
         name=EMPLOYEE_GROUP_NAME,
     ).delete()
 
 
 class Migration(migrations.Migration):
     dependencies = [
+        ("users", "0001_initial"),
         ("auth", "0012_alter_user_first_name_max_length"),
         ("education", "0001_initial"),
     ]

@@ -251,29 +251,25 @@ class EducationProfileTests(TestCase):
         self.assertEqual(person.education_status, '')
         self.assertIsNone(person.study_year)
 
-    def test_existing_employee_accounts_lose_only_admin_entry(self):
+    def test_initial_employee_role_has_internal_permission_and_seed_is_idempotent(self):
         from importlib import import_module
+        from types import SimpleNamespace
         from django.apps import apps
         from django.contrib.auth.models import Group
         from django.db import connection
 
         group = Group.objects.get(name='Сотрудники')
-        employee = User.objects.create_user(username='existing', is_staff=True)
-        administrator = User.objects.create_superuser(username='administrator')
-        other = User.objects.create_user(username='other', is_staff=True)
-        employee.groups.add(group)
-        administrator.groups.add(group)
-        migration = import_module('users.migrations.0006_employee_role_without_admin_access')
-        from types import SimpleNamespace
-        migration.remove_admin_access(apps, SimpleNamespace(connection=connection))
-        employee.refresh_from_db()
-        administrator.refresh_from_db()
-        other.refresh_from_db()
-        self.assertFalse(employee.is_staff)
+        self.assertTrue(group.permissions.filter(
+            content_type__app_label='education', codename='view_internal_materials',
+        ).exists())
+        employee = User.objects.create_user(username='employee')
+        set_user_role(employee, UserRole.EMPLOYEE)
+        migration = import_module('users.migrations.0002_create_employee_role')
+        migration.create_employee_role(apps, SimpleNamespace(connection=connection))
+        self.assertEqual(Group.objects.filter(name='Сотрудники').count(), 1)
         self.assertTrue(employee.has_perm(INTERNAL_MATERIALS_PERMISSION))
-        self.assertTrue(administrator.is_staff)
-        self.assertTrue(administrator.is_superuser)
-        self.assertTrue(other.is_staff)
+        self.assertFalse(employee.is_staff)
+        self.assertFalse(employee.is_superuser)
 
 
     def test_former_participants_appear_only_in_last_section(self):

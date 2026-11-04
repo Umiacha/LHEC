@@ -366,8 +366,10 @@ class TranslatedTitleTests(TestCase):
         self.assertContains(self.client.get('/en/students/theses/'), 'Русская тема')
 
     def test_migration_preserves_all_existing_topics_and_does_not_overwrite_edits(self):
+        self.assertEqual(StudentWorkTopic.objects.filter(kind='diploma').count(), 18)
+        self.assertEqual(StudentWorkTopic.objects.filter(kind='course').count(), 22)
         StudentWorkTopic.objects.all().delete()
-        migration = importlib.import_module('education.migrations.0008_seed_student_work_topics')
+        migration = importlib.import_module('education.migrations.0002_seed_student_work_topics')
         migration.seed_topics(apps, SimpleNamespace(connection=connection))
         self.assertEqual(StudentWorkTopic.objects.count(), 40)
         self.assertEqual(StudentWorkTopic.objects.filter(kind='diploma').count(), 18)
