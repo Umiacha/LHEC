@@ -2,12 +2,6 @@
 
 MANAGE = uv run python manage.py
 
-.PHONY: release-requirements
-# Вызывать при подготовке каждого релиза локально или в CI.
-# Устаревший uv.lock приводит к ошибке, а не обновляется при экспорте.
-release-requirements:
-	uv export --locked --no-dev --no-emit-project --output-file requirements.txt > /dev/null
-
 
 # Проверить, не требуются ли новые миграции.
 # Команда завершится с ошибкой, если модели изменены,
@@ -37,8 +31,7 @@ run: db-start
 
 
 # Собрать CSS и обновить файлы, раздаваемые WhiteNoise / веб-сервером.
-styles:
-	npm run css:build
+styles: css
 	$(MANAGE) collectstatic --noinput
 
 
@@ -83,3 +76,49 @@ db-status:
 
 db-reset:
 	uv run python scripts/dev_db.py reset
+
+.PHONY: css release release-prepare release-css release-translations release-requirements
+css:
+	npm run css:build
+
+# Единый сценарий: чистый HEAD -> подготовка в снимке -> упаковка Python.
+# Одна shell-сессия сохраняет временный каталог и гарантирует очистку при ошибке.
+release:
+	@set -eu; \
+	if [ -n "$$(git status --porcelain --untracked-files=all)" ]; then \
+		echo "Рабочее дерево не чистое: сохраните изменения в коммите перед make release." >&2; exit 1; \
+	fi; \
+	for tool in python3 uv npm msgfmt; do command -v "$$tool" >/dev/null || { echo "Для сборки требуется $$tool." >&2; exit 1; }; done; \
+	release_root="$$(pwd)"; \
+	release_commit="$$(git rev-parse HEAD)"; \
+	release_timestamp="$$(git show -s --format=%ct HEAD)"; \
+	release_work="$$(mktemp -d)"; \
+	trap 'rm -rf "$$release_work"' EXIT; \
+	trap 'exit 1' HUP INT TERM; \
+	mkdir "$$release_work/source"; \
+	git archive --format=tar HEAD > "$$release_work/source.tar"; \
+	tar -xf "$$release_work/source.tar" -C "$$release_work/source"; \
+	env -u DJANGO_SETTINGS_MODULE -u UV_PROJECT_ENVIRONMENT -u VIRTUAL_ENV \
+		$(MAKE) --no-print-directory -C "$$release_work/source" release-prepare; \
+	python3 "$$release_work/source/scripts/build_release.py" \
+		--source "$$release_work/source" --output "$$release_root/dist" \
+		--commit "$$release_commit" --timestamp "$$release_timestamp"
+
+# Внутренние шаги выполняются последовательно даже при make -j release.
+release-prepare:
+	uv sync --locked --no-dev
+	$(MAKE) release-requirements
+	$(MAKE) release-css
+	$(MAKE) release-translations
+
+release-requirements:
+	uv export --locked --no-dev --no-emit-project --output-file requirements.txt > /dev/null
+
+release-css:
+	npm ci
+	$(MAKE) css
+
+# Не загружаем settings/.env; пересобираем и отслеживаемые Git каталоги .mo.
+release-translations:
+	find locale -name '*.mo' -type f -delete
+	uv run --no-sync django-admin compilemessages --ignore=.venv --ignore=node_modules

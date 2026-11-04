@@ -33,3 +33,6 @@ Thumbs.db
 node_modules/
 /private_publications/
 /.local/
+
+# Production release artifacts
+/dist/
