@@ -1,18 +1,35 @@
-{% extends "core/_placeholder.html" %}
+{% extends "core/base.html" %}
 {% load i18n %}
 
 {% block title %}{% translate "Объявления — ЛХВЭ" %}{% endblock %}
+{% block description %}{% translate "Новости и объявления Лаборатории химии высоких энергий." %}{% endblock %}
 
-{% block description %}
-{% translate "Новости и объявления Лаборатории химии высоких энергий." %}
-{% endblock %}
-
-{% block page_label %}{% translate "Лаборатория" %}{% endblock %}
-
-{% block page_heading %}
-{% translate "Объявления" %}
-{% endblock %}
-
-{% block page_intro %}
-{% translate "Новости, события и объявления лаборатории." %}
+{% block content %}
+<section class="bg-paper page-section">
+    <div class="page-container">
+        <p class="page-label">{% translate "Лаборатория" %}</p>
+        <h1 class="mt-4 page-title">{% translate "Объявления" %}</h1>
+        <p class="mt-6 max-w-2xl page-intro">{% translate "Новости, события и объявления лаборатории." %}</p>
+    </div>
+</section>
+<section class="page-container page-section" aria-label="{% translate "Объявления" %}">
+    <div class="grid gap-8">
+        {% for announcement in page_obj %}
+            <article class="content-card" aria-labelledby="announcement-{{ announcement.pk }}">
+                <time datetime="{{ announcement.published_at|date:'c' }}" class="metadata">
+                    {{ announcement.published_at|date:"j E Y" }}
+                </time>
+                <h2 id="announcement-{{ announcement.pk }}" class="mt-3 break-words card-title">
+                    {{ announcement.localized_title }}
+                </h2>
+                <div class="mt-4 break-words leading-7 text-slate-700">
+                    {{ announcement.localized_text|linebreaksbr }}
+                </div>
+            </article>
+        {% empty %}
+            <p class="empty-state">{% translate "Сейчас новых объявлений нет." %}</p>
+        {% endfor %}
+    </div>
+    {% include "core/components/pagination.html" %}
+</section>
 {% endblock %}

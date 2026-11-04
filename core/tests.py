@@ -526,7 +526,7 @@ class LanguageTests(TestCase):
         ).status_code, 403)
 
     def test_public_pages_and_login_render_in_english(self):
-        names = ['core:home', 'core:science', 'core:gallery', 'core:contacts',
+        names = ['core:home', 'research:science', 'core:gallery', 'core:contacts',
                  'core:history', 'core:news', 'users:people', 'users:login',
                  'education:students', 'publications:publications', 'research:projects']
         with translation.override('en'):
@@ -558,3 +558,58 @@ class LanguageTests(TestCase):
             for path in (settings.BASE_DIR / app / 'templates' / app).rglob('*.html'):
                 with self.subTest(template=str(path)):
                     get_template(str(path.relative_to(settings.BASE_DIR / app / 'templates')))
+
+
+class NewsPageTests(TestCase):
+    def test_only_published_due_announcements_are_visible(self):
+        from datetime import timedelta
+        from django.utils import timezone
+
+        now = timezone.now()
+        older = Announcement.objects.create(
+            title='Older announcement', text='Older text', is_published=True,
+            published_at=now - timedelta(days=2),
+        )
+        newer = Announcement.objects.create(
+            title='Newer announcement', text='<script>alert(1)</script>\nSecond line',
+            is_published=True, published_at=now - timedelta(days=1),
+        )
+        Announcement.objects.create(title='Hidden draft', text='Draft text')
+        Announcement.objects.create(
+            title='Future announcement', text='Future text', is_published=True,
+            published_at=now + timedelta(days=1),
+        )
+        response = self.client.get(reverse('core:news'))
+        self.assertTemplateUsed(response, 'core/news.html')
+        self.assertTemplateNotUsed(response, 'core/_placeholder.html')
+        self.assertEqual(list(response.context['page_obj']), [newer, older])
+        self.assertNotContains(response, 'Hidden draft')
+        self.assertNotContains(response, 'Future announcement')
+        self.assertContains(response, '&lt;script&gt;alert(1)&lt;/script&gt;<br>Second line')
+        self.assertNotContains(response, 'in_development.JPG')
+
+    def test_pagination_and_translation(self):
+        from datetime import timedelta
+        from django.utils import timezone
+
+        for index in range(11):
+            Announcement.objects.create(
+                title=f'Объявление {index}', text='Текст',
+                title_en=f'Announcement {index}', text_en='English text',
+                is_published=True, published_at=timezone.now() - timedelta(days=index),
+            )
+        response = self.client.get('/en/news/')
+        self.assertEqual(len(response.context['page_obj']), 10)
+        self.assertContains(response, 'Announcement 0')
+        self.assertContains(response, 'English text')
+        self.assertContains(response, 'href="?page=2"')
+        response = self.client.get('/en/news/?page=2')
+        self.assertEqual(len(response.context['page_obj']), 1)
+        self.assertContains(response, 'Announcement 10')
+        self.assertNotContains(response, 'Announcement 0')
+
+    def test_empty_page(self):
+        response = self.client.get(reverse('core:news'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Сейчас новых объявлений нет.')
+        self.assertNotContains(response, 'in_development.JPG')

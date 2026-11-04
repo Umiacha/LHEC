@@ -4,7 +4,7 @@
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
-        {% url 'core:science' as back_url %}
+        {% url 'research:science' as back_url %}
         {% include "core/components/back_link.html" with back_label=_("Наука") back_anchor="" %}
         <h1 class="mt-4 page-title">{% translate "Научные проекты" %}</h1>
         {% for group in project_groups %}

@@ -14,7 +14,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class Announcement(models.Model):  # TODO: добавляем ли эту инфу на страницы науч. направлений? Сотрудников?
+class Announcement(models.Model):
     title = models.CharField(
         'Заголовок',
         max_length=200,

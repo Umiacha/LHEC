@@ -7,7 +7,7 @@
 {% block content %}
 <section class="bg-paper page-section">
     <div class="page-container">
-        {% url 'core:science' as back_url %}
+        {% url 'research:science' as back_url %}
         {% include "core/components/back_link.html" with back_label=_("Научные направления") back_anchor="#directions" %}
         <h1 class="mt-4 break-words page-title">{{ direction.localized_name }}</h1>
         {% if direction.localized_description %}

@@ -8,7 +8,7 @@
 <section class="bg-paper page-section">
     <div class="page-container">
         <header class="max-w-3xl">
-            {% url 'core:science' as back_url %}
+            {% url 'research:science' as back_url %}
         {% include "core/components/back_link.html" with back_label=_("Наука") %}
             <h1 class="mt-4 page-title">{% translate "Публикации" %}</h1>
             <p class="mt-6 page-intro">{% translate "Научные публикации сотрудников лаборатории." %}</p>

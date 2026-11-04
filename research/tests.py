@@ -349,7 +349,7 @@ class DiplomaTests(TestCase):
         self.diploma.supervisors.add(supervisor)
         self.diploma.external_supervisors = 'Внешний руководитель'
         self.diploma.save()
-        page = reverse('core:science')
+        page = reverse('research:science')
         response = self.client.get(page)
         self.assertContains(response, self.diploma.external_url)
         self.assertContains(response, self.diploma.get_level_display())
@@ -367,7 +367,7 @@ class DiplomaTests(TestCase):
         self.assertNotContains(self.client.get(page), self.diploma.external_url)
 
     def test_science_download_requires_employee_and_file(self):
-        page = reverse('core:science')
+        page = reverse('research:science')
         user = get_user_model().objects.create_user(username='reader', is_staff=True)
         self.client.force_login(user)
         self.assertNotContains(self.client.get(page), self.url)
@@ -398,7 +398,7 @@ class DissertationTests(TestCase):
             file=SimpleUploadedFile('thesis.pdf', b'%PDF-thesis'),
         )
         self.url = self.dissertation.file.url
-        self.page = reverse('core:science')
+        self.page = reverse('research:science')
         self.employee = get_user_model().objects.create_user(username='employee')
         self.employee.groups.add(Group.objects.get(name=EMPLOYEE_GROUP_NAME))
 

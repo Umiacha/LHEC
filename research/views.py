@@ -11,7 +11,24 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
+from publications.models import Publication
+
 from .models import Diploma, Dissertation, ProjectParticipation, ResearchDirection, ResearchProject
+
+
+def science(request: HttpRequest) -> HttpResponse:
+    year = timezone.localdate().year
+    return render(request, "research/science.html", {
+        "directions": ResearchDirection.objects.filter(is_published=True),
+        "projects": ResearchProject.objects.filter(
+            is_published=True, start_year__lte=year, end_year__gte=year,
+        ),
+        "publications": Publication.objects.filter(is_published=True, is_featured=True),
+        "dissertations": Dissertation.objects.filter(is_published=True),
+        "diplomas": Diploma.objects.filter(is_published=True).select_related("author").prefetch_related("supervisors"),
+        "can_download_diplomas": request.user.has_perm(INTERNAL_MATERIALS_PERMISSION),
+        "can_download_dissertations": request.user.has_perm(INTERNAL_MATERIALS_PERMISSION),
+    })
 
 
 def direction_detail(request: HttpRequest, slug: str) -> HttpResponse:
