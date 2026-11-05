@@ -24,7 +24,8 @@ class Publication(models.Model):
         'users.Employee',
         blank=True,
         related_name='publications',
-        verbose_name='Сотрудники лаборатории среди авторов'
+        verbose_name='Сотрудники лаборатории среди авторов',
+        help_text='Выберите карточки сотрудников лаборатории, включая бывших.',
     )
     research_directions = models.ManyToManyField(
         'research.ResearchDirection',

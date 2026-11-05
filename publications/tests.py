@@ -261,6 +261,27 @@ class AdminImportTests(TestCase):
     def test_add_page(self):
         self.assertContains(self.client.get(self.url), 'Прочитать файл')
 
+    def test_former_employee_without_account_can_be_linked(self):
+        from users.models import Employee
+
+        employee = Employee.objects.create(
+            last_name='Иванов', first_name='Иван', is_current=False,
+        )
+        response = self.client.get(self.url)
+        self.assertIn(employee, response.context['adminform'].form.fields['employees'].queryset)
+        response = self.client.post(self.url, self.post_data(
+            employees=[employee.pk], is_published='on',
+        ))
+        self.assertEqual(response.status_code, 302)
+        publication = Publication.objects.get()
+        self.assertEqual(list(publication.employees.all()), [employee])
+        self.client.logout()
+        response = self.client.get(reverse('users:employe_card', args=[employee.pk]))
+        self.assertContains(response, publication.title)
+        self.assertEqual(list(response.context['latest_publications']), [publication])
+        response = self.client.get(reverse('publications:publications'), {'employee': employee.pk})
+        self.assertEqual(list(response.context['publications']), [publication])
+
     def test_import_does_not_save_and_preserves_note(self):
         content = (Path(__file__).parent / 'test_data/article.bib').read_bytes()
         response = self.client.post(self.url, self.post_data(
