@@ -1,4 +1,4 @@
-.PHONY: check-migrations show-migrations makemigrations migrate run tailwind dev styles
+.PHONY: check-migrations show-migrations makemigrations migrate run gunicorn-run tailwind dev styles
 
 MANAGE = uv run python manage.py
 
@@ -28,6 +28,18 @@ migrate:
 # Запустить Django development server.
 run: db-start
 	$(MANAGE) runserver
+
+
+# Запуск без DEBUG=режима
+gunicorn-run:
+	DJANGO_DEBUG=False \
+	DJANGO_SERVE_STATIC=True \
+	DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1 \
+	uv run gunicorn config.wsgi:application \
+	  --bind 127.0.0.1:8000 \
+	  --workers 1 \
+	  --access-logfile - \
+	  --error-logfile -
 
 
 # Собрать CSS и обновить файлы, раздаваемые WhiteNoise / веб-сервером.

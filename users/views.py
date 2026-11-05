@@ -64,7 +64,7 @@ def employe_card(request: HttpRequest, pk: int) -> HttpResponse:
 
 @login_required
 @require_http_methods(["GET", "POST"])
-def edit_employe_card(request: HttpRequest, pk: int) -> HttpResponse:  # TODO: потом добавить еще возможность выбирать свои featured publications
+def edit_employe_card(request: HttpRequest, pk: int) -> HttpResponse:
     """Редактирование владельцем своей карточки сотрудника."""
     employee = get_object_or_404(Employee, pk=pk, user=request.user)
     if request.method == 'POST':
