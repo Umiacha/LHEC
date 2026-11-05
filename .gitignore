@@ -36,3 +36,6 @@ node_modules/
 
 # Production release artifacts
 /dist/
+
+# Local files
+docs/tasks.md
