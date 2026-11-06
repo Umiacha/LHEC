@@ -26,9 +26,9 @@
 
 ## Требования и состав поставки
 
-Поставка — `lhec-<hash>.tar.gz` и файл `.sha256` из GitHub Release.
+Поставка — `lhec-<версия>-<hash>.tar.gz` и файл `.sha256` из GitHub Release.
 Архив содержит код, миграции, шаблоны, готовые CSS и переводы,
-`requirements.txt`, `Makefile.prod` и метаданные `RELEASE.json` с коммитом релиза.
+`requirements.txt`, `Makefile.prod` и метаданные `RELEASE.json` с версией и коммитом релиза.
 Статика собирается после установки зависимостей.
 
 Требуются Python **3.12.x**, PostgreSQL и reverse proxy.

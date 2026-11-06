@@ -3,10 +3,12 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 import shutil
 import tarfile
 import tempfile
+import tomllib
 
 ROOT = Path(__file__).resolve().parent.parent
 APPS = ('config', 'core', 'education', 'publications', 'research', 'users')
@@ -32,7 +34,11 @@ def allowed(path):
 def build(source, output, commit, timestamp):
     source = Path(source).resolve()
     output = Path(output).resolve()
-    name = f'lhec-{commit}'
+    with (source / 'pyproject.toml').open('rb') as project_file:
+        version = tomllib.load(project_file).get('project', {}).get('version')
+    if not isinstance(version, str) or not re.fullmatch(r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)', version):
+        raise RuntimeError('project.version в pyproject.toml должна иметь формат X.Y.Z (например, 0.1.0)')
+    name = f'lhec-{version}-{commit}'
     with tempfile.TemporaryDirectory(prefix='lhec-package-') as temporary:
         work = Path(temporary)
         release = work / name
@@ -62,7 +68,7 @@ def build(source, output, commit, timestamp):
                     and relative.suffix not in {'.pyc', '.pyo'}
                     and relative.as_posix() not in selected):
                 raise RuntimeError(f'Ресурс ошибочно исключён: {relative}')
-        metadata = {'commit': commit, 'commit_timestamp': timestamp, 'files': selected}
+        metadata = {'version': version, 'commit': commit, 'commit_timestamp': timestamp, 'files': selected}
         (release / 'RELEASE.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n')
         artifact = work / f'{name}.tar.gz'
         with tarfile.open(artifact, 'w:gz') as archive:

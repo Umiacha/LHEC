@@ -17,6 +17,15 @@ SPEC.loader.exec_module(release)
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_invalid_version_does_not_publish(self):
+        for version in ('', '01.2.3', '../bad', '1.2'):
+            with self.subTest(version=version), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                (root / 'pyproject.toml').write_text('[project]\nversion = ' + json.dumps(version))
+                with self.assertRaisesRegex(RuntimeError, 'project.version'):
+                    release.build(root, root / 'dist', 'a' * 40, 0)
+                self.assertFalse((root / 'dist').exists())
+
     def test_archive_contract_and_dirty_tree(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -32,7 +41,7 @@ class ReleaseTests(unittest.TestCase):
                 'publications/test_data/article.ris': 'fixture',
                 'core/tests.py': 'test', 'config/test_security.py': 'test',
                 'scripts/dev_db.py': 'dev tool', 'media/upload.jpg': 'local upload',
-                'pyproject.toml': 'build configuration',
+                'pyproject.toml': '[project]\nversion = "0.2.3"\n',
                 'Makefile': (release.ROOT / 'Makefile').read_text(),
                 'scripts/build_release.py': (release.ROOT / 'scripts/build_release.py').read_text(),
             }
@@ -96,6 +105,7 @@ if name == 'uv' and args[0] == 'run':
             self.assertEqual((root / 'core/static/core/css/main.css').read_text(), 'old css')
             self.assertEqual((root / 'locale/en/LC_MESSAGES/django.mo').read_text(), 'old translation')
             artifact, = (root / 'dist').glob('*.tar.gz')
+            self.assertEqual(artifact.name, f'lhec-0.2.3-{git("rev-parse", "HEAD").stdout.strip()}.tar.gz')
             expected = hashlib.sha256(artifact.read_bytes()).hexdigest()
             self.assertEqual(Path(str(artifact) + '.sha256').read_text().split()[0], expected)
             with tarfile.open(artifact) as archive:
@@ -106,6 +116,7 @@ if name == 'uv' and args[0] == 'run':
                     self.assertNotIn(excluded, names)
                 self.assertEqual(archive.extractfile(prefix + 'core/static/core/css/main.css').read(), b'built css')
                 metadata = json.load(archive.extractfile(prefix + 'RELEASE.json'))
+                self.assertEqual(metadata['version'], '0.2.3')
                 self.assertEqual(metadata['commit'], git('rev-parse', 'HEAD').stdout.strip())
                 self.assertEqual(set(metadata['files']), names - {'RELEASE.json'})
             # A failed preparation must never publish an archive.
