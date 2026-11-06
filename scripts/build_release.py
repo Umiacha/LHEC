@@ -10,7 +10,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 APPS = ('config', 'core', 'education', 'publications', 'research', 'users')
-FILES = ('manage.py', 'requirements.txt', 'Makefile.prod', '.env.example', 'README.md')
+FILES = ('manage.py', 'requirements.txt', 'Makefile.prod', '.env.example')
 RESOURCES = {'templates', 'static'}
 
 

@@ -22,6 +22,7 @@ class ReleaseTests(unittest.TestCase):
             root = Path(temporary)
             files = {
                 **{name: 'placeholder' for name in release.FILES},
+                'README.md': 'Repository documentation; must not ship',
                 '.gitignore': '.env\ndist/\n',
                 'config/settings.py': '', 'config/wsgi.py': '',
                 'core/static/core/css/main.css': 'old css',
@@ -101,7 +102,7 @@ if name == 'uv' and args[0] == 'run':
                 prefix = artifact.name.removesuffix('.tar.gz') + '/'
                 names = {member.name.removeprefix(prefix) for member in archive if member.isfile()}
                 self.assertEqual(names, {name for name in files if release.allowed(Path(name))} | {'RELEASE.json'})
-                for excluded in ('.env', 'core/tests.py', 'config/test_security.py', 'media/upload.jpg', 'scripts/dev_db.py', 'pyproject.toml'):
+                for excluded in ('README.md', '.env', 'core/tests.py', 'config/test_security.py', 'media/upload.jpg', 'scripts/dev_db.py', 'pyproject.toml'):
                     self.assertNotIn(excluded, names)
                 self.assertEqual(archive.extractfile(prefix + 'core/static/core/css/main.css').read(), b'built css')
                 metadata = json.load(archive.extractfile(prefix + 'RELEASE.json'))
