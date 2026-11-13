@@ -3,12 +3,14 @@
 PYTHON ?= .venv/bin/python
 MANAGE = $(PYTHON) manage.py
 
-.PHONY: help check-production check check-migrations show-migrations migrate collectstatic compilemessages create-superuser
+.PHONY: help check-mysql gunicorn-run check-production check check-migrations show-migrations migrate collectstatic compilemessages create-superuser
 
 # По умолчанию только справка, без изменения БД или файлов.
 help:
 	@echo "make -f Makefile.prod <команда> [PYTHON=/path/to/python]"
 	@echo "  check             Проверки Django для деплоя (предупреждения = ошибка)"
+	@echo "  check-mysql       Диагностика MySQL (блокируют только ошибки)"
+	@echo "  gunicorn-run      Диагностика MySQL и запуск Gunicorn"
 	@echo "  check-migrations  Проверить соответствие моделей миграциям"
 	@echo "  show-migrations   Показать состояние миграций"
 	@echo "  migrate           Применить миграции к серверной БД"
@@ -22,6 +24,7 @@ check-production:
 	@$(PYTHON) -c 'import os; os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings"); from django.conf import settings; import sys; sys.exit("Отказ: для серверных команд задайте DJANGO_DEBUG=False." if settings.DEBUG else 0)'
 
 check: check-production
+	$(MANAGE) check_mysql
 	$(MANAGE) check --deploy --fail-level WARNING
 
 check-migrations: check-production
@@ -30,7 +33,13 @@ check-migrations: check-production
 show-migrations: check-production
 	$(MANAGE) showmigrations
 
-migrate: check-production
+check-mysql: check-production
+	$(MANAGE) check_mysql
+
+gunicorn-run: check-mysql
+	$(PYTHON) -m gunicorn config.wsgi:application
+
+migrate: check-mysql
 	$(MANAGE) migrate --noinput
 
 collectstatic: check-production

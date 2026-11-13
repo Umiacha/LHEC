@@ -374,6 +374,14 @@ uv run python manage.py test tests.test_research_constraints tests.test_project_
 Проверки выполнялись на тестовой БД, созданной миграциями с нуля и удалённой
 после запуска; схема и данные основной локальной БД не изменялись.
 
+### Диагностика MySQL
+
+`make check-mysql` проверяет подключение и совместимость сервера без изменения
+схемы. Проверка встроена в `make migrate`, `make run`, `make gunicorn-run`.
+Предупреждения допускают продолжение, ошибки дают ненулевой код. Подробности:
+`uv run python manage.py check_mysql --verbosity 2` и
+[диагностика при деплое](deploy.md#диагностика-mysql-перед-миграциями-и-запуском).
+
 ### Даты и часовые пояса
 
 `USE_TZ=True`, `TIME_ZONE=Europe/Moscow`. Для соединения с БД параметр

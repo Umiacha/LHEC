@@ -1,4 +1,4 @@
-.PHONY: check-migrations show-migrations makemigrations migrate run gunicorn-run tailwind dev styles
+.PHONY: check-mysql check-migrations show-migrations makemigrations migrate run gunicorn-run tailwind dev styles
 
 MANAGE = uv run python manage.py
 
@@ -20,18 +20,23 @@ makemigrations:
 	$(MANAGE) makemigrations
 
 
+# Диагностика MySQL: предупреждения не блокируют, ошибки останавливают make.
+check-mysql:
+	$(MANAGE) check_mysql
+
+
 # Применить миграции.
-migrate:
+migrate: check-mysql
 	$(MANAGE) migrate
 
 
 # Запустить Django development server.
-run: db-start
+run: check-mysql
 	$(MANAGE) runserver
 
 
 # Запуск без DEBUG=режима
-gunicorn-run:
+gunicorn-run: check-mysql
 	DJANGO_DEBUG=False \
 	DJANGO_SERVE_STATIC=True \
 	DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1 \
