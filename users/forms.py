@@ -81,7 +81,7 @@ class EmployeeEditForm(forms.ModelForm):
             )
 
     def clean_scientific_profiles(self):
-        field = forms.URLField(max_length=2000, assume_scheme='https')
+        field = forms.URLField(max_length=ScientificProfile._meta.get_field('url').max_length, assume_scheme='https')
         urls = []
         for line in self.cleaned_data['scientific_profiles'].splitlines():
             if line.strip():

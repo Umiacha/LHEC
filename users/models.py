@@ -205,7 +205,7 @@ class ScientificProfile(models.Model):
         Employee, on_delete=models.CASCADE, related_name='scientific_profiles',
         verbose_name='Сотрудник',
     )
-    url = models.URLField('URL', max_length=2000)
+    url = models.URLField('URL', max_length=500)
     sort_order = models.PositiveIntegerField('Порядок', default=0)
 
     class Meta:

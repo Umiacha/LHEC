@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='ScientificProfile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('url', models.URLField(max_length=2000, verbose_name='URL')),
+                ('url', models.URLField(max_length=500, verbose_name='URL')),
                 ('sort_order', models.PositiveIntegerField(default=0, verbose_name='Порядок')),
                 ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scientific_profiles', to='users.employee', verbose_name='Сотрудник')),
             ],

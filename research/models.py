@@ -228,6 +228,10 @@ class ProjectParticipation(models.Model):
                     | (models.Q(employee__isnull=True) & ~models.Q(external_name=''))
                 ),
                 name='research_project_participant_identity',
+                violation_error_message=_(
+                    'Выберите сотрудника ЛХВЭ либо укажите ФИО внешнего участника. '
+                    'Если выбран сотрудник, оставьте ФИО и организацию внешнего участника пустыми.'
+                ),
             ),
             models.UniqueConstraint(
                 fields=('leader_project_id',),
