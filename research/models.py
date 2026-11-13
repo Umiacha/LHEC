@@ -11,7 +11,15 @@ class ResearchDirection(models.Model):
     """Научное направление и работающая в нём научная группа."""
 
     name = models.CharField('Название', max_length=255)
-    slug = models.SlugField('Slug', max_length=255, unique=True)
+    slug = models.SlugField(
+        'Slug', max_length=255, unique=True,
+        error_messages={
+            'unique': _(
+                'Научное направление с таким Slug уже существует. '
+                'Сравнение Slug регистронезависимо.'
+            ),
+        },
+    )
     description = models.TextField('Описание', blank=True)
     leader = models.ForeignKey(
         'users.Employee',
