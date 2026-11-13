@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
 
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError, close_old_connections, transaction
 from django.test import TransactionTestCase
 
@@ -84,17 +85,20 @@ class ProjectParticipationUniquenessTests(TransactionTestCase):
         self.assertEqual(second.leader_project_id, self.project.pk)
 
     def test_concurrent_inserts_allow_only_one(self):
-        for employee in (False, True):
-            with self.subTest(employee=employee):
+        for identity in ('leader', 'employee', 'external'):
+            with self.subTest(identity=identity):
                 barrier = Barrier(2)
 
                 def insert(number):
                     close_old_connections()
                     try:
                         barrier.wait(timeout=10)
-                        values = {'employee_id': self.employee.pk} if employee else {
-                            'external_name': f'Внешний {number}', 'role': 'leader',
-                        }
+                        if identity == 'employee':
+                            values = {'employee_id': self.employee.pk}
+                        elif identity == 'external':
+                            values = {'external_name': 'Внешний', 'external_organization': 'МГУ'}
+                        else:
+                            values = {'external_name': f'Внешний {number}', 'role': 'leader'}
                         try:
                             with transaction.atomic():
                                 ProjectParticipation.objects.create(project_id=self.project.pk, **values)
@@ -108,3 +112,88 @@ class ProjectParticipationUniquenessTests(TransactionTestCase):
                     self.assertCountEqual(list(pool.map(insert, range(2))), [True, False])
                 self.assertEqual(self.project.participations.count(), 1)
                 self.project.participations.all().delete()
+
+    def test_external_identity_scope_and_staff_nulls(self):
+        first = ProjectParticipation.objects.create(
+            project=self.project, external_name='Иван Иванов', external_organization='МГУ',
+        )
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ProjectParticipation.objects.create(
+                project=self.project, external_name='Иван Иванов', external_organization='МГУ',
+            )
+        with self.assertRaises(ValidationError):
+            self.participant(external_name='Иван Иванов', external_organization='МГУ').full_clean()
+        ProjectParticipation.objects.create(
+            project=self.project, external_name='Иван Иванов', external_organization='МИФИ',
+        )
+        ProjectParticipation.objects.create(
+            project=self.project, external_name='Пётр Петров', external_organization='МГУ',
+        )
+        other = ResearchProject.objects.create(
+            name='Другой', slug='other', start_year=2026, end_year=2028,
+        )
+        ProjectParticipation.objects.create(
+            project=other, external_name='Иван Иванов', external_organization='МГУ',
+        )
+        second_employee = Employee.objects.create(first_name='Пётр', last_name='Петров')
+        for employee in (self.employee, second_employee):
+            staff = ProjectParticipation.objects.create(project=self.project, employee=employee)
+            staff.refresh_from_db()
+            self.assertIsNone(staff.external_identity_name)
+            self.assertIsNone(staff.external_identity_organization)
+        first.refresh_from_db()
+        self.assertEqual(first.external_identity_name, first.external_name)
+        self.assertEqual(first.external_identity_organization, first.external_organization)
+
+    def test_external_bulk_create_and_updates_reject_duplicates(self):
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ProjectParticipation.objects.bulk_create([
+                self.participant(external_name='Иван Иванов'),
+                self.participant(external_name='Иван Иванов'),
+            ])
+        first = ProjectParticipation.objects.create(project=self.project, external_name='Иван Иванов')
+        second = ProjectParticipation.objects.create(project=self.project, external_name='Пётр Петров')
+        for bulk in (False, True):
+            with self.subTest(bulk=bulk), self.assertRaises(IntegrityError), transaction.atomic():
+                if bulk:
+                    second.external_name = first.external_name
+                    ProjectParticipation.objects.bulk_update([second], ['external_name'])
+                else:
+                    ProjectParticipation.objects.filter(pk=second.pk).update(external_name=first.external_name)
+
+    def test_staff_to_external_recomputes_identity(self):
+        ProjectParticipation.objects.create(project=self.project, external_name='Иван Иванов')
+        staff = ProjectParticipation.objects.create(project=self.project, employee=self.employee)
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ProjectParticipation.objects.filter(pk=staff.pk).update(
+                employee=None, external_name='Иван Иванов',
+            )
+        ProjectParticipation.objects.filter(pk=staff.pk).update(employee=None, external_name='Пётр Петров')
+        staff.refresh_from_db()
+        self.assertEqual(staff.external_identity_name, 'Пётр Петров')
+        self.assertEqual(staff.external_identity_organization, '')
+        ProjectParticipation.objects.filter(pk=staff.pk).update(employee=self.employee, external_name='')
+        staff.refresh_from_db()
+        self.assertIsNone(staff.external_identity_name)
+        self.assertIsNone(staff.external_identity_organization)
+
+    def test_identity_check_rejects_invalid_direct_writes(self):
+        for values in ({}, {'external_organization': 'МГУ'},
+                       {'employee': self.employee, 'external_name': 'Иван'},
+                       {'employee': self.employee, 'external_organization': 'МГУ'}):
+            with self.subTest(values=values), self.assertRaises(IntegrityError), transaction.atomic():
+                ProjectParticipation.objects.create(project=self.project, **values)
+
+    def test_full_length_utf8mb4_external_identity(self):
+        # Four-byte characters exercise the complete index, including its final character.
+        values = {'external_name': '😀' * 255, 'external_organization': '🚀' * 500}
+        first = ProjectParticipation.objects.create(project=self.project, **values)
+        first.refresh_from_db()
+        self.assertEqual(first.external_identity_name, values['external_name'])
+        self.assertEqual(first.external_identity_organization, values['external_organization'])
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ProjectParticipation.objects.create(project=self.project, **values)
+        ProjectParticipation.objects.create(
+            project=self.project, external_name=values['external_name'],
+            external_organization='🚀' * 499 + '🌍',
+        )

@@ -185,6 +185,25 @@ class ProjectParticipation(models.Model):
         db_persist=True,
         null=True,
     )
+    # utf8mb4 index budget: (255 + 500) * 4 + 8 (project) = 3028 < 3072 bytes.
+    external_identity_name = models.GeneratedField(
+        expression=models.Case(
+            models.When(employee__isnull=True, then=models.F('external_name')),
+            default=models.Value(None),
+        ),
+        output_field=models.CharField(max_length=255),
+        db_persist=True,
+        null=True,
+    )
+    external_identity_organization = models.GeneratedField(
+        expression=models.Case(
+            models.When(employee__isnull=True, then=models.F('external_organization')),
+            default=models.Value(None),
+        ),
+        output_field=models.CharField(max_length=500),
+        db_persist=True,
+        null=True,
+    )
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
 
     external_name_en = models.CharField('ФИО внешнего участника — EN', max_length=255, blank=True)
@@ -219,8 +238,7 @@ class ProjectParticipation(models.Model):
                 name='research_project_unique_employee',
             ),
             models.UniqueConstraint(
-                fields=('project', 'external_name', 'external_organization'),
-                condition=models.Q(employee__isnull=True),
+                fields=('project', 'external_identity_name', 'external_identity_organization'),
                 name='research_project_unique_external',
             ),
         ]
