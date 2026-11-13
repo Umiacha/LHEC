@@ -253,6 +253,8 @@ LANGUAGE_CODE = 'ru'
 LANGUAGES = [('ru', 'Русский'), ('en', 'English')]
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
+# Display and form input use Moscow time; USE_TZ and the database connection's
+# default TIME_ZONE=None keep MySQL DATETIME values in UTC.
 TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
