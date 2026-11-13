@@ -175,6 +175,16 @@ class ProjectParticipation(models.Model):
     external_name = models.CharField('ФИО внешнего участника', max_length=255, blank=True)
     external_organization = models.CharField('Организация внешнего участника', max_length=500, blank=True)
     role = models.CharField('Роль', max_length=20, choices=Role.choices, default=Role.EXECUTOR)
+    # MySQL permits multiple NULLs in a unique index, but only one leader per project.
+    leader_project_id = models.GeneratedField(
+        expression=models.Case(
+            models.When(role='leader', then=models.F('project')),
+            default=models.Value(None),
+        ),
+        output_field=models.BigIntegerField(),
+        db_persist=True,
+        null=True,
+    )
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
 
     external_name_en = models.CharField('ФИО внешнего участника — EN', max_length=255, blank=True)
@@ -201,11 +211,11 @@ class ProjectParticipation(models.Model):
                 name='research_project_participant_identity',
             ),
             models.UniqueConstraint(
-                fields=('project',), condition=models.Q(role='leader'),
+                fields=('leader_project_id',),
                 name='research_project_one_leader',
             ),
             models.UniqueConstraint(
-                fields=('project', 'employee'), condition=models.Q(employee__isnull=False),
+                fields=('project', 'employee'),
                 name='research_project_unique_employee',
             ),
             models.UniqueConstraint(
