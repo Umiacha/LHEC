@@ -4,6 +4,7 @@ from django.contrib.auth.forms import (
     AuthenticationForm,
     UserChangeForm,
     UserCreationForm,
+    UsernameField,
 )
 from django.contrib.auth.models import User
 from .roles import UserRole, get_user_role
@@ -14,7 +15,7 @@ INPUT_CLASSES = 'form-control'
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(
+    username = UsernameField(
         label=_('Логин'),
         widget=forms.TextInput(
             attrs={

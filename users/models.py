@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 
 from core.i18n import localized_value
+from core.fields import NormalizedNameField
 
 
 class SciencePosition(models.TextChoices):
@@ -106,9 +107,9 @@ class EmployeeQuerySet(models.QuerySet):
 
 class Employee(models.Model):
     """Публичная карточка участника лаборатории с необязательным аккаунтом."""
-    last_name = models.CharField(verbose_name='Фамилия', max_length=200)
-    first_name = models.CharField(verbose_name='Имя', max_length=200)
-    mid_name = models.CharField(verbose_name='Отчество', max_length=200, blank=True)
+    last_name = NormalizedNameField(verbose_name='Фамилия', max_length=200)
+    first_name = NormalizedNameField(verbose_name='Имя', max_length=200)
+    mid_name = NormalizedNameField(verbose_name='Отчество', max_length=200, blank=True)
     photo = models.ImageField(verbose_name='Фото',upload_to='employees/photos/', blank=True)
     science_position = models.CharField(
         verbose_name='Научная должность',
@@ -153,9 +154,9 @@ class Employee(models.Model):
     is_published = models.BooleanField(verbose_name='Опубликовано', default=True)
     objects = EmployeeQuerySet.as_manager()
 
-    last_name_en = models.CharField('Фамилия — EN', max_length=200, blank=True)
-    first_name_en = models.CharField('Имя — EN', max_length=200, blank=True)
-    mid_name_en = models.CharField('Отчество — EN', max_length=200, blank=True)
+    last_name_en = NormalizedNameField('Фамилия — EN', max_length=200, blank=True)
+    first_name_en = NormalizedNameField('Имя — EN', max_length=200, blank=True)
+    mid_name_en = NormalizedNameField('Отчество — EN', max_length=200, blank=True)
     bio_en = models.TextField('Описание — EN', blank=True)
 
     @property
@@ -205,7 +206,7 @@ class ScientificProfile(models.Model):
         Employee, on_delete=models.CASCADE, related_name='scientific_profiles',
         verbose_name='Сотрудник',
     )
-    url = models.URLField('URL', max_length=500)
+    url = models.URLField('URL', db_collation='utf8mb4_0900_bin', max_length=500)
     sort_order = models.PositiveIntegerField('Порядок', default=0)
 
     class Meta:
