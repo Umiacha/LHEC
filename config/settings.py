@@ -206,15 +206,19 @@ if (
         'DATABASE_URL должен указывать на именованную БД MySQL.'
     )
 
+# Retain mysql:// URLs while routing all migration DDL through our table policy.
+database_config['ENGINE'] = 'config.db.mysql'
+
 database_config.setdefault('OPTIONS', {}).update({
     'charset': 'utf8mb4',
     'isolation_level': 'read committed',
     'init_command': (
-        "SET SESSION sql_mode = "
-        "IF(FIND_IN_SET('STRICT_TRANS_TABLES', @@SESSION.sql_mode), "
-        "@@SESSION.sql_mode, "
+        "SET SESSION default_storage_engine = 'InnoDB', sql_mode = "
         "CONCAT_WS(',', NULLIF(@@SESSION.sql_mode, ''), "
-        "'STRICT_TRANS_TABLES'))"
+        "IF(FIND_IN_SET('STRICT_TRANS_TABLES', @@SESSION.sql_mode), "
+        "NULL, 'STRICT_TRANS_TABLES'), "
+        "IF(FIND_IN_SET('NO_ENGINE_SUBSTITUTION', @@SESSION.sql_mode), "
+        "NULL, 'NO_ENGINE_SUBSTITUTION'))"
     ),
 })
 
