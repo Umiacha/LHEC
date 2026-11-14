@@ -80,8 +80,14 @@ messages:
 compilemessages:
 	$(MANAGE) compilemessages --ignore=.venv --ignore=node_modules
 
-# Только изолированный локальный кластер; DATABASE_URL здесь не используется.
-.PHONY: db-start db-stop db-status db-reset
+# Явные команды для выделенной локальной MySQL-БД; start/stop управляют общей службой.
+.PHONY: db-prepare db-check db-start db-stop db-status db-reset
+db-prepare:
+	uv run python scripts/dev_db.py prepare
+
+db-check:
+	uv run python scripts/dev_db.py check
+
 db-start:
 	uv run python scripts/dev_db.py start
 
