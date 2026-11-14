@@ -462,6 +462,10 @@ uv run python manage.py test tests.test_datetimes core research --noinput
 
 ### Проверки и тесты
 
+Воспроизводимый полный запуск на Ubuntu с MySQL, runserver и Gunicorn:
+[сценарий `make check-ubuntu`](ubuntu-check.md). Он использует отдельную
+`test_lhecdev` и временные каталоги файлов.
+
 Требования для Django-тестов:
 
 - Выделенная MySQL-БД в `DATABASE_URL`; учётная запись с правами на отдельную тестовую БД Django.
@@ -479,7 +483,7 @@ make check-migrations
 Тесты упаковки можно запускать без БД и внешних сборщиков:
 
 ```sh
-python3 -m unittest discover -s tests -v
+uv run python -m unittest tests.test_release tests.test_dev_db -v
 ```
 
 ## Переводы интерфейса

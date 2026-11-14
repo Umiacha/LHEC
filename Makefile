@@ -145,3 +145,8 @@ release-css:
 release-translations:
 	find locale -name '*.mo' -type f -delete
 	uv run --no-sync django-admin compilemessages --ignore=.venv --ignore=node_modules
+
+# Полная локальная проверка на отдельной test_lhecdev, включая реальные HTTP-серверы.
+.PHONY: check-ubuntu
+check-ubuntu:
+	uv run python scripts/check_ubuntu.py
