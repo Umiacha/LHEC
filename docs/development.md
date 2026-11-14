@@ -462,6 +462,8 @@ uv run python manage.py test tests.test_datetimes core research --noinput
 
 ### Проверки и тесты
 
+Результат проверки собранного артефакта: [релизный архив на Ubuntu с MySQL](release-check.md).
+
 Воспроизводимый полный запуск на Ubuntu с MySQL, runserver и Gunicorn:
 [сценарий `make check-ubuntu`](ubuntu-check.md). Он использует отдельную
 `test_lhecdev` и временные каталоги файлов.
