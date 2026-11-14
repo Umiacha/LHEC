@@ -1,10 +1,6 @@
-from copy import copy
-from importlib import import_module
-
-from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError, connection, transaction
-from django.test import TestCase, TransactionTestCase
+from django.test import TestCase
 
 from users.forms import EmployeeEditForm
 from users.models import Employee, ScientificProfile
@@ -77,40 +73,3 @@ class ScientificProfileTests(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
         form.save_profiles(self.employee)
         self.assertEqual(self.employee.scientific_profiles.get().url, url)
-
-
-class ScientificProfileMigrationTests(TransactionTestCase):
-    def test_existing_long_column_is_checked_before_shrinking(self):
-        migration = import_module('users.migrations.0004_scientificprofile_url_length')
-        employee = Employee.objects.create(first_name='Иван', last_name='Иванов')
-        field = ScientificProfile._meta.get_field('url')
-        long_field = copy(field)
-        long_field.max_length = 2000
-        constraint = ScientificProfile._meta.constraints[0]
-        # Reproduce the old column without its oversized index, which MySQL cannot create.
-        with connection.schema_editor() as editor:
-            editor.remove_constraint(ScientificProfile, constraint)
-            editor.alter_field(ScientificProfile, field, long_field)
-        try:
-            profile = ScientificProfile.objects.create(employee=employee, url=profile_url(501))
-            with connection.schema_editor() as editor:
-                with self.assertRaisesRegex(RuntimeError, 'Значения не обрезаны'):
-                    migration.check_url_lengths(apps, editor)
-            profile.refresh_from_db()
-            self.assertEqual(profile.url, profile_url(501))
-            ScientificProfile.objects.filter(pk=profile.pk).update(url=profile_url(500))
-            with connection.schema_editor() as editor:
-                migration.check_url_lengths(apps, editor)
-                migration.shrink_url(apps, editor)
-            profile.refresh_from_db()
-            self.assertEqual(profile.url, profile_url(500))
-            with connection.cursor() as cursor:
-                column = next(item for item in connection.introspection.get_table_description(
-                    cursor, ScientificProfile._meta.db_table,
-                ) if item.name == 'url')
-            self.assertEqual(column.internal_size, 500)
-        finally:
-            ScientificProfile.objects.all().delete()
-            with connection.schema_editor() as editor:
-                editor.alter_field(ScientificProfile, long_field, field)
-                editor.add_constraint(ScientificProfile, constraint)

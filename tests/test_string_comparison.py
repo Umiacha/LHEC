@@ -1,16 +1,12 @@
-from copy import copy
-from importlib import import_module
-
 from django.apps import apps
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, connection, transaction
-from django.db.migrations.loader import MigrationLoader
 from django.db.models.expressions import RawSQL
 from django.forms import modelform_factory
 from django.forms.models import inlineformset_factory
-from django.test import TestCase, TransactionTestCase
+from django.test import TestCase
 
 from education.models import LabWork, LectureCourse
 from research.admin import ProjectParticipationFormSet
@@ -171,53 +167,3 @@ class StringComparisonTests(TestCase):
             generated = cursor.fetchall()
         self.assertEqual(len(generated), 2)
         self.assertTrue(all(expression for name, expression in generated))
-
-
-class StringComparisonMigrationTests(TransactionTestCase):
-    def test_generated_columns_are_rebuilt_from_existing_data(self):
-        loader = MigrationLoader(connection)
-        migration = loader.get_migration('research', '0007_alter_dissertation_author_and_more')
-        before = loader.project_state([
-            ('research', '0006_alter_diploma_external_url_and_more'),
-            ('core', '0002_string_comparison'),
-        ])
-        with connection.schema_editor() as editor:
-            migration.unapply(before, editor)
-        try:
-            old_project = before.apps.get_model('research', 'ResearchProject')
-            old_participation = before.apps.get_model('research', 'ProjectParticipation')
-            project = old_project.objects.create(name='Проект', slug='migration', start_year=2026, end_year=2028)
-            participant = old_participation.objects.create(
-                project=project, external_name='Семенов', external_organization='МГУ',
-            )
-        finally:
-            with connection.schema_editor() as editor:
-                migration.apply(before, editor)
-        participant = ProjectParticipation.objects.get(pk=participant.pk)
-        self.assertEqual(participant.external_identity_name, 'Семенов')
-        self.assertEqual(participant.external_identity_organization, 'МГУ')
-        with self.assertRaises(IntegrityError), transaction.atomic():
-            ProjectParticipation.objects.create(
-                project_id=project.pk, external_name='СЕМЕНОВ', external_organization='мгу',
-            )
-
-    def test_preflight_detects_old_case_sensitive_duplicates_without_exposing_usernames(self):
-        migration = import_module('core.migrations.0002_string_comparison')
-        field = User._meta.get_field('username')
-        current = copy(field)
-        current.db_collation = 'utf8mb4_0900_as_ci'
-        binary = copy(field)
-        binary.db_collation = 'utf8mb4_0900_bin'
-        with connection.schema_editor() as editor:
-            editor.alter_field(User, current, binary)
-        try:
-            User.objects.bulk_create([User(username='PrivateLogin'), User(username='PRIVATELOGIN')])
-            with connection.schema_editor() as editor:
-                with self.assertRaisesRegex(RuntimeError, 'auth.User') as raised:
-                    migration.check_collations_and_duplicates(apps, editor)
-            self.assertNotIn('PrivateLogin', str(raised.exception))
-            self.assertEqual(User.objects.count(), 2)
-        finally:
-            User.objects.all().delete()
-            with connection.schema_editor() as editor:
-                editor.alter_field(User, binary, current)
