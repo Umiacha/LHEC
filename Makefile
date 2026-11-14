@@ -1,4 +1,4 @@
-.PHONY: check-migrations show-migrations makemigrations migrate run gunicorn-run tailwind dev styles
+.PHONY: check-mysql check-migrations show-migrations makemigrations migrate run gunicorn-run tailwind dev styles
 
 MANAGE = uv run python manage.py
 
@@ -20,18 +20,23 @@ makemigrations:
 	$(MANAGE) makemigrations
 
 
+# Диагностика MySQL: предупреждения не блокируют, ошибки останавливают make.
+check-mysql:
+	$(MANAGE) check_mysql
+
+
 # Применить миграции.
-migrate:
+migrate: check-mysql
 	$(MANAGE) migrate
 
 
 # Запустить Django development server.
-run: db-start
+run: check-mysql
 	$(MANAGE) runserver
 
 
 # Запуск без DEBUG=режима
-gunicorn-run:
+gunicorn-run: check-mysql
 	DJANGO_DEBUG=False \
 	DJANGO_SERVE_STATIC=True \
 	DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1 \
@@ -75,8 +80,14 @@ messages:
 compilemessages:
 	$(MANAGE) compilemessages --ignore=.venv --ignore=node_modules
 
-# Только изолированный локальный кластер; DATABASE_URL здесь не используется.
-.PHONY: db-start db-stop db-status db-reset
+# Явные команды для выделенной локальной MySQL-БД; start/stop управляют общей службой.
+.PHONY: db-prepare db-check db-start db-stop db-status db-reset
+db-prepare:
+	uv run python scripts/dev_db.py prepare
+
+db-check:
+	uv run python scripts/dev_db.py check
+
 db-start:
 	uv run python scripts/dev_db.py start
 
@@ -134,3 +145,8 @@ release-css:
 release-translations:
 	find locale -name '*.mo' -type f -delete
 	uv run --no-sync django-admin compilemessages --ignore=.venv --ignore=node_modules
+
+# Полная локальная проверка на отдельной test_lhecdev, включая реальные HTTP-серверы.
+.PHONY: check-ubuntu
+check-ubuntu:
+	uv run python scripts/check_ubuntu.py

@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from core.i18n import localized_value
+from core.fields import CanonicalSlugField
 
 from research.models import diploma_file_path  # Совместимость с миграцией 0002.
 from .storage import lecture_file_storage, teaching_material_file_storage
@@ -9,7 +10,7 @@ from .storage import lecture_file_storage, teaching_material_file_storage
 
 class LabWork(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = CanonicalSlugField(unique=True)
     short_description = models.TextField()
     equipment = models.TextField(blank=True)
     description = models.TextField(blank=True)
@@ -95,7 +96,7 @@ class LectureCourse(models.Model):
     """Курс лекций для сотрудников с правом view_internal_materials."""
 
     title = models.CharField('Название', max_length=255)
-    slug = models.SlugField('Slug', max_length=255, unique=True)
+    slug = CanonicalSlugField('Slug', max_length=255, unique=True)
     description = models.TextField('Описание', blank=True)
     lecturer = models.ForeignKey(
         'users.Employee', on_delete=models.SET_NULL, null=True, blank=True,

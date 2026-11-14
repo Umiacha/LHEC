@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 
 from core.i18n import localized_value
+from core.fields import CanonicalSlugField, NormalizedNameField
 
 from .storage import dissertation_file_storage, diploma_file_storage
 
@@ -10,8 +11,16 @@ from .storage import dissertation_file_storage, diploma_file_storage
 class ResearchDirection(models.Model):
     """Научное направление и работающая в нём научная группа."""
 
-    name = models.CharField('Название', max_length=255)
-    slug = models.SlugField('Slug', max_length=255, unique=True)
+    name = models.CharField('Название', max_length=255, db_collation='utf8mb4_0900_as_ci')
+    slug = CanonicalSlugField(
+        'Slug', max_length=255, unique=True,
+        error_messages={
+            'unique': _(
+                'Научное направление с таким Slug уже существует. '
+                'Сравнение Slug регистронезависимо.'
+            ),
+        },
+    )
     description = models.TextField('Описание', blank=True)
     leader = models.ForeignKey(
         'users.Employee',
@@ -34,7 +43,7 @@ class ResearchDirection(models.Model):
     created_at = models.DateTimeField('Запись создана', auto_now_add=True)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
 
-    name_en = models.CharField('Название — EN', max_length=255, blank=True)
+    name_en = models.CharField('Название — EN', max_length=255, blank=True, db_collation='utf8mb4_0900_as_ci')
     description_en = models.TextField('Описание — EN', blank=True)
 
     @property
@@ -96,8 +105,8 @@ class ResearchProject(models.Model):
         STATE_ASSIGNMENT = 'state_assignment', _('Государственное задание')
         OTHER = 'other', _('Другое')
 
-    name = models.CharField('Название', max_length=500)
-    slug = models.SlugField('Slug', max_length=255, unique=True)
+    name = models.CharField('Название', max_length=500, db_collation='utf8mb4_0900_as_ci')
+    slug = CanonicalSlugField('Slug', max_length=255, unique=True)
     start_year = models.PositiveSmallIntegerField('Год начала')
     end_year = models.PositiveSmallIntegerField('Год окончания')
     abstract = models.TextField('Аннотация', blank=True)
@@ -110,13 +119,13 @@ class ResearchProject(models.Model):
     funding_kind = models.CharField('Тип основания', max_length=20, choices=FundingKind.choices, blank=True)
     funding_number = models.CharField('Номер гранта, договора или задания', max_length=255, blank=True)
     funding_program = models.CharField('Программа или конкурс', max_length=500, blank=True)
-    external_url = models.URLField('Внешняя страница проекта', blank=True)
+    external_url = models.URLField('Внешняя страница проекта', db_collation='utf8mb4_0900_bin', blank=True)
     is_published = models.BooleanField('Показывать на сайте', default=False)
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
     created_at = models.DateTimeField('Запись создана', auto_now_add=True)
     updated_at = models.DateTimeField('Запись изменена', auto_now=True)
 
-    name_en = models.CharField('Название — EN', max_length=500, blank=True)
+    name_en = models.CharField('Название — EN', max_length=500, blank=True, db_collation='utf8mb4_0900_as_ci')
     abstract_en = models.TextField('Аннотация — EN', blank=True)
     funding_source_en = models.CharField('Источник финансирования — EN', max_length=500, blank=True)
     customer_en = models.CharField('Заказчик — EN', max_length=500, blank=True)
@@ -172,13 +181,42 @@ class ProjectParticipation(models.Model):
         'users.Employee', on_delete=models.PROTECT, null=True, blank=True,
         related_name='project_participations', verbose_name='Сотрудник ЛХВЭ',
     )
-    external_name = models.CharField('ФИО внешнего участника', max_length=255, blank=True)
-    external_organization = models.CharField('Организация внешнего участника', max_length=500, blank=True)
+    external_name = NormalizedNameField('ФИО внешнего участника', max_length=255, blank=True)
+    external_organization = NormalizedNameField('Организация внешнего участника', max_length=500, blank=True)
     role = models.CharField('Роль', max_length=20, choices=Role.choices, default=Role.EXECUTOR)
+    # MySQL permits multiple NULLs in a unique index, but only one leader per project.
+    leader_project_id = models.GeneratedField(
+        expression=models.Case(
+            models.When(role='leader', then=models.F('project')),
+            default=models.Value(None),
+        ),
+        output_field=models.BigIntegerField(),
+        db_persist=True,
+        null=True,
+    )
+    # utf8mb4 index budget: (255 + 500) * 4 + 8 (project) = 3028 < 3072 bytes.
+    external_identity_name = models.GeneratedField(
+        expression=models.Case(
+            models.When(employee__isnull=True, then=models.F('external_name')),
+            default=models.Value(None),
+        ),
+        output_field=models.CharField(max_length=255, db_collation='utf8mb4_0900_as_ci'),
+        db_persist=True,
+        null=True,
+    )
+    external_identity_organization = models.GeneratedField(
+        expression=models.Case(
+            models.When(employee__isnull=True, then=models.F('external_organization')),
+            default=models.Value(None),
+        ),
+        output_field=models.CharField(max_length=500, db_collation='utf8mb4_0900_as_ci'),
+        db_persist=True,
+        null=True,
+    )
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
 
-    external_name_en = models.CharField('ФИО внешнего участника — EN', max_length=255, blank=True)
-    external_organization_en = models.CharField('Организация внешнего участника — EN', max_length=500, blank=True)
+    external_name_en = NormalizedNameField('ФИО внешнего участника — EN', max_length=255, blank=True)
+    external_organization_en = NormalizedNameField('Организация внешнего участника — EN', max_length=500, blank=True)
 
     @property
     def localized_external_name(self):
@@ -199,18 +237,21 @@ class ProjectParticipation(models.Model):
                     | (models.Q(employee__isnull=True) & ~models.Q(external_name=''))
                 ),
                 name='research_project_participant_identity',
+                violation_error_message=_(
+                    'Выберите сотрудника ЛХВЭ либо укажите ФИО внешнего участника. '
+                    'Если выбран сотрудник, оставьте ФИО и организацию внешнего участника пустыми.'
+                ),
             ),
             models.UniqueConstraint(
-                fields=('project',), condition=models.Q(role='leader'),
+                fields=('leader_project_id',),
                 name='research_project_one_leader',
             ),
             models.UniqueConstraint(
-                fields=('project', 'employee'), condition=models.Q(employee__isnull=False),
+                fields=('project', 'employee'),
                 name='research_project_unique_employee',
             ),
             models.UniqueConstraint(
-                fields=('project', 'external_name', 'external_organization'),
-                condition=models.Q(employee__isnull=True),
+                fields=('project', 'external_identity_name', 'external_identity_organization'),
                 name='research_project_unique_external',
             ),
         ]
@@ -237,8 +278,8 @@ class Dissertation(models.Model):
         DOCTOR = 'doctor', _('Докторская диссертация')
 
     title = models.CharField('Название', max_length=1000)
-    external_url = models.URLField('Внешняя страница диссертации', max_length=1000)
-    author = models.CharField('Автор (ФИО)', max_length=255)
+    external_url = models.URLField('Внешняя страница диссертации', db_collation='utf8mb4_0900_bin', max_length=1000)
+    author = NormalizedNameField('Автор (ФИО)', max_length=255)
     year = models.PositiveSmallIntegerField('Год защиты', validators=[MinValueValidator(1)])
     degree = models.CharField('Вид диссертации', max_length=20, choices=Degree.choices, default=Degree.CANDIDATE)
     specialty = models.CharField('Шифр и название специальности', max_length=500, blank=True)
@@ -251,7 +292,7 @@ class Dissertation(models.Model):
     is_published = models.BooleanField('Показывать на сайте', default=False)
     sort_order = models.PositiveIntegerField('Порядок отображения', default=0)
 
-    author_en = models.CharField('Автор — EN', max_length=255, blank=True)
+    author_en = NormalizedNameField('Автор — EN', max_length=255, blank=True)
     specialty_en = models.CharField('Специальность — EN', max_length=500, blank=True)
     supervisors_en = models.CharField('Научные руководители / консультанты — EN', max_length=1000, blank=True)
 
@@ -295,7 +336,7 @@ class Diploma(models.Model):
         SPECIALIST = 'specialist', _('Дипломная работа специалиста')
 
     title = models.CharField('Название', max_length=1000)
-    external_url = models.URLField('Внешняя страница работы', max_length=1000)
+    external_url = models.URLField('Внешняя страница работы', db_collation='utf8mb4_0900_bin', max_length=1000)
     author = models.ForeignKey(
         'users.Employee', on_delete=models.PROTECT, related_name='diplomas',
         verbose_name='Автор',

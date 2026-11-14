@@ -49,8 +49,8 @@ class Publication(models.Model):
     pages = models.CharField('Страницы или номер статьи', max_length=50, blank=True)
 
     doi = models.CharField('DOI', max_length=255, blank=True)
-    istina_url = models.URLField('Ссылка на Истину', blank=True)
-    external_url = models.URLField('Другая ссылка', blank=True)
+    istina_url = models.URLField('Ссылка на Истину', db_collation='utf8mb4_0900_bin', blank=True)
+    external_url = models.URLField('Другая ссылка', db_collation='utf8mb4_0900_bin', blank=True)
 
     abstract = models.TextField('Аннотация', blank=True)
     note = models.TextField('Примечание лаборатории', blank=True)

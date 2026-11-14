@@ -4,6 +4,7 @@ from django.contrib.auth.forms import (
     AuthenticationForm,
     UserChangeForm,
     UserCreationForm,
+    UsernameField,
 )
 from django.contrib.auth.models import User
 from .roles import UserRole, get_user_role
@@ -14,7 +15,7 @@ INPUT_CLASSES = 'form-control'
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(
+    username = UsernameField(
         label=_('Логин'),
         widget=forms.TextInput(
             attrs={
@@ -81,7 +82,7 @@ class EmployeeEditForm(forms.ModelForm):
             )
 
     def clean_scientific_profiles(self):
-        field = forms.URLField(max_length=2000, assume_scheme='https')
+        field = forms.URLField(max_length=ScientificProfile._meta.get_field('url').max_length, assume_scheme='https')
         urls = []
         for line in self.cleaned_data['scientific_profiles'].splitlines():
             if line.strip():

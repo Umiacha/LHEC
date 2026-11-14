@@ -183,16 +183,44 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 database_url = os.environ.get('DATABASE_URL', '').strip()
 if not database_url:
-    raise ImproperlyConfigured('Задайте DATABASE_URL для PostgreSQL в .env или окружении.')
+    raise ImproperlyConfigured(
+        'Задайте DATABASE_URL для MySQL в .env или окружении.'
+    )
 
 try:
     database_config = dj_database_url.parse(
-        database_url, conn_max_age=0 if DEBUG else 600, conn_health_checks=True,
+        database_url,
+        conn_max_age=0,
+        conn_health_checks=True,
     )
 except ValueError:
-    raise ImproperlyConfigured('Некорректный DATABASE_URL для PostgreSQL.') from None
-if database_config['ENGINE'] != 'django.db.backends.postgresql' or not database_config.get('NAME'):
-    raise ImproperlyConfigured('DATABASE_URL должен указывать на именованную БД PostgreSQL.')
+    raise ImproperlyConfigured(
+        'Некорректный DATABASE_URL для MySQL.'
+    ) from None
+
+if (
+    database_config['ENGINE'] != 'django.db.backends.mysql'
+    or not database_config.get('NAME')
+):
+    raise ImproperlyConfigured(
+        'DATABASE_URL должен указывать на именованную БД MySQL.'
+    )
+
+# Retain mysql:// URLs while routing all migration DDL through our table policy.
+database_config['ENGINE'] = 'config.db.mysql'
+
+database_config.setdefault('OPTIONS', {}).update({
+    'charset': 'utf8mb4',
+    'isolation_level': 'read committed',
+    'init_command': (
+        "SET SESSION default_storage_engine = 'InnoDB', sql_mode = "
+        "CONCAT_WS(',', NULLIF(@@SESSION.sql_mode, ''), "
+        "IF(FIND_IN_SET('STRICT_TRANS_TABLES', @@SESSION.sql_mode), "
+        "NULL, 'STRICT_TRANS_TABLES'), "
+        "IF(FIND_IN_SET('NO_ENGINE_SUBSTITUTION', @@SESSION.sql_mode), "
+        "NULL, 'NO_ENGINE_SUBSTITUTION'))"
+    ),
+})
 
 DATABASES = {
     'default': database_config,
@@ -225,6 +253,8 @@ LANGUAGE_CODE = 'ru'
 LANGUAGES = [('ru', 'Русский'), ('en', 'English')]
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
+# Display and form input use Moscow time; USE_TZ and the database connection's
+# default TIME_ZONE=None keep MySQL DATETIME values in UTC.
 TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True

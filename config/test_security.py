@@ -13,7 +13,7 @@ class SecurityEnvironmentTests(unittest.TestCase):
             PYTHON_DOTENV_DISABLED='1',
             DJANGO_SETTINGS_MODULE='config.settings',
             DJANGO_SECRET_KEY='test-only-' + 'abcdefghijklmnopqrstuvwxyz0123456789' * 2,
-            DATABASE_URL='postgresql://test@localhost/test',
+            DATABASE_URL='mysql://test@localhost/test',
         )
         env.update(overrides)
         return subprocess.run(

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db import connections, router
 from django.forms.models import BaseInlineFormSet
 from django.urls import reverse
 
@@ -60,7 +61,8 @@ class ProjectParticipationFormSet(BaseInlineFormSet):
         if any(self.errors):
             return
         leaders = 0
-        people = set()
+        employees = set()
+        external_people = []
         for form in self.forms:
             data = form.cleaned_data
             if not data or data.get('DELETE'):
@@ -68,13 +70,28 @@ class ProjectParticipationFormSet(BaseInlineFormSet):
             if data.get('role') == ProjectParticipation.Role.LEADER:
                 leaders += 1
             employee = data.get('employee')
-            identity = (
-                ('employee', employee.pk) if employee else
-                ('external', form.instance.external_name, form.instance.external_organization)
-            )
-            if identity in people:
+            duplicate = False
+            if employee:
+                duplicate = employee.pk in employees
+                employees.add(employee.pk)
+            else:
+                identity = (form.instance.external_name, form.instance.external_organization)
+                # Python casefold() does not implement MySQL's UCA comparison.
+                # Compare unsaved inline rows with the same collation as the index.
+                database = router.db_for_write(self.model, instance=self.instance)
+                with connections[database].cursor() as cursor:
+                    for name, organization in external_people:
+                        cursor.execute(
+                            'SELECT %s COLLATE utf8mb4_0900_as_ci = %s COLLATE utf8mb4_0900_as_ci '
+                            'AND %s COLLATE utf8mb4_0900_as_ci = %s COLLATE utf8mb4_0900_as_ci',
+                            [identity[0], name, identity[1], organization],
+                        )
+                        if cursor.fetchone()[0]:
+                            duplicate = True
+                            break
+                external_people.append(identity)
+            if duplicate:
                 raise ValidationError('Один человек не может участвовать в проекте дважды.')
-            people.add(identity)
         if leaders > 1:
             raise ValidationError('У проекта может быть только один руководитель.')
 
